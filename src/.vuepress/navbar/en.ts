@@ -2,7 +2,7 @@ import { navbar } from "vuepress-theme-hope";
 
 export const enNavbar = navbar([
   "/",
-  { text: "演示", icon: "discover", link: "/demo/" },
+  // { text: "演示", icon: "discover", link: "/demo/" },
   {
     text: "前端",
     icon: "edit",
@@ -20,8 +20,8 @@ export const enNavbar = navbar([
         ],
       },
       
-      { text: "Cherry", icon: "edit", link: "cherry" },
-      { text: "Dragon Fruit", icon: "edit", link: "dragonfruit" },
+      { text: "vuePress", icon: "edit", link: "cherry" },
+      { text: "vue2", icon: "edit", link: "dragonfruit" },
       "tomato",
       "strawberry",
     ],
@@ -46,15 +46,15 @@ export const enNavbar = navbar([
             icon: "edit",
             link: "2",
           },
-          "3",
-          "4",
+          // "3",
+          // "4",
         ],
       }
     ]
   },
   {
-    text: "V2 Docs",
+    text: "github",
     icon: "note",
-    link: "https://vuepress-theme-hope.github.io/v2/",
+    link: "https://github.com/Fankozhang",
   },
 ]);

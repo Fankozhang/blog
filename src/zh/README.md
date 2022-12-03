@@ -4,9 +4,9 @@ layout: Blog
 icon: home
 title: 博客主页
 heroImage: /logo.svg
-heroText: 你博客的名称
+heroText: 帆的随笔记录
 heroFullScreen: true
-tagline: 你可以在这里放置你的口号与标语
+tagline: 随笔展示
 projects:
   - icon: project
     name: 项目名称

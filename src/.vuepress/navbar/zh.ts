@@ -9,33 +9,32 @@ export const zhNavbar = navbar([
     prefix: "/zh/posts/",
     children: [
       {
-        text: "苹果",
+        text: "前端",
         icon: "edit",
         prefix: "apple/",
         children: [
-          { text: "苹果1", icon: "edit", link: "1" },
-          { text: "苹果2", icon: "edit", link: "2" },
+          { text: "html", icon: "edit", link: "1" },
+          { text: "css", icon: "edit", link: "2" },
           "3",
           "4",
         ],
       },
       {
-        text: "香蕉",
+        text: "后端",
         icon: "edit",
         prefix: "banana/",
         children: [
           {
-            text: "香蕉 1",
+            text: "java",
             icon: "edit",
             link: "1",
           },
           {
-            text: "香蕉 2",
+            text: "node",
             icon: "edit",
             link: "2",
           },
-          "3",
-          "4",
+
         ],
       },
       { text: "樱桃", icon: "edit", link: "cherry" },

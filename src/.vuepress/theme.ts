@@ -3,7 +3,7 @@ import { enNavbar, zhNavbar } from "./navbar/index.js";
 import { enSidebar, zhSidebar } from "./sidebar/index.js";
 
 export default hopeTheme({
-  hostname: "https://mister-hope.github.io",
+  hostname: "https://github.com/Fankozhang",
 
   author: {
     name: "帆",
@@ -22,8 +22,9 @@ export default hopeTheme({
 
   blog: {
     medias: {
+      GitHub: "https://github.com/Fankozhang",
       Baidu: "http://www.baidu.com",
-      // BiliBili: "https://example.com",
+      BiliBili: "https://example.com",
       // Bitbucket: "https://example.com",
       // Dingding: "https://example.com",
       // Discord: "https://example.com",
@@ -33,7 +34,7 @@ export default hopeTheme({
       // Facebook: "https://example.com",
       // Flipboard: "https://example.com",
       // Gitee: "https://example.com",
-      GitHub: "https://github.com/Fankozhang",
+      
       // Gitlab: "https://example.com",
       // Gmail: "https://example.com",
       // Instagram: "https://example.com",
