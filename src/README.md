@@ -2,16 +2,16 @@
 home: true
 layout: Blog
 icon: home
-title: Blog Home
+title: 首页
 heroImage: /logo.svg
-heroText: the name of your blog
-tagline: You can put your slogan here
+heroText: 帆的随笔记录
+tagline: 这里是日常记录
 heroFullScreen: true
 projects:
-  - icon: project
-    name: project name
-    desc: project detailed description
-    link: https://your.project.link
+  - icon: github
+    name: my-github
+    desc: 这里是我的github地址
+    link: https://github.com/Fankozhang
 
   - icon: link
     name: link name

@@ -1,5 +1,5 @@
 ---
-title: Features Demo
+title: 演示
 index: false
 icon: discover
 category:
