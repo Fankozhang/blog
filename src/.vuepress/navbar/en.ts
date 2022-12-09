@@ -53,6 +53,23 @@ export const enNavbar = navbar([
     ]
   },
   {
+    text: "收藏",
+    icon: "note",
+    prefix: "/site/",
+    children:[
+      {
+        text: "网址收藏",
+        icon: "edit",
+        link: "site1",
+      },
+      {
+        text: "工作中问题及解决",
+        icon: "edit",
+        link: "method",
+      }
+    ]
+  },
+  {
     text: "github",
     icon: "note",
     link: "https://github.com/Fankozhang",
