@@ -3,7 +3,7 @@ home: true
 layout: Blog
 icon: home
 title: 首页
-heroImage: /logo.svg
+heroImage: /logo.png
 heroText: 帆的随笔记录
 tagline: 这里是日常记录
 heroFullScreen: true
@@ -33,7 +33,7 @@ projects:
     desc: Detailed description of friend
     link: https://link.to.your.friend
 
-  - icon: /logo.svg
+  - icon: /logo.png
     name: custom item
     desc: Detailed description of this custom item
     link: https://link.to.your.friend
