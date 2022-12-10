@@ -49,7 +49,11 @@ if ('download' in document.createElement('a')) { // 非IE下载
 
 对于blob可点击  [JS中的Blob对象 - 简书 (jianshu.com)](https://www.jianshu.com/p/b322c2d5d778)     
 
- [JavaScript 中 Blob 对象 - 掘金 (juejin.cn)](https://juejin.cn/post/6844903480704892942)  文章查看
+ [JavaScript 中 Blob 对象 - 掘金 (juejin.cn)](https://juejin.cn/post/6844903480704892942)  文章查看  
+
+
+
+
 
 ## 一个表单里面添加，删除子级表单
 
@@ -153,6 +157,10 @@ delForm(item, index) {
 },
 ```
 
+
+
+
+
 ## vue项目（两套路由）适配  pc端 移动端
 
 vue项目开发中，我们已经开发实现了pc端的网站开发，当想要实现移动端适配时，当时有两种适配的方法作为参考。  
@@ -185,13 +193,17 @@ vue项目开发中，我们已经开发实现了pc端的网站开发，当想要
 
 - 用vscode的二分查找，这个查找会找出可能存在冲突的插件，并禁用掉，我循环查了四五次，最终问题没有解决（用这个方法有问题的插件没有被筛出来）
 
-  ![vscodeTwoSearch](/../../.vuepress/public/vscodeTwoSearch.png)
+  ![vscodeTwoSearch](/vscodeTwoSearch.png)
 
 - 当弹出扩展主机意外终止的弹框时，点击**打开开发人员工具**，查看报错信息中关于host相关的部分，报错信息很长，只需要看头部的错误路径。我的错误路径中有easy-scss。所以猜测可能是安装的easy-scss插件有问题。于是我卸载了这个插件。（问题成功解决，不在弹出扩展主机意外终止弹框）
 
 这种遇到插件冲突的问题确实是很少遇到。我的也是突然出现的。记录一次解决方案。
 
-## vue项目使用scss时，下载之后启动报错
+
+
+
+
+## vue项目使用scss时，版本冲突
 
 下载scss后，启动项目报错，这个错误发生的原因是node和scss的版本不兼容，出现这种问题需要去网上查找兼容的scss版本，在重新安装。（找这个还挺麻烦的，来回卸载重下（试错）还是很费时的。版本冲突很麻烦，推荐使用less）
 
@@ -207,5 +219,34 @@ npm install node-sass@6.0.1 --save-dev
 
 ```
 npm install sass-loader@10.2.0 --save-dev
+```
+
+
+
+
+
+## 根据url获取文件名
+
+```
+// 根据url获取文件名
+    getFileNameByUrl (url) {
+      if (url == null) {
+        return
+      }
+      const b = url.split("/")
+      const c = b.slice(b.length - 1, b.length).toString(String)
+      return c
+    },
+```
+
+例子
+
+```
+var a="http://www.jb51.net/html/images/logo.gif";
+var b=a.split("/");
+console.log(b); // ["http:", "", "www.jb51.net", "html", "images", "logo.gif"]
+var c=b.slice(b.length-1, b.length).toString(String).split(".");
+console.log(c); // ["logo", "gif"]
+alert("取得的文件名是:" + c.slice(0, 1)); // 取得的文件名是:logo
 ```
 
