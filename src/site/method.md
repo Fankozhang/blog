@@ -250,3 +250,9 @@ console.log(c); // ["logo", "gif"]
 alert("取得的文件名是:" + c.slice(0, 1)); // 取得的文件名是:logo
 ```
 
+
+
+
+
+
+

@@ -23,8 +23,10 @@ export default hopeTheme({
   blog: {
     medias: {
       GitHub: "https://github.com/Fankozhang",
+      Gitee: "https://gitee.com/fankozhang",
+      BiliBili: "https://www.bilibili.com/",
       Baidu: "http://www.baidu.com",
-      BiliBili: "https://example.com",
+      
       // Bitbucket: "https://example.com",
       // Dingding: "https://example.com",
       // Discord: "https://example.com",
@@ -33,7 +35,7 @@ export default hopeTheme({
       // Evernote: "https://example.com",
       // Facebook: "https://example.com",
       // Flipboard: "https://example.com",
-      // Gitee: "https://example.com",
+      
       
       // Gitlab: "https://example.com",
       // Gmail: "https://example.com",

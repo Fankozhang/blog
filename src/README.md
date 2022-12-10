@@ -13,36 +13,36 @@ projects:
     desc: 这里是我的github地址
     link: https://github.com/Fankozhang
 
-  - icon: link
-    name: link name
-    desc: link detailed description
-    link: https://link.address
+  - icon: gitee
+    name: my-gitee
+    desc: 我的码云地址
+    link: https://gitee.com/fankozhang
 
-  - icon: book
-    name: book name
-    desc: Detailed description of the book
-    link: https://link.to.your.book
+  # - icon: book
+  #   name: book name
+  #   desc: Detailed description of the book
+  #   link: https://link.to.your.book
 
-  - icon: article
-    name: article name
-    desc: Detailed description of the article
-    link: https://link.to.your.article
+  # - icon: article
+  #   name: article name
+  #   desc: Detailed description of the article
+  #   link: https://link.to.your.article
 
-  - icon: friend
-    name: friend name
-    desc: Detailed description of friend
-    link: https://link.to.your.friend
+  # - icon: friend
+  #   name: friend name
+  #   desc: Detailed description of friend
+  #   link: https://link.to.your.friend
 
-  - icon: /logo.png
-    name: custom item
-    desc: Detailed description of this custom item
-    link: https://link.to.your.friend
+  # - icon: /logo.png
+  #   name: custom item
+  #   desc: Detailed description of this custom item
+  #   link: https://link.to.your.friend
 
 footer: customize your footer text
 ---
 
-This is a blog home page demo.
+这只是我本人简单记录的一些随笔信息。  
 
-To use this layout, you should set both `layout: Blog` and `home: true` in the page front matter.
+记录了我某一些的学习视频和遇到的问题及解决方法。  
 
-For related configuration docs, please see [blog homepage](https://vuepress-theme-hope.github.io/v2/guide/blog/home/).
+一起进步。  

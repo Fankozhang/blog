@@ -2,19 +2,45 @@
 icon: edit
 date: 2022-01-11
 category:
-  - Fruit
-  - Strawberry
+  - UI
+ 
 tag:
-  - red
+  - UI
   - small
 ---
 
-# vue3
+# UI
 
-## Heading 2
+## Element Ui
 
-Here is the content.
+### Element UI 中国省市区级联数据
 
-### Heading 3
+####  element-china-area-data 
 
-Here is the content.
+ [element-china-area-data - Element UI 中国省市区级联数据)](https://www.npmjs.com/package/element-china-area-data) 
+
+ `npm install element-china-area-data -S` 
+
+```javascript
+import { regionData,  provinceAndCityData,CodeToText,TextToCode} 
+from 'element-china-area-data'
+
+export default{
+	data(){
+		return{
+			regions: regionData,
+			provinceAndCitys:provinceAndCityData
+		}
+		
+	}
+}
+```
+
+### **Element UI 国民经济行业分类**
+
+#### Element UI 国民经济行业分类
+
+ [element-china-category-Element UI 国民经济行业分类](https://www.npmjs.com/package/element-china-category-data) 
+
+ `npm install element-china-category-data -S` 
+
