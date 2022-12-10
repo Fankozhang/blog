@@ -15,7 +15,7 @@ typora-root-url: ..\.vuepress\public
 
 例子：
 
-```
+```javascript
 // 导出指定字段Excel列表
 export function getExcelList (params) {
   return request({
@@ -31,7 +31,7 @@ export function getExcelList (params) {
 
 后端返回文件流,res接收，在方法体中输入以下代码，即可下载
 
-```
+```javascript
 const content = res
 const blob = new Blob([content])
 const fileName = "简历信息" + '.xls' // 自定义下载文件的名字，根据不同文件类型跟换后缀名
@@ -63,7 +63,7 @@ if ('download' in document.createElement('a')) { // 非IE下载
 
 表单数据样式为
 
-```
+```javascript
 form:{
     form1:'....',
     form2:'.....',
@@ -89,7 +89,7 @@ form是外层表单数据，form1,form2,form3为外层表单里的基本数据�
 
 主要关注子表单的prop绑定
 
-```
+```javascript
 <a-form-model ref="form" :model="form">
     <a-form-model-item
       prop="form1"
@@ -139,7 +139,7 @@ form是外层表单数据，form1,form2,form3为外层表单里的基本数据�
 
 增加子表单时
 
-```
+```javascript
 addForm(){
     this.form.form4.push({
       //  platEdit: true,
@@ -150,7 +150,7 @@ addForm(){
 
 每一个子表单有一个删除按钮，点击子表单的删除按钮时
 
-```
+```javascript
 delForm(item, index) {
     this.form.form4.splice(index, 1);
     this.$forceUpdate();
@@ -227,7 +227,7 @@ npm install sass-loader@10.2.0 --save-dev
 
 ## 根据url获取文件名
 
-```
+```javascript
 // 根据url获取文件名
     getFileNameByUrl (url) {
       if (url == null) {
@@ -241,7 +241,7 @@ npm install sass-loader@10.2.0 --save-dev
 
 例子
 
-```
+```javascript
 var a="http://www.jb51.net/html/images/logo.gif";
 var b=a.split("/");
 console.log(b); // ["http:", "", "www.jb51.net", "html", "images", "logo.gif"]

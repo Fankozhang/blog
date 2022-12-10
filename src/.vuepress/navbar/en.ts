@@ -21,7 +21,7 @@ export const enNavbar = navbar([
       },
       
       { text: "vuePress", icon: "edit", link: "cherry" },
-      { text: "vue2", icon: "edit", link: "dragonfruit" },
+      { text: "uni-app", icon: "edit", link: "dragonfruit" },
       "tomato",
       "strawberry",
     ],
