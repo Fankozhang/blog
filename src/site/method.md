@@ -254,5 +254,7 @@ alert("取得的文件名是:" + c.slice(0, 1)); // 取得的文件名是:logo
 
 
 
+## vue实现全屏滚动
 
+查看以下博客 [(130条消息) vue全屏滚动——vue-fullpage.js教程_朝阳39的博客-CSDN博客_vue-fullpage](https://blog.csdn.net/weixin_41192489/article/details/111104443) 
 
