@@ -104,3 +104,47 @@ async getUserBaseInfo() {
 },
 ```
 
+## uniapp内打开一个url
+
+在pc浏览器我一般是通过window,open()打开一个url地址的，在小程序，是会报错的，所以就得另找一个解决方法。以下是实现方法。
+
+建一个outUrl.vue的文件，文件内容如下：
+
+```
+<template>
+	<view>
+		<web-view :src="url"></web-view>
+	</view>
+</template>
+
+<script>
+	export default {
+		data() {
+			return {
+				url:''
+			}
+		},
+		onLoad(option){
+			this.url=option.url
+		},
+		methods: {
+			
+		}
+	}
+</script>
+
+<style>
+
+</style>
+```
+
+在打开页面的地方触发点击事件，跳转到outUrl的页面，并传入url
+
+```
+go(url){
+    uni.navigateTo({
+        url:'./outPage?url='+url
+    })
+},
+```
+
