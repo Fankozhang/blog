@@ -138,7 +138,7 @@ async getUserBaseInfo() {
 </style>
 ```
 
-在打开页面的地方触发点击事件，跳转到outUrl的页面，并传入url
+在打开页面的地方触发点击事件，跳转到outUrl的页面，并传入url。
 
 ```
 go(url){
@@ -148,3 +148,4 @@ go(url){
 },
 ```
 
+如此，便可以实现在新页面打开url地址了。
