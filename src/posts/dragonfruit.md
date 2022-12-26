@@ -6,6 +6,7 @@ category:
   - uni-app
 tag:
   - uni
+typora-root-url: ..\.vuepress\public
 ---
 
 
@@ -149,3 +150,61 @@ go(url){
 ```
 
 如此，便可以实现在新页面打开url地址了。
+
+## uniapp的分包操作
+
+我的uniapp小程序在微信开发者工具打开后，在点击真机调试的时候会出现问题。这个问题在打包发布时也会出现，具体原因是项目整体包的体积太大，会影响小程序的运行速度。因此小程序对此做了限制。 即小程序的单独一个包的大小不能超过2M,一旦超过就需要分包处理。
+
+在我看来分包就是对资源进行划分，实现按需加载。
+
+分包时一般就是分为了一个主包和若干个子包。由于我的小程序项目不是很大，所以就分出了一个子包出来，以下展示我是如何操作的。
+
+项目中，所有的页面都是放在pages文件夹下的，静态资源放在static文件夹下。
+
+在pages目录的同级下创建一个packageA文件夹（需要分几个包，就创建几个文件夹），在pages文件夹中只留下tabBar的相关页面。其余的页面文件划分到类似于packageA的文件夹下。并将packageA文件夹内的页面所依赖的静态文件也搬到对应的分包文件夹下。（注意：分包的时候一定要把和这个包里的页面相关的静态资源换到这个包下，并修改页面跳转时的路径）
+
+![packageUni](/packageUni.png)
+
+pages.json文件夹下增加如下配置：
+
+"subpackages"的内容就是对分包进行的配置。
+
+root代表分包根目录
+
+pages代表分包的页面文件路径（注意，有几个页面，就有几个路径）
+
+```
+"subpackages": [
+	    {
+	      "root": "packageA",
+	      "pages": [
+	      	{
+				"path":"pages/notice/notice"
+			}，
+			{
+				"path":"pages/notice/notice"
+			}，
+			{
+				"path":"pages/notice/notice"
+			}
+	      ]
+	     }
+]
+```
+
+分完包之后要设置，进入那个页面时，加载对应的包内容，配置如下：
+
+```
+"preloadRule": {
+			"pages/index/index": { // 当进入这个包页面的时候
+			"network": "all",  // 什么网络下支持允许预加载，默认wifi: wifi/all
+				"packages": [
+				"packageA"  // 下载包
+			]
+			}
+		},
+```
+
+以上就是对uniapp小程序的分包操作，那么如何查看自己分包是否成功了呢，在微信开发者工具打开，点击详情，在基本信息页面可以看到本地代码，点开后就能查看自己的主包和分包信息了，如果包的大小还是大于2M的话，就需要继续优化了。
+
+![PackageAuniWechat](/PackageAuniWechat.png)
