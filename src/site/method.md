@@ -63,7 +63,7 @@ if ('download' in document.createElement('a')) { // 非IE下载
 
 表单数据样式为
 
-```javascript
+```
 form:{
     form1:'....',
     form2:'.....',
@@ -89,7 +89,7 @@ form是外层表单数据，form1,form2,form3为外层表单里的基本数据�
 
 主要关注子表单的prop绑定
 
-```javascript
+```html
 <a-form-model ref="form" :model="form">
     <a-form-model-item
       prop="form1"
@@ -139,7 +139,7 @@ form是外层表单数据，form1,form2,form3为外层表单里的基本数据�
 
 增加子表单时
 
-```javascript
+```
 addForm(){
     this.form.form4.push({
       //  platEdit: true,
@@ -150,11 +150,11 @@ addForm(){
 
 每一个子表单有一个删除按钮，点击子表单的删除按钮时
 
-```javascript
-delForm(item, index) {
+```
+delForm(item, index){
     this.form.form4.splice(index, 1);
     this.$forceUpdate();
-},
+}
 ```
 
 
@@ -227,16 +227,16 @@ npm install sass-loader@10.2.0 --save-dev
 
 ## 根据url获取文件名
 
-```javascript
+```
 // 根据url获取文件名
-    getFileNameByUrl (url) {
+    getFileNameByUrl (url){
       if (url == null) {
         return
       }
       const b = url.split("/")
       const c = b.slice(b.length - 1, b.length).toString(String)
       return c
-    },
+    }
 ```
 
 例子
@@ -254,7 +254,8 @@ alert("取得的文件名是:" + c.slice(0, 1)); // 取得的文件名是:logo
 
 
 
-## vue实现全屏滚动
+## vue实现全屏滚动效果
 
 查看以下博客 [(130条消息) vue全屏滚动——vue-fullpage.js教程_朝阳39的博客-CSDN博客_vue-fullpage](https://blog.csdn.net/weixin_41192489/article/details/111104443) 
+
 
