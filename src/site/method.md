@@ -258,4 +258,41 @@ alert("取得的文件名是:" + c.slice(0, 1)); // 取得的文件名是:logo
 
 查看以下博客 [(130条消息) vue全屏滚动——vue-fullpage.js教程_朝阳39的博客-CSDN博客_vue-fullpage](https://blog.csdn.net/weixin_41192489/article/details/111104443) 
 
+## vue页面中的锚点跳转
+
+在vue项目中，页面中设置锚点，并在某一位置跳转到锚点位置
+
+```html
+<p id="info-title">基本信息</p>        跳转到的地方 根据id跳转
+
+<li @click="go('info-title')"><i class="el-icon-circle-check" ></i>基本信息</li>          从这个地方跳转
+```
+
+```javascript
+go (id) {
+      const anchor = document.getElementById(id)
+      console.log("distance", anchor)
+      let distance = 0
+      const total = anchor.offsetTop
+      console.log("distance", distance)
+      const step = total / 30
+
+      jump()
+
+      function jump () {
+        if (distance < total) {
+        distance += step
+        document.documentElement.scrollTop = distance
+        document.body.scrollTop = distance
+        window.pageYOffset = distance
+        // setTimeout(jump, 10)
+        jump()
+      } else {
+        document.documentElement.scrollTop = total
+        document.body.scrollTop = total
+        window.pageYOffset = total
+      }
+      }
+    }
+```
 
