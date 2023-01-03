@@ -296,3 +296,41 @@ go (id) {
     }
 ```
 
+## git中上传时忽略文件 .gitignore  配置
+
+ 对于.gitignore的配置可参考如下的文章
+
+[(132条消息) Git忽略文件.gitignore详解_ThinkWon的博客-CSDN博客_gitignore](https://blog.csdn.net/ThinkWon/article/details/101447866) 
+
+ [Git入门之.gitignore - 掘金 (juejin.cn)](https://juejin.cn/post/6998911250323390501) 
+
+普通的vue文件的可参考如下配置：
+
+```
+.DS_Store
+node_modules/
+dist/
+
+
+# local env files
+.env.local
+.env.*.local
+
+# Log files
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+
+# Editor directories and files
+.idea
+.vscode
+*.suo
+*.ntvs*
+*.njsproj
+*.sln
+*.sw*
+package-lock.json
+yarn.lock
+
+```
+
