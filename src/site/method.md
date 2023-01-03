@@ -51,7 +51,9 @@ if ('download' in document.createElement('a')) { // 非IE下载
 
  [JavaScript 中 Blob 对象 - 掘金 (juejin.cn)](https://juejin.cn/post/6844903480704892942)  文章查看  
 
+对于其他的文件下载的内容可参考如下文章：
 
+ [前端文件下载的正确打开方式 (qq.com)](https://mp.weixin.qq.com/s/vZiP2ULrLRtqShDJ9u1n2A) 
 
 
 
@@ -332,5 +334,36 @@ yarn-error.log*
 package-lock.json
 yarn.lock
 
+```
+
+## nprogress使用
+
+当网页进行路由跳转时，在网页上显示进度条。可以使用nprogress。起过渡和美化的作用
+
+```
+cnpm install nprogress
+```
+
+```
+import nprogress from "nprogress";
+import "nprogress/nprogress.css"
+```
+
+在拦截器加上nprogress,  nprogress.start()进度条开始    nprogress.done()进度条结束
+
+```
+request.interceptors.request.use((config)=>{
+    // 进度条开始
+    nprogress.start()
+    return config
+})
+
+request.interceptors.response.use(
+    (res)=>{ 
+    // 进度条结束
+    nprogress.done();  
+    return res.data},
+    (error)=>{ return Promise.reject(new Error('faile'))}
+)
 ```
 
