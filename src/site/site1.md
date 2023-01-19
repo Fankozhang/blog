@@ -70,15 +70,16 @@ tag:
 
 ## css样式调试网站
 
--  [毛玻璃效果 - Glass CSS](https://css.glass/) 
--  [div样式调试  Soft UI CSS shadow generator](https://neumorphism.io/#d8d4d4) 
--  [内置多种交互式的样式  All elements made with CSS and HTML (uiverse.io)](https://uiverse.io/all) 
--  [内含多种交互动作调试   Animista - On-Demand CSS Animations Library](https://animista.net/play/basic/flip-2) 
--  [渐变色调试网站  ColorSpace - CSS Gradient Color Generator (mycolor.space)](https://mycolor.space/gradient?ori=to+left&hex=%231967D2&hex2=%234B6166&sub=1) 
--  [100多种渐变色提供选择  Fresh Background Gradients | WebGradients.com 💎](https://webgradients.com/) 
--  [渐变色的按钮  Gradient buttons (colorion.co)](https://gradientbuttons.colorion.co/) 
--  [CSS Grid 布局)](https://cssgrid-generator.netlify.app/) 
--  [盒子div阴影调试  Smooth Shadow (brumm.af)](https://shadows.brumm.af/) 
+-  [毛玻璃效果 - Glass CSS](https://css.glass/)     
+-  [div样式调试  Soft UI CSS shadow generator](https://neumorphism.io/#d8d4d4)     
+-  [内置多种交互式的样式  All elements made with CSS and HTML (uiverse.io)](https://uiverse.io/all)   
+-  [内含多种交互动作调试   Animista - On-Demand CSS Animations Library](https://animista.net/play/basic/flip-2)   
+-  [渐变色调试网站  ColorSpace - CSS Gradient Color Generator (mycolor.space)](https://mycolor.space/gradient?ori=to+left&hex=%231967D2&hex2=%234B6166&sub=1)   
+-  [100多种渐变色提供选择  Fresh Background Gradients | WebGradients.com 💎](https://webgradients.com/)   
+-  [渐变色的按钮  Gradient buttons (colorion.co)](https://gradientbuttons.colorion.co/)   
+-  [CSS Grid 布局)](https://cssgrid-generator.netlify.app/)   
+-  [盒子div阴影调试  Smooth Shadow (brumm.af)](https://shadows.brumm.af/)   
+-   [加载的动画效果   SpinKit | Simple CSS Spinners (tobiasahlin.com)](https://tobiasahlin.com/spinkit/)   
 
 ## 工具
 
