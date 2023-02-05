@@ -64,7 +64,9 @@ tag:
 
 - [易百教程™ - 专注于IT教程和实例 ，内容挺多(yiibai.com)](https://www.yiibai.com/) 
 
--    [Quick Reference & Quick Reference（编程语言知识速查，很好用）](https://quickref.cn/) 
+- [Quick Reference & Quick Reference（编程语言知识速查，很好用）](https://quickref.cn/) 
+
+-     [ dselegent-blog  b站评论看到的一个博客，内容记录挺多](https://blog.dselegent.cf/front_end/front_end_framework/react/01.html) 
 
 
 

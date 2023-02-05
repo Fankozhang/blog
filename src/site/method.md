@@ -367,3 +367,64 @@ request.interceptors.response.use(
 )
 ```
 
+## 快速删除文件夹下所有文件
+
+在我们的项目安装依赖时，会生成 node_modules 文件夹，当出现依赖相关的问题难以解决时，可能会需要删除
+
+node_modules 文件夹，在重新安装，但删除的过程很慢，此时有快速删除的方法。
+
+全局安装  rimraf
+
+```
+npm install rimraf -g
+```
+
+cd 到需要清空的文件夹父目录 ，控制台输入    `rimraf  ‘要删除的文件名’`    ，即可删除此目录下（包括所有子目录）下的所有文件。当所有文件被清空后，删除对应的文件夹，就可以很快速的删除了。
+
+```
+rimraf node_modules
+```
+
+## this.$refs[formName].validat验证（自定义校验）
+
+验证不生效可参考文章  https://www.jianshu.com/p/5ebd1bd9ecaf
+
+我的不生效原因是  自定义的正则校验有问题,正确的可以参考如下：
+
+```
+data(){
+	 // 验证手机的规则（验证时更改正则表达式即可）
+    var checkMobile = (rule, value, cb) => {
+      if (/^1[3456789]\d{9}$/.test(value) || /^\d{3}-\d{7,8}|\d{4}-\d{7,8}$/.test(value))      {
+        return cb()
+      }
+      // 返回一个错误提示
+      cb(new Error("请输入合法的手机号码"))
+    }
+    
+     return {
+      rules: {
+        //  chargePhone是prop的值
+        chargePhone: [
+          { required: true, message: "请输入电话", trigger: "blur" },
+          { validator: checkMobile, trigger: "change" },
+        ]
+      }
+      ]
+
+}
+```
+
+直接在dom里添加验证参考：
+
+```
+<a-form-model-item
+    prop="phone"
+    
+   :rules="[{ required: true, message: '请输入联系方式', trigger: 'blur' },{ pattern:       /^1[3456789]\d{9}$/, message: '手机号码格式不正确', trigger: 'blur' }]"
+   
+    label="电话"
+>
+
+```
+
