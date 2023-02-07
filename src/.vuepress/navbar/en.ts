@@ -24,7 +24,8 @@ export const enNavbar = navbar([
       { text: "uni-app", icon: "edit", link: "dragonfruit" },
       "tomato",
       "strawberry",
-      "bigScreen"
+      "bigScreen",
+      "desk"
     ],
   },
   {

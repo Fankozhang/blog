@@ -34,7 +34,8 @@ export const enSidebar = sidebar({
         { text: "uni-app", icon: "edit", link: "dragonfruit" },
         "tomato",
         "strawberry",
-        "bigScreen"
+        "bigScreen",
+        "desk"
       ],
     },
     {

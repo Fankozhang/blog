@@ -484,3 +484,35 @@ nginx+keepalived
   [视频地址 2022版  尚硅谷Docker实战教程_哔哩哔哩_bilibili](https://www.bilibili.com/video/BV1gr4y1U7CY/?spm_id_from=333.337.search-card.all.click&vd_source=f25f5a8d75a3a60d5a288f726803ec11) 
 
 资料 ：https://www.aliyundrive.com/s/nh9WKM1ZG6A 
+
+
+
+Docker 官网：[https://www.docker.com](https://www.docker.com/)
+
+Github Docker 源码：https://github.com/docker/docker-ce
+
+安装docker镜像的仓库： [Docker Hub Container Image Library | App Containerization](https://hub.docker.com/) 
+
+
+
+docker commit  提交容器副本使之成为一个新的镜像
+
+·docker commit -m="提交的描述信息" -a="作者" 容器ID 要创建的目标镜像名:[标签名]
+
+docker commit -m="ubuntu add vim ok" -a="fankozhang"  50d70d915a7e  fankozhang/myubuntu:1.1
+
+ 
+
+
+
+### 操作过程中遇到问题 ：
+
+#### Docker下删除自己创建的镜像报错 (cannot be forced) - image has dependent child images
+
+删除镜像命令 ：     docker rmi 镜像Id 
+
+大概意思就是这个镜像被别的镜像所依赖，不能强制删除，需要查找child images，再逐个删除。查找被这个镜像所依赖的镜像命令如下：
+
+ docker image inspect --format='{{.RepoTags}} {{.Id}} {{.Parent}}' $(docker image ls -q --filter since=镜像Id) 
+
+将所有需要依赖这个镜像的镜像都删除掉，才能删除这个镜像。

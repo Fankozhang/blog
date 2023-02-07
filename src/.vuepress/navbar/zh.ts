@@ -41,6 +41,7 @@ export const zhNavbar = navbar([
       { text: "火龙果", icon: "edit", link: "dragonfruit" },
       "tomato",
       "strawberry",
+      "desk"
     ],
   },
   {
