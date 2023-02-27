@@ -66,7 +66,11 @@ tag:
 
 - [Quick Reference & Quick Reference（编程语言知识速查，很好用）](https://quickref.cn/) 
 
--     [ dselegent-blog  b站评论看到的一个博客，内容记录挺多](https://blog.dselegent.cf/front_end/front_end_framework/react/01.html) 
+- [ dselegent-blog  b站评论看到的一个博客，内容记录挺多](https://blog.dselegent.cf/front_end/front_end_framework/react/01.html) 
+
+-  [web前端面试 - 面试官系列 (vue3js.cn)](https://vue3js.cn/interview/) 
+
+-      [W3Schools 在线教程(内容挺多，也详细)](https://www.w3schools.cn/) 
 
 
 

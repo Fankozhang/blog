@@ -479,6 +479,14 @@ nginx+keepalived
 
  [Nginx+keepalived实现高可用集群-阿里云开发者社区 (aliyun.com)](https://developer.aliyun.com/article/885619) 
 
+
+
+### 使用nginx出现的问题：
+
+#### 耗时长的数据请求，返回404
+
+在前台往后台发送了一个请求，实现选取字段导出的功能，返回的一个文档流，由于数据量大，耗时长，选取某些字段时能返回正常的文档流，但选取某些字段时又返回404错误，于是我测试了很多的字段，发现并不是传值字段的问题。而后发现那些返回 404 的请求的,等待服务器响应的时间都是 1min,由此判断，可能是请求响应时长方面的问题，但我查看了前端代码,没找到设置1min时长过期的代码，在1min的基础上，我搜索了网页请求1min返回404是什么问题，最终确认是nginx的配置有问题，参考如下文章 [Nginx报错404，由于请求处理时间过长_](https://blog.csdn.net/weixin_43568226/article/details/122390109)      [nginx中的timeout超时设置，请求超时、响应等待超时等_](https://blog.csdn.net/HD243608836/article/details/111564684) 最终解决了问题。（nginx默认的超时时长为60s,而我的请求耗时1.4min，没有对超时时长做配置，所以返回了404，增加超时时长后，请求正常返回。）
+
 ## docker
 
   [视频地址 2022版  尚硅谷Docker实战教程_哔哩哔哩_bilibili](https://www.bilibili.com/video/BV1gr4y1U7CY/?spm_id_from=333.337.search-card.all.click&vd_source=f25f5a8d75a3a60d5a288f726803ec11) 
@@ -503,8 +511,6 @@ docker commit -m="ubuntu add vim ok" -a="fankozhang"  50d70d915a7e  fankozhang/m
 
  
 
-
-
 ### 操作过程中遇到问题 ：
 
 #### Docker下删除自己创建的镜像报错 (cannot be forced) - image has dependent child images
@@ -513,6 +519,6 @@ docker commit -m="ubuntu add vim ok" -a="fankozhang"  50d70d915a7e  fankozhang/m
 
 大概意思就是这个镜像被别的镜像所依赖，不能强制删除，需要查找child images，再逐个删除。查找被这个镜像所依赖的镜像命令如下：
 
- docker image inspect --format='{{.RepoTags}} {{.Id}} {{.Parent}}' $(docker image ls -q --filter since=镜像Id) 
+ `docker image inspect --format='{{.RepoTags}} {{.Id}} {{.Parent}}' $(docker image ls -q --filter since=镜像Id)` 
 
 将所有需要依赖这个镜像的镜像都删除掉，才能删除这个镜像。
