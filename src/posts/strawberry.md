@@ -164,3 +164,20 @@ export default{
 
  `npm install element-china-category-data -S` 
 
+
+
+## ant design vue
+
+### a-table增加序号列
+
+```
+const columns = [
+  {
+    title: "序号",
+    width: 70,
+    align:center,
+    customRender: (text, record, index) => `${index + 1}`,
+  },
+]
+```
+

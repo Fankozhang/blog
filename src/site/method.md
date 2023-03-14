@@ -55,6 +55,47 @@ if ('download' in document.createElement('a')) { // 非IE下载
 
  [前端文件下载的正确打开方式 (qq.com)](https://mp.weixin.qq.com/s/vZiP2ULrLRtqShDJ9u1n2A) 
 
+## 根据url下载文件，并设置文件名
+
+```
+downLoad(){
+	this.xhrequest(url,name)
+	// url传入下载的连接地址
+	//name传文件下载后的文件名字，要加后缀名
+}
+
+           downloadBlob (blob, fileName) {
+                try {
+                    const href = window.URL.createObjectURL(blob); //创建下载的链接
+                    if (window.navigator.msSaveBlob) {
+                        window.navigator.msSaveBlob(blob, fileName);
+                    } else {
+                        // 谷歌浏览器 创建a标签 添加download属性下载
+                        const downloadElement = document.createElement("a");
+                        downloadElement.href = href;
+                        downloadElement.target = "_blank";
+                        downloadElement.download = fileName;
+                        document.body.appendChild(downloadElement);
+                        downloadElement.click(); // 点击下载
+                        document.body.removeChild(downloadElement); // 下载完成移除元素
+                        window.URL.revokeObjectURL(href); // 释放掉blob对象
+                    }
+                } catch (e) {
+                    console.log("下载失败");
+                }
+            },
+
+            async xhrequest(url,name) {
+                let data = await fetch(url)
+                    .then((response) => response.blob())
+                    .then((res) => {
+                        let blod = new Blob([res]);
+                        this.downloadBlob(blod, name);
+                    });
+                return data;
+            },
+```
+
 
 
 ## 一个表单里面添加，删除子级表单

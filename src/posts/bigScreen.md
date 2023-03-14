@@ -93,7 +93,7 @@ mounted(){
 ```
 var option={
 	geo:{
-      type:"map",
+      // type:"map",
       map:"china",//使用 registerMap 注册的地图名称
       // 默认设置完地图是固定死的不能拖动
       roam:true,//否开启鼠标缩放和平移漫游。默认不开启。
@@ -346,7 +346,7 @@ toolbox:{  //工具
 
 - name   用于设置系列图标的名称
 - type   用于设置图表的类型（饼图，柱状图。。。。。。）
-- radius         `Array.<number|string>`：数组的第一项是内半径，第二项是外半径 
+- radius         `Array.<number|string>`：数组的第一项是饼图内半径，第二项是外半径 
 - center  用于设置 图 的位置
 - data  用于设置展示的数据，一般是数组。
 - label   用于设置图表中 引导线末端的文字的样式
@@ -389,8 +389,46 @@ toolbox:{  //工具
 
 
 
-## 关于图表开发中遇到的问题
+## 关于图表开发中遇到的问题和需求
 
 ### 关系图中显示了节点，却没有连线
 
-在进行关系匹配时，尽量用 id 来进行匹配，而不是用 name 来进行匹配。因为 name 不具有唯一性，匹配时可能存在问题，导致关系的连线不显示。当数据异常时，控制台还可能会报错。
+在进行关系匹配时，尽量用 id 来进行匹配，而不是用 name 来进行匹配。因为 name 不具有唯一性，匹配时可能存在问题，导致关系的连线不显示。当数据异常，重复时，控制台还可能会报错。
+
+### x轴文本内容太长的几种解决方案
+
+ [Echarts x轴文本内容太长的几种解决方案 - 简书 (jianshu.com)](https://www.jianshu.com/p/32416425049a) 
+
+### 柱形图支持横向/纵向滚动条，鼠标滚动可以平移滚动条
+
+ [echarts柱形图支持横向/纵向滚动条，鼠标滚动可以平移滚动条 - 简书 (jianshu.com)](https://www.jianshu.com/p/6ad4eb4da7af) 
+
+```
+dataZoom: [
+          {
+            type: "slider",
+            realtime: true,
+            start: 0,
+            end: 45, // 初始展示40%
+            height: 2,
+            fillerColor: "rgba(17, 100, 210, 0.42)", // 滚动条颜色
+            borderColor: "rgba(17, 100, 210, 0.12)",
+            handleSize: 0, // 两边手柄尺寸
+            showDetail: false, // 拖拽时是否展示滚动条两侧的文字
+            top: "96%" // 滚动条距离顶部高度
+
+            // zoomLock:true, // 是否只平移不缩放
+            // moveOnMouseMove:true, //鼠标移动能触发数据窗口平移
+            // zoomOnMouseWheel :true, //鼠标移动能触发数据窗口缩放
+          },
+          {
+            type: "inside", // 支持内部鼠标滚动平移
+            start: 0,
+            end: 40,
+            zoomOnMouseWheel: false, // 关闭滚轮缩放
+            moveOnMouseWheel: true, // 开启滚轮平移
+            moveOnMouseMove: true // 鼠标移动能触发数据窗口平移
+          }
+        ]
+```
+
