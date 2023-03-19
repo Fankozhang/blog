@@ -144,6 +144,8 @@ jobs:
 
 
 
+ [还在手动配置Nginx？太LOW了，这个超强大的 Nginx 可视化管理工具太牛逼了！ (qq.com)](https://mp.weixin.qq.com/s/33K0XfZ8bAT95qmrhzvRDw) 
+
 ### 基本命令
 
  1、cd /usr/local/nginx/sbin/     *//进入目录* 
