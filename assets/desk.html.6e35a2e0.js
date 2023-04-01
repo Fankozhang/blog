@@ -1,0 +1,1 @@
+import{_ as t}from"./_plugin-vue_export-helper.cdc0426e.js";import{o as a,c as o,a as e,b as r}from"./app.ad56f2b0.js";const s={},c=e("h1",{id:"知识拓展",tabindex:"-1"},[e("a",{class:"header-anchor",href:"#知识拓展","aria-hidden":"true"},"#"),r(" 知识拓展")],-1),n=[c];function _(d,i){return a(),o("div",null,n)}const f=t(s,[["render",_],["__file","desk.html.vue"]]);export{f as default};
