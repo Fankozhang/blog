@@ -1,3 +1,10 @@
+/*
+ * @name: 东方凝洛
+ * @Date: 2022-12-02 21:19:19
+ * @msg: 
+ * @param: 
+ * @return: 
+ */
 import { sidebar } from "vuepress-theme-hope";
 
 export const enSidebar = sidebar({
@@ -15,12 +22,12 @@ export const enSidebar = sidebar({
     // },
     {
       text: "前端",
-      icon: "edit",
+      icon: "note",
       prefix: "/posts/",
       children: [
         {
           text: "前端知识记录",
-          icon: "edit",
+          icon: "",
           prefix: "apple/",
           children: [
             "1",
@@ -30,8 +37,8 @@ export const enSidebar = sidebar({
           ],
         },
         
-        { text: "vuePress", icon: "edit", link: "cherry" },
-        { text: "uni-app", icon: "edit", link: "dragonfruit" },
+        { text: "vuePress", icon: "", link: "cherry" },
+        { text: "uni-app", icon: "", link: "dragonfruit" },
         "tomato",
         "strawberry",
         "bigScreen",
@@ -45,17 +52,17 @@ export const enSidebar = sidebar({
       children:[
         {
           text: "后端语言",
-          icon: "edit",
+          icon: "",
           prefix: "banana/",
           children: [
             {
               text: "java",
-              icon: "edit",
+              icon: "",
               link: "1",
             },
             {
               text: "node",
-              icon: "edit",
+              icon: "",
               link: "2",
             },
             // "3",
@@ -66,17 +73,17 @@ export const enSidebar = sidebar({
     },
     {
       text: "收藏",
-      icon: "note",
+      icon: "",
       prefix: "/site/",
       children:[
         {
           text: "网址收藏",
-          icon: "edit",
+          icon: "",
           link: "site1",
         },
         {
           text: "工作中问题及解决",
-          icon: "edit",
+          icon: "",
           link: "method",
         }
       ]

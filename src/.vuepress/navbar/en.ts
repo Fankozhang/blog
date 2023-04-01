@@ -5,12 +5,12 @@ export const enNavbar = navbar([
   // { text: "演示", icon: "discover", link: "/demo/" },
   {
     text: "前端",
-    icon: "edit",
+    icon: "note",
     prefix: "/posts/",
     children: [
       {
         text: "前端知识记录",
-        icon: "edit",
+        icon: "",
         prefix: "apple/",
         children: [
           "1",
@@ -20,8 +20,8 @@ export const enNavbar = navbar([
         ],
       },
       
-      { text: "vuePress", icon: "edit", link: "cherry" },
-      { text: "uni-app", icon: "edit", link: "dragonfruit" },
+      { text: "vuePress", icon: "", link: "cherry" },
+      { text: "uni-app", icon: "", link: "dragonfruit" },
       "tomato",
       "strawberry",
       "bigScreen",
@@ -35,17 +35,17 @@ export const enNavbar = navbar([
     children:[
       {
         text: "后端语言",
-        icon: "edit",
+        icon: "",
         prefix: "banana/",
         children: [
           {
             text: "java",
-            icon: "edit",
+            icon: "",
             link: "1",
           },
           {
             text: "node",
-            icon: "edit",
+            icon: "",
             link: "2",
           },
           // "3",
@@ -56,7 +56,7 @@ export const enNavbar = navbar([
   },
   {
     text: "收藏",
-    icon: "note",
+    icon: "",
     prefix: "/site/",
     children:[
       {

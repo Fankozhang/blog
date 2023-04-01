@@ -469,3 +469,21 @@ data(){
 
 ```
 
+## axios请求获取本地静态文件(动态获取json数据)
+
+```vue
+// json数据存放在 public文件夹下(动态获取json数据)
+
+import axios from 'axios'
+
+loadGeoJson (level, adcode) {
+    // 不要带有public路径
+      const mapUrl = `/static/${level}/${adcode}.json`
+      return axios.get(mapUrl)
+},
+// 如下获取的文件地址为  public/map/city/123.json
+loadGeoJson("/map/city","123").then(res=>{
+    this.json=res.data
+})
+```
+
