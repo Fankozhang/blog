@@ -8,7 +8,7 @@ tag:
   - electron
 ---
 
-# 知识拓展
+# 知识拓展(electron,qiankun)
 
 # electron
 
@@ -965,5 +965,154 @@ const stream= await navigator.mediaDevices.getDisplayMedia({video:true})
 
   }
 </script>
+```
+
+# qiankun  微服务
+
+ 官网：[快速上手 - qiankun (umijs.org)](https://qiankun.umijs.org/zh/guide/getting-started#主应用) 
+
+ 参考：[基于qiankun（乾坤）的微前端实践总结 - 掘金 (juejin.cn)](https://juejin.cn/post/7121515637624537119#heading-16)   [qiankun-demo: 基于qiankun（乾坤）框架的微前端实践demo (gitee.com)](https://gitee.com/qiaoba_1/qiankun-demo) 
+
+## 主应用（vue搭建）：
+
+安装qiankun：  npm **i** qiankun -S 
+
+在主应用页面上增加一个  显示子应用页面的容器
+
+```vue
+<template>
+  <div id="app">
+    <!-- 主应用内容 -->
+    <div id="nav">
+      <router-link to="/">Home</router-link> |
+      <router-link to="/about">About</router-link>
+    </div>
+    <router-view/>
+    <!-- 子应用显示的容器 -->
+    <div id="vue-son-container"></div>
+  </div>
+</template>
+```
+
+修改入口文件 `main.js` ，通过 qiankun(乾坤) 的 registerMicroApps 和 start 方法注册子应用并启动。
+
+```js
+import Vue from 'vue'
+import App from './App.vue'
+import router from './router'
+import { registerMicroApps, start } from 'qiankun';
+
+Vue.config.productionTip = false
+
+new Vue({
+  router,
+  render: h => h(App)
+}).$mount('#app')
+
+/* 确保装载子应用的容器已创建，等DOM加载完成后启动子应用 */
+vueApp.$nextTick( () => {
+  /* 注册子应用 */
+  registerMicroApps([
+    /**
+     * name: 子应用名称 - 子应用之间必须确保唯一
+     * entry: 子应用入口 - 通过该地址加载微应用
+     * container: 子应用挂载节点 - 子应用加载完成后将挂载在该节点上
+     * activeRule: 子应用触发的路由规则 - 触发路由规则后将加载该子应用
+     */
+    {
+      name:'vue-son-container',
+      entry:'//localhost:8081/about',
+      container:'#vue-son-container',
+      activeRule:'/app-son-vue'
+    }
+  ]);
+  // 启动子应用
+  start();
+})
+```
+
+
+
+## 子应用（vue搭建）：
+
+ 首先，在 Vue 子应用的 `src` 目录下新增 `public-path.js` 
+
+```
+if (window.__POWERED_BY_QIANKUN__) {
+    __webpack_public_path__ = window.__INJECTED_PUBLIC_PATH_BY_QIANKUN__;
+}
+```
+
+ 入口文件 `main.js` 修改，为了避免根 id `#app` 与其他的 DOM 冲突，需要限制查找范围。 （main.js）
+
+```js
+import Vue from 'vue'
+import App from './App.vue'
+import routes from './router'
+
+Vue.config.productionTip = false
+
+let router = null;
+let instance = null;
+function render(props = {}) {
+  const { container } = props;
+  router = new VueRouter({
+    base: window.__POWERED_BY_QIANKUN__ ? '/app-son-vue/' : '/',
+    // 官方建议路由模式为histroy
+    mode: 'history',
+    routes,
+  });
+
+  instance = new Vue({
+    router,
+    store,
+    render: (h) => h(App),
+  }).$mount(container ? container.querySelector('#app') : '#app');
+}
+
+// 独立运行时
+if (!window.__POWERED_BY_QIANKUN__) {
+  render();
+}
+// bootstrap 只会在微应用初始化的时候调用一次，下次微应用重新进入时会直接调用 mount 钩子，不会再重复触发 bootstrap。
+export async function bootstrap() {
+  console.log('进入vue app 子应用的bootstrap周期');
+}
+// 应用每次进入都会调用 mount 方法，通常我们在这里触发应用的渲染方法
+export async function mount(props) {
+  console.log('进入vue app 子应用的mount周期', props);
+  render(props);
+}
+// 应用每次 切出/卸载 会调用的方法，通常在这里我们会卸载微应用的应用实例
+export async function unmount() {
+  console.log('进入vue app 子应用的unmount周期');
+  instance.$destroy();
+  instance.$el.innerHTML = '';
+  instance = null;
+  router = null;
+}
+
+
+```
+
+子应用 vue.config.js配置如下代码，否则会报错，错误和原因 应该是   application ‘xxx‘ died in status LOADING_SOURCE_CODE: [qiankun\] You need to export lifecycle functio_喜樂的CC的博客-CSDN博客](https://blog.csdn.net/qq_40259641/article/details/125501246) 
+
+```
+// const { name } = require('./package');
+const name="vue-son-container"
+module.exports = {
+  devServer: {
+    headers: {
+      'Access-Control-Allow-Origin': '*',
+    },
+  },
+  configureWebpack: {
+    output: {
+      library: `${name}-[name]`,
+      libraryTarget: 'umd', // 把微应用打包成 umd 库格式
+      jsonpFunction: `webpackJsonp_${name}`,
+    },
+  },
+};
 ```
 

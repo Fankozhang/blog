@@ -147,6 +147,8 @@ jobs:
 
 ### 基本命令
 
+start nginx.exe  // 部署nginx文件后，启动nginx服务
+
  1、cd /usr/local/nginx/sbin/     *//进入目录* 
 
 2、./nginx                       *//启动* 

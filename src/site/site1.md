@@ -105,6 +105,8 @@ tag:
 
 - [PDF转Word | 免费在线PDF转Word | PDF转Word转换器 | PDF转化速度快 | 首页 (alltoall.net)](https://www.alltoall.net/) 
 
+- 图片压缩，编辑：https://www.iloveimg.com/zh-cn
+
 - [iLovePDF | 为PDF爱好者提供的PDF文件在线处理工具](https://www.ilovepdf.com/zh-cn) 
 
 - [docsmall - 免费在线图片压缩、GIF压缩工具、PDF压缩工具、PDF合并工具、PDF分割工具](https://docsmall.com/) 

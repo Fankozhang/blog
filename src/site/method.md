@@ -11,6 +11,12 @@ typora-root-url: ..\.vuepress\public
 
 # 工作问题及解决方法
 
+## vscode代码片段
+
+ 点击Code-首选项-用户代码片段 
+
+ [vsCode 代码片段 自动生成格式 (99cc.vip)](https://99cc.vip/public/tools/vscode_snippet/index.html) 
+
 ## 后端返回文件流(文档流)如何下载
 
 例子：
@@ -57,12 +63,12 @@ if ('download' in document.createElement('a')) { // 非IE下载
 
 ## 根据url下载文件，并设置文件名
 
-```
-downLoad(){
-	this.xhrequest(url,name)
-	// url传入下载的连接地址
-	//name传文件下载后的文件名字，要加后缀名
-}
+```js
+            downLoad(){
+                this.xhrequest(url,name)
+                // url传入下载的连接地址
+                //name传文件下载后的文件名字，要加后缀名
+            }
 
            downloadBlob (blob, fileName) {
                 try {
@@ -85,6 +91,7 @@ downLoad(){
                 }
             },
 
+             //  name参数需要有后缀名才行
             async xhrequest(url,name) {
                 let data = await fetch(url)
                     .then((response) => response.blob())
@@ -469,6 +476,15 @@ data(){
 
 ```
 
+## Ant Design of Vue清除表单校验
+
+clearValidate和resetFields区别
+
+```javascript
+this.$refs['form'].resetFields() //移除校验结果并重置字段值
+this.$refs['form'].clearValidate() //移除校验结果
+```
+
 ## axios请求获取本地静态文件(动态获取json数据)
 
 ```vue
@@ -485,5 +501,65 @@ loadGeoJson (level, adcode) {
 loadGeoJson("/map/city","123").then(res=>{
     this.json=res.data
 })
+```
+
+## vue项目适配屏幕分辨率与屏幕的缩放适配
+
+ [(198条消息) vue项目适配屏幕分辨率与屏幕的缩放适配详细教程_vue 分辨率适配_汪小敏同学的博客-CSDN博客](https://blog.csdn.net/weixin_44692055/article/details/127843876) 
+
+## vscode eslint setting配置
+
+ [(206条消息) Vscode如何配置属于自己的ESlint_vscode eslint配置_·甘之如饴·的博客-CSDN博客](https://blog.csdn.net/G0000227/article/details/122093671) 
+
+## 百度地图根据地址解析坐标系
+
+[逆地理编码 gc | 百度地图API SDK (baidu.com)](https://lbs.baidu.com/index.php?title=webapi/guide/webservice-geocoding)
+
+```
+npm install --save vue-jsonp
+
+main.js 引入
+
+import { VueJsonp } from 'vue-jsonp' 
+Vue.use(VueJsonp)
+```
+
+```
+<baidu-map class="bm-view" ref="map" :center="mapCenter" :zoom="17">
+   <bm-marker
+       :position="mapCenterAddress"
+       :dragging="false"
+       animation=""
+   ></bm-marker>
+</baidu-map>
+
+// bm-marker  显示地址的红点
+```
+
+组件内使用     address:'要解析的地址名'  ak:'百度网站上申请的ak,个人标识'   output: 'json',callback: 'showLocation'固定
+
+返回值里   json.result.location是一个包含坐标系的对象
+
+```
+//mapCenter: "",
+//mapCenterAddress: { lat: "123", lng: "123" },
+
+// 百度地图地址解析
+    TypeMap () {
+      this.mapCenter = "中国（山东）自由贸易试验区济南片区新泺大街1166号奥盛大厦1号楼2333-2室"
+      this.$jsonp('http://api.map.baidu.com/geocoding/v3/', {
+        address: this.mapCenter,
+        output: 'json',
+        ak: '6SBDhZuzz9h00tQd2B5bhjxeTe7zhGgp',
+        callback: 'showLocation'
+      }).then(json => {
+        // 得到我们想要的内容,
+        console.log('json', json)
+        this.mapCenterAddress.lat = String(json.result.location.lat)
+        this.mapCenterAddress.lng = String(json.result.location.lng)
+      }).catch(err => {
+        console.log(err)
+      })
+    },
 ```
 
