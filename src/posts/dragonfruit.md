@@ -337,5 +337,190 @@ pages代表分包的页面文件路径（注意，有几个页面，就有几个
 }
 ```
 
+## uniapp使用echarts图
 
+插件地址 ： [echarts for uniapp - DCloud 插件市场](https://ext.dcloud.net.cn/plugin?id=8017) 
+
+注意：使用HBuilderX导入插件echarts，   使用页面需要将 组件 引入进来使用， 要为引入的  echarts  设置宽高，否则可能不显示。 
+
+```vue
+<template>
+	<view class="shadow container">
+		<view class="container">
+		    <echarts style="width:100%;height:100%;" ref="echarts" :option="option" canvasId="echarts"></echarts>
+		</view>
+	</view>
+</template>
+
+<script>
+	import echarts from '../echarts-uniapp/echarts-uniapp.vue'
+	export default{
+		components:{
+			echarts
+		},
+		data(){
+			return{
+				option:{},
+			}
+		},
+		onReady() {
+			this.draw()
+		},
+		methods:{
+			draw(){
+				this.option = {}
+			},
+		}
+	}
+</script>
+
+<style lang="less" scoped>
+.hx-img{
+    width: 100%;
+}
+.container {
+        position: absolute;
+        top: 0;
+        bottom: 0;
+        left: 0;
+        right: 0;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: space-between;
+        box-sizing: border-box;
+    }
+    .container-wrap {
+        width: 100%;
+        height: 100%;
+    }
+</style>
+```
+
+以下是一个简单的关系图示例：
+
+```vue
+<template>
+	<view class="shadow container">
+		<view class="container">
+		    <echarts style="width:100%;height:100%;" ref="echarts" :option="option" canvasId="echarts"></echarts>
+		</view>
+	</view>
+</template>
+
+<script>
+	import echarts from '../echarts-uniapp/echarts-uniapp.vue'
+	export default{
+		components:{
+			echarts
+		},
+		data(){
+			return{
+				option:{},
+				color: '#1890ff',
+				datas:[
+					{ name: '张三', id: '0', draggable: 'true' },
+					{ name: '李四', id: '1', draggable: 'true' },
+					{ name: '王五', id: '2', draggable: 'true' },
+					{ name: '赵六', id: '3', draggable: 'true' },
+					{ name: '魏七', id: '4', draggable: 'true' }
+				],
+				lines: [
+					{ source: '1', target: '1', value: '' },
+					{ source: '0', target: '1', value: '' },
+					{ source: '0',  target: '2', value: '' },
+					{ source: '0',  target: '3', value: '' },
+					{ source: '0',  target: '4', value: '' },
+				]
+			}
+		},
+		onReady() {
+			this.draw()
+		},
+		methods:{
+			draw(){
+				this.option = {
+				        title: {
+				          text: ''
+				        },
+				        color: this.color,
+				        tooltip: {},
+				        animationDurationUpdate: 1500,
+				        label: {
+				          normal: {
+				            show: true,
+				            textStyle: {
+				              fontSize: 12
+				            }
+				          }
+				        },
+				        series: [
+				          {
+				            type: 'graph',
+				            layout: 'force', // 采用力引导布局
+				            symbolSize: 45,
+				            legendHoverLink: true, // 启用图例 hover 时的联动高亮。
+				            focusNodeAdjacency: false, // 在鼠标移到节点上的时候突出显示节点以及节点的边和邻接节点。
+				            roam: true,
+				            label: {
+				              normal: {
+				                show: true,
+				                position: 'inside',
+				                textStyle: {
+				                  fontSize: 12
+				                }
+				              }
+				            },
+				            force: {
+				              repulsion: 1000
+				            },
+				            edgeSymbolSize: [4, 50],
+				            edgeLabel: {
+				              normal: {
+				                show: true,
+				                textStyle: {
+				                  fontSize: 10
+				                },
+				                formatter: '{c}'
+				              }
+				            },
+				            data: this.datas,
+				            links: this.lines,
+				            lineStyle: {
+				              normal: {
+				                opacity: 0.9,
+				                width: 1,
+				                curveness: 0
+				              }
+				            }
+				          }
+				        ]
+				      }
+			},
+		}
+	}
+</script>
+
+<style lang="less" scoped>
+.hx-img{
+    width: 100%;
+}
+.container {
+        position: absolute;
+        top: 0;
+        bottom: 0;
+        left: 0;
+        right: 0;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: space-between;
+        box-sizing: border-box;
+    }
+    .container-wrap {
+        width: 100%;
+        height: 100%;
+    }
+</style>
+```
 

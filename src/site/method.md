@@ -11,13 +11,41 @@ typora-root-url: ..\.vuepress\public
 
 # 工作问题及解决方法
 
-## vscode代码片段
+## vscode
+
+### vscode代码片段
 
  点击Code-首选项-用户代码片段 
 
  [vsCode 代码片段 自动生成格式 (99cc.vip)](https://99cc.vip/public/tools/vscode_snippet/index.html) 
 
-## 后端返回文件流(文档流)如何下载
+### vscode  弹出扩展主机意外终止...次
+
+第一次遇到这种编辑器类似的问题，在网上找了挺多的解决方法，出现这种情况的原因大概是vscode的插件冲突，解决方法大体上就两种。
+
+一种是卸载VScode,删除掉配置文件。在重装。（麻烦，没试过）
+
+第二种是找出有问题的插件并卸载。查找方法有以下几种（我的vscode装了大概60个插件吧）
+
+- 卸载除基本插件外的所有插件，在一个个装，看到底是哪个有问题。（我感觉相当费时，所以没采用）
+
+- 用vscode的二分查找，这个查找会找出可能存在冲突的插件，并禁用掉，我循环查了四五次，最终问题没有解决（用这个方法有问题的插件没有被筛出来）
+
+  ![vscodeTwoSearch](/vscodeTwoSearch.png)
+
+- 当弹出扩展主机意外终止的弹框时，点击**打开开发人员工具**，查看报错信息中关于host相关的部分，报错信息很长，只需要看头部的错误路径。我的错误路径中有easy-scss。所以猜测可能是安装的easy-scss插件有问题。于是我卸载了这个插件。（问题成功解决，不在弹出扩展主机意外终止弹框）
+
+这种遇到插件冲突的问题确实是很少遇到。我的也是突然出现的。记录一次解决方案。
+
+### vscode eslint setting配置
+
+ [(206条消息) Vscode如何配置属于自己的ESlint_vscode eslint配置_·甘之如饴·的博客-CSDN博客](https://blog.csdn.net/G0000227/article/details/122093671) 
+
+
+
+## 下载（url）
+
+### 后端返回文件流(文档流)如何下载
 
 例子：
 
@@ -61,7 +89,7 @@ if ('download' in document.createElement('a')) { // 非IE下载
 
  [前端文件下载的正确打开方式 (qq.com)](https://mp.weixin.qq.com/s/vZiP2ULrLRtqShDJ9u1n2A) 
 
-## 根据url下载文件，并设置文件名
+### 根据url下载文件，并设置文件名
 
 ```js
             downLoad(){
@@ -103,9 +131,36 @@ if ('download' in document.createElement('a')) { // 非IE下载
             },
 ```
 
+### 根据url获取文件名
+
+```
+// 根据url获取文件名
+    getFileNameByUrl (url){
+      if (url == null) {
+        return
+      }
+      const b = url.split("/")
+      const c = b.slice(b.length - 1, b.length).toString(String)
+      return c
+    }
+```
+
+例子
+
+```javascript
+var a="http://www.jb51.net/html/images/logo.gif";
+var b=a.split("/");
+console.log(b); // ["http:", "", "www.jb51.net", "html", "images", "logo.gif"]
+var c=b.slice(b.length-1, b.length).toString(String).split(".");
+console.log(c); // ["logo", "gif"]
+alert("取得的文件名是:" + c.slice(0, 1)); // 取得的文件名是:logo
+```
 
 
-## 一个表单里面添加，删除子级表单
+
+## 表单（校验）
+
+### 一个表单里面添加，删除子级表单
 
 #### **(ant-design-vue  演示)**
 
@@ -209,9 +264,187 @@ delForm(item, index){
 
 
 
+### this.$refs[formName].validat验证（自定义校验）
+
+验证不生效可参考文章  https://www.jianshu.com/p/5ebd1bd9ecaf
+
+我的不生效原因是  自定义的正则校验有问题,正确的可以参考如下：
+
+```
+data(){
+	 // 验证手机的规则（验证时更改正则表达式即可）
+    var checkMobile = (rule, value, cb) => {
+      if (/^1[3456789]\d{9}$/.test(value) || /^\d{3}-\d{7,8}|\d{4}-\d{7,8}$/.test(value))      {
+        return cb()
+      }
+      // 返回一个错误提示
+      cb(new Error("请输入合法的手机号码"))
+    }
+    
+     return {
+      rules: {
+        //  chargePhone是prop的值
+        chargePhone: [
+          { required: true, message: "请输入电话", trigger: "blur" },
+          { validator: checkMobile, trigger: "change" },
+        ]
+      }
+      ]
+
+}
+```
+
+直接在dom里添加验证参考：
+
+```
+<a-form-model-item
+    prop="phone"
+    
+   :rules="[{ required: true, message: '请输入联系方式', trigger: 'blur' },{ pattern:       /^1[3456789]\d{9}$/, message: '手机号码格式不正确', trigger: 'blur' }]"
+   
+    label="电话"
+>
+
+```
+
+## 
+
+### 自定义表单（表单生成器）
+
+ [vue拖拽表单生成器 - 掘金 (juejin.cn)](https://juejin.cn/post/7065863860669906952) 
+
+适用ant design vue  ( [KFormDesign (gitee.io)](http://kcz66.gitee.io/k-form-design/#/README) )
+
+k-form-create使用
+
+main.js
+
+```
+import { useAntd } from 'k-form-design/packages/core/useComponents'
+import KFormDesign from 'k-form-design/packages/use.js'
+import 'k-form-design/lib/k-form-design.css'
+// 有自己的颜色需求按照官网去配置，不生效，将node_modules下的k-for-design.css的样式源码粘出来，全局修改里面的颜色，在main.js引入自己改过的样式文件
+
+useAntd(Vue)
+Vue.use(KFormDesign)
+```
+
+ k-form-design.vue
+
+```vue
+<template>
+  <page-header-wrapper>
+    <a-card>
+      <k-form-design ref="kfd" :showHead="false" hideResetHint @save="handleSave" />
+    </a-card>
+  </page-header-wrapper>
+</template>
+
+<script>
+import { setFormDesignConfig } from "k-form-design"
+import storage from 'store'
+import { ACCESS_TOKEN } from '@/store/mutation-types'
+export default {
+  data () {
+    return {}
+  },
+  watch: {},
+  mounted () {
+      // 对上传文件的部分做设置
+    setFormDesignConfig({
+      uploadFile: "/api/upload", // 上传文件地址
+      uploadImage: "/api/upload", // 上传图片地址
+      uploadFileName: "", // 上传文件name
+      uploadImageName: "", // 上传图片name
+      uploadFileData: { }, // 上传文件额外参数
+      uploadImageData: { }, // 上传图片额外参数
+      uploadFileHeaders: { Authorization: 'Bearer ' + storage.get(ACCESS_TOKEN) }, // 上传文件请求头部
+      uploadImageHeaders: { Authorization: 'Bearer ' + storage.get(ACCESS_TOKEN) } // 上传图片请求头部
+    })
+  },
+  methods: {
+  		handleSave(){
+  			// 点击保存时调用这个方法
+  		}
+  }
+}
+</script>
+
+```
+
+回显
+
+```vue
+<template>
+  <div>
+    <a-modal :title="title" :visible="visible" @cancel="handleCancel" width="80%">
+      <template slot="footer">
+        <a-button type="primary" @click="save" v-if="title != '查看'"> 保存 </a-button>
+        
+      </template>
+      <div>
+        <a-row>
+          <div>
+            <k-form-build :defaultValue="defaultValue" ref="kfb" :value="jsonData" :disabled="disabled"></k-form-build>
+          </div>
+        </a-row>
+      </div>
+    </a-modal>
+  </div>
+</template>
+
+<script>
+export default {
+  data () {
+    return {
+      title: "",
+      visible: false,
+      jsonData: {},
+      form: this.$form.createForm(this),
+      dyData: {},
+      formValues: "",
+      kimId: "",
+      defaultValue: {},
+      disabled: false
+    }
+  },
+  components: {},
+  created () {},
+  mounted () {},
+  methods: {
+    setFormValue () {
+      this.$nextTick(() => {
+        this.$refs.kfb.form.setFieldsValue(this.defaultValue)
+      })
+    },
+    handleCancel () {
+      this.visible = false
+    },
+    save () {
+      // 使用getData函数获取数据
+      this.$refs.kfb
+        .getData()
+        .then((values) => {
+        })
+        .catch(() => {
+          this.$message.warning("验证未通过，操作失败")
+        })
+    }
+  }
+}
+</script>
+
+<style lang="less" scoped></style>
+
+```
 
 
-## vue项目（两套路由）适配  pc端 移动端
+
+
+
+## 适配
+
+### vue项目（两套路由）适配  pc端 移动端
 
 vue项目开发中，我们已经开发实现了pc端的网站开发，当想要实现移动端适配时，当时有两种适配的方法作为参考。  
 
@@ -231,23 +464,11 @@ vue项目开发中，我们已经开发实现了pc端的网站开发，当想要
 
 
 
-## vscode  弹出扩展主机意外终止...次
+### vue项目适配屏幕分辨率与屏幕的缩放适配
 
-第一次遇到这种编辑器类似的问题，在网上找了挺多的解决方法，出现这种情况的原因大概是vscode的插件冲突，解决方法大体上就两种。
+ [(198条消息) vue项目适配屏幕分辨率与屏幕的缩放适配详细教程_vue 分辨率适配_汪小敏同学的博客-CSDN博客](https://blog.csdn.net/weixin_44692055/article/details/127843876) 
 
-一种是卸载VScode,删除掉配置文件。在重装。（麻烦，没试过）
 
-第二种是找出有问题的插件并卸载。查找方法有以下几种（我的vscode装了大概60个插件吧）
-
-- 卸载除基本插件外的所有插件，在一个个装，看到底是哪个有问题。（我感觉相当费时，所以没采用）
-
-- 用vscode的二分查找，这个查找会找出可能存在冲突的插件，并禁用掉，我循环查了四五次，最终问题没有解决（用这个方法有问题的插件没有被筛出来）
-
-  ![vscodeTwoSearch](/vscodeTwoSearch.png)
-
-- 当弹出扩展主机意外终止的弹框时，点击**打开开发人员工具**，查看报错信息中关于host相关的部分，报错信息很长，只需要看头部的错误路径。我的错误路径中有easy-scss。所以猜测可能是安装的easy-scss插件有问题。于是我卸载了这个插件。（问题成功解决，不在弹出扩展主机意外终止弹框）
-
-这种遇到插件冲突的问题确实是很少遇到。我的也是突然出现的。记录一次解决方案。
 
 
 
@@ -272,33 +493,6 @@ npm install sass-loader@10.2.0 --save-dev
 ```
 
 
-
-
-
-## 根据url获取文件名
-
-```
-// 根据url获取文件名
-    getFileNameByUrl (url){
-      if (url == null) {
-        return
-      }
-      const b = url.split("/")
-      const c = b.slice(b.length - 1, b.length).toString(String)
-      return c
-    }
-```
-
-例子
-
-```javascript
-var a="http://www.jb51.net/html/images/logo.gif";
-var b=a.split("/");
-console.log(b); // ["http:", "", "www.jb51.net", "html", "images", "logo.gif"]
-var c=b.slice(b.length-1, b.length).toString(String).split(".");
-console.log(c); // ["logo", "gif"]
-alert("取得的文件名是:" + c.slice(0, 1)); // 取得的文件名是:logo
-```
 
 
 
@@ -433,58 +627,6 @@ cd 到需要清空的文件夹父目录 ，控制台输入    `rimraf  ‘要删
 rimraf node_modules
 ```
 
-## this.$refs[formName].validat验证（自定义校验）
-
-验证不生效可参考文章  https://www.jianshu.com/p/5ebd1bd9ecaf
-
-我的不生效原因是  自定义的正则校验有问题,正确的可以参考如下：
-
-```
-data(){
-	 // 验证手机的规则（验证时更改正则表达式即可）
-    var checkMobile = (rule, value, cb) => {
-      if (/^1[3456789]\d{9}$/.test(value) || /^\d{3}-\d{7,8}|\d{4}-\d{7,8}$/.test(value))      {
-        return cb()
-      }
-      // 返回一个错误提示
-      cb(new Error("请输入合法的手机号码"))
-    }
-    
-     return {
-      rules: {
-        //  chargePhone是prop的值
-        chargePhone: [
-          { required: true, message: "请输入电话", trigger: "blur" },
-          { validator: checkMobile, trigger: "change" },
-        ]
-      }
-      ]
-
-}
-```
-
-直接在dom里添加验证参考：
-
-```
-<a-form-model-item
-    prop="phone"
-    
-   :rules="[{ required: true, message: '请输入联系方式', trigger: 'blur' },{ pattern:       /^1[3456789]\d{9}$/, message: '手机号码格式不正确', trigger: 'blur' }]"
-   
-    label="电话"
->
-
-```
-
-## Ant Design of Vue清除表单校验
-
-clearValidate和resetFields区别
-
-```javascript
-this.$refs['form'].resetFields() //移除校验结果并重置字段值
-this.$refs['form'].clearValidate() //移除校验结果
-```
-
 ## axios请求获取本地静态文件(动态获取json数据)
 
 ```vue
@@ -503,13 +645,7 @@ loadGeoJson("/map/city","123").then(res=>{
 })
 ```
 
-## vue项目适配屏幕分辨率与屏幕的缩放适配
 
- [(198条消息) vue项目适配屏幕分辨率与屏幕的缩放适配详细教程_vue 分辨率适配_汪小敏同学的博客-CSDN博客](https://blog.csdn.net/weixin_44692055/article/details/127843876) 
-
-## vscode eslint setting配置
-
- [(206条消息) Vscode如何配置属于自己的ESlint_vscode eslint配置_·甘之如饴·的博客-CSDN博客](https://blog.csdn.net/G0000227/article/details/122093671) 
 
 ## 百度地图根据地址解析坐标系
 
@@ -562,4 +698,124 @@ Vue.use(VueJsonp)
       })
     },
 ```
+
+## vue的v-html解析富文本传来的表格不显示边线
+
+ [(210条消息) 更改v-html的样式_v-html 样式修改_oduoke~~的博客-CSDN博客](https://blog.csdn.net/xh1506101064/article/details/106675796) 
+
+```
+<div class="content-table" v-html="abc"></div>
+
+
+css  注意：/deep/  不能缺少
+.content-table{
+  /deep/table {
+        border-collapse: collapse !important;
+        td,th {
+          text-align: center;
+        border: 1px solid #ccc !important;
+        min-width: 50px !important;
+        height: 20px !important;
+    }
+    th {
+        background-color: #f1f1f1 !important;
+    }
+    }
+
+}
+```
+
+
+
+## Ant Design of Vue
+
+
+
+### Ant Design of Vue  a-table 表格行满足条件高亮
+
+```
+<a-table
+      :rowClassName="setRowClassName"
+      :rowKey="(record,index)=>{return index}"
+    >
+    
+setRowClassName (record) {
+       if (record.province == '山东省') {
+       return 'row-color'
+      } else {
+       return 'row-color2'
+      }
+    },
+
+// style 不能加 scoped，否则行样式不生效
+
+<style  lang="less">
+.row-color{
+  background:#e6f7ff !important;
+}
+.row-color2{
+  background:white !important;
+}
+</style>
+```
+
+### Ant Design of Vue清除表单校验
+
+clearValidate和resetFields区别
+
+```javascript
+this.$refs['form'].resetFields() //移除校验结果并重置字段值
+this.$refs['form'].clearValidate() //移除校验结果
+```
+
+### ant design vue 年份选择器
+
+```
+<a-date-picker
+          mode="year"
+          format="YYYY"
+          v-model="year"
+          :open="yearShowOne"
+          @openChange="openChangeOne"
+          @panelChange="panelChangeOne"
+          placeholder="请选择年份"
+        >
+
+import moment from "moment"
+
+
+data(){
+return{
+	year:'',
+    yearShowOne: false
+}
+}
+
+methods:{
+	getYear () {
+        this.year = moment().format("YYYY")
+      },
+    openChangeOne (status) {
+      if (status) {
+        this.yearShowOne = true
+      }
+    },
+    // 得到年份选择器的值
+    panelChangeOne (value) {
+      this.year = moment(value).format("YYYY")
+      this.yearShowOne = false
+    },
+
+}
+```
+
+### ant design vue  表格隔行变色
+
+```
+::v-deep .ant-table-tbody .ant-table-row:nth-child(2n) {
+		background: #e6f7ff;
+	}
+```
+
+
 

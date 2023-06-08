@@ -48,27 +48,42 @@ export const enSidebar = sidebar({
     {
       text: "后端",
       icon: "note",
-      prefix: "/posts/",
+      prefix: "/posts/banana/",
       children:[
-        {
-          text: "后端语言",
-          icon: "",
-          prefix: "banana/",
-          children: [
-            {
-              text: "java",
-              icon: "",
-              link: "1",
-            },
+        // {
+        //   text: "后端语言",
+        //   icon: "",
+        //   prefix: "banana/",
+        //   children: [
+          {
+            text: "java",
+            icon: "",
+            prefix: "java/",
+            children:[
+              {
+                text: "java",
+                icon: "",
+                link:"basic"
+              },{
+                text: "springBoot",
+                icon: "",
+                link:"spring-boot"
+              }
+            ]
+          },
             {
               text: "node",
               icon: "",
               link: "2",
+            },{
+              text: "实战项目",
+              icon: "",
+              link: "spring",
             },
             // "3",
             // "4",
-          ],
-        }
+        //   ],
+        // }
       ]
     },
     {
@@ -85,6 +100,10 @@ export const enSidebar = sidebar({
           text: "工作中问题及解决",
           icon: "",
           link: "method",
+        },{
+          text: "python",
+          icon: "",
+          link: "python",
         }
       ]
     },

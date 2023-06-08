@@ -7,219 +7,12 @@ tag:
   - ssm
   - spring-boot
 typora-root-url: ..\..\.vuepress\public
+
 ---
 
-# Java
 
-## idea快捷键
 
-ctrl+o :  查看类中所有方法
-
-## 输入 java 命令报错
-
- [(210条消息) 【已解决】Error: could not open `C:\Program Files\Java\jre1.8.0_121\lib\amd64\jvm.cfg‘_来老铁干了这碗代码的博客-CSDN博客](https://blog.csdn.net/weixin_43899069/article/details/115796539) 
-
-java升级时，会在环境变量的path路径中增加以下两条路径，与我们安装java的路径重合。
-
-**解决方法：**
-删掉环境变量中的这两条语句， 同时找到对应文件，删除即可。
-
-C:\ProgramData\Oracle\Java\javapath
-
-C:\Program Files (x86)\Common Files\Oracle\Java\javapath
-
-## **idea创建java项目（maven）** 
-
-### **1 创建普通Java项目（quickstart）** 
-
-![javaCreateSimple](/javaCreateSimple.png)
-
-### 2创建普通Java web项目（maven-archetype-webapp） 
-
-![javaWebCreate](/javaWebCreate.png)
-
-
-
- pom.xml 
-
-```
-<properties>
-  <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
-  <maven.compiler.source>1.8</maven.compiler.source>
-  <maven.compiler.target>1.8</maven.compiler.target>
-</properties>
-
-<dependencies>
-  <dependency>
-    <groupId>junit</groupId>
-    <artifactId>junit</artifactId>
-    <version>4.12</version>
-    <scope>test</scope>
-  </dependency>
-</dependencies>
-```
-
- 删除pom.xml中  <pluginManagement></pluginManagement>  标签和里面的内容
-plugins标签中加了jetty和tomcat,可以测试项目运行 
-
-```
-<build>
-  <finalName>simple-java-web</finalName>
-  <plugins>
-    <plugin>
-
-      <groupId>org.eclipse.jetty</groupId>
-
-      <artifactId>jetty-maven-plugin</artifactId>
-
-      <version>9.4.11.v20180605</version>
-
-      <configuration>
-
-        <scanIntervalSeconds>10</scanIntervalSeconds>
-
-        <webAppConfig>
-
-          <contextPath>/test</contextPath>
-
-        </webAppConfig>
-
-      </configuration>
-
-    </plugin>
-
-    <plugin>
-      <groupId>org.apache.tomcat.maven</groupId>
-      <artifactId>tomcat7-maven-plugin</artifactId>
-      <version>2.2</version>
-      <configuration>
-        <port>8081</port> <!--启动的端口号，默认8081 -->
-        <path>/test</path> <!-- 项目站点名，对外访问路径 -->
-        <uriEncoding>UTF-8</uriEncoding>
-        <server>tomcat7</server>
-      </configuration>
-    </plugin>
-  </plugins>
-</build>
-```
-
-![javaWebCreate2](/javaWebCreate2.png)![javaWebCreate3](/javaWebCreate3.png)![javaWebCreate4](/javaWebCreate4.png)
-
-
-
- (   compile命令编译   package命令打包   )
-访问路径为 ：
-jetty   http://localhost:8080/test
- tomcat    http://localhost:8081/test 
-
-
-
-### **3创建多模块项目** 
-
- 创建项目  项目名 maven-parent 
-
-
-
-![javaModuleCreate](/javaModuleCreate.png)
-
- 创建 module  3个 
-
-
-
-![javaModuleCreate2](/javaModuleCreate2.png)
-
-![javaModuleCreate3](/javaModuleCreate3.png)
-
- maven-dao     maven-service     maven-controller（3个模块）
-创建maven-dao   maven-service    **用quickstart**
-创建maven-controller **用maven-archetype-webapp** 
-
- **生成目录结构** 
-
-![javaModuleCreate4](/javaModuleCreate4.png)
-
- 修改所有的子模块的pom.xml配置 
-
-![javaModuleCreate5](/javaModuleCreate5.png)
-
-UserDao
-
-```
-package org.example.dao;
-
-public class UserDao {
-    public static void testDao(){
-        System.out.println("testDao");
-    }
-}
-```
-
- UserService 
-
-```
-package org.example.service;
-
-import org.example.dao.UserDao;
-
-public class UserService {
-    public static void testService() {
-        System.out.println("userService");
-        // 调用maven-dao模块的方法
-        UserDao.testDao();
-    }
-}
-```
-
- UserServlet 
-
-```
-package org.example;
-
-import org.example.service.UserService;
-
-import javax.servlet.ServletException;
-import javax.servlet.annotation.WebServlet;
-import javax.servlet.http.HttpServlet;
-import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
-import java.io.IOException;
-
-@WebServlet("/user")
-public class UserServlet extends HttpServlet {
-
-    @Override
-    protected void service(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
-        super.service(req, resp);
-        System.out.println("userServlet");
-        UserService.testService();
-    }
-}
-```
-
-
-
-
-在三个module的pom.xml引入相关联模块的依赖
-
-dao不用引  
-
-![javaModuleCreate6](/javaModuleCreate6.png)
-
-![javaModuleCreate7](/javaModuleCreate7.png)
-
-![javaModuleCreate8](/javaModuleCreate8.png)
-
- 配置maven命令，启动 
-
-
-
-## java SSM框架
-
-决定看ssm框架视频， [【尚硅谷】SSM框架全套教程，MyBatis+Spring+SpringMVC+SSM整合一套通关_哔哩哔哩_bilibili](https://www.bilibili.com/video/BV1Ya411S7aT/?spm_id_from=333.337.search-card.all.click&vd_source=f25f5a8d75a3a60d5a288f726803ec11) 。
-
- 需要资料当然要到评论区取找了，资源链接：https://pan.baidu.com/s/1jx1hRb7ugMFFJP81Fvcy1Q?pwd=yyds 提取码：yyds 。     https://gitee.com/zhengguangqq/ssm-md   尚硅谷的ssm md格式笔记 
-
-## java  springboot
+# springboot
 
  [IDEA最右侧栏的Maven窗口不见了怎么调出来-百度经验 (baidu.com)](https://jingyan.baidu.com/article/48b558e35cbfc73e39c09a4e.html) 
 
@@ -235,7 +28,7 @@ https://blog.csdn.net/m0_67391121/article/details/126020133
 
 
 
-### springBoot整合junit
+## springBoot整合junit
 
 1.导入测试对应的starter
 2,测试类使用@SpringBootTest修饰
@@ -272,7 +65,7 @@ class DemoApplicationTests {
 1,测试类如果存在于引导类所在包或子包中无需指定引导类
 2.测试类如果不存在于引导类所在的包或子包中需要通过@SpringBootTest(c1asses= ***.class)属性指定引导类
 
-### 整合myBatis （数据库配置）
+## 整合myBatis （数据库配置）
 
 该心配置：数据库连接相关信息（连什么？连谁？什么权限)
 映射配置：SQL映射（ML/注解)
@@ -324,7 +117,7 @@ public interface UserDao {
 
 
 
-### 整合MyBatis-Plus
+## 整合MyBatis-Plus
 
 MyBatis-Plus与MyBatis区别:      导入坐标不同      数据层实现简化
 
@@ -358,7 +151,7 @@ mybatis-plus:
 2.数据层接口使用BaseMapperi简化开发
 3.需要使用的第三方技术无法通过勾选确定时，需要手工添加坐标
 
-### 整合 Druid
+## 整合 Druid
 
 ```
 <dependency>
@@ -382,11 +175,11 @@ spring:
       password: root
 ```
 
-### SSMP 整合案例
+## SSMP 整合案例
 
 maven导入相关依赖
 
-#### 实体类创建(l0mbok)
+### 实体类创建(l0mbok)
 
 **Book.class**
 
@@ -414,7 +207,7 @@ public class Book {
 }
 ```
 
-#### 数据层开发
+### 数据层开发
 
 导入配置数据库依赖和连接信息
 
@@ -423,7 +216,6 @@ public class Book {
 **bookDao Interface**  
 
 ```java
-
 @Mapper
 public interface BookDao {
     @Select("select * from book where id = #{id}")
@@ -462,7 +254,7 @@ public interface BookDao extends BaseMapper<Book> {
 }
 ```
 
-##### 查询测试：
+#### 查询测试：
 
 ```java
 @SpringBootTest
@@ -484,7 +276,7 @@ class SpringMybatisApplicationTests {
 }
 ```
 
-##### 新增保存测试：
+#### 新增保存测试：
 
 ```java
 @Test
@@ -509,7 +301,7 @@ mybatis-plus:
       id-type: auto
 ```
 
-##### 修改测试：
+#### 修改测试：
 
 ```java
 // 将数据库 id 为 2 的数据做更新
@@ -523,7 +315,7 @@ mybatis-plus:
 	}
 ```
 
-##### 删除测试：
+#### 删除测试：
 
 ```java
 // 删除数据库 id 为 4 的那条数据
@@ -538,7 +330,7 @@ mybatis-plus:
             3.开发Dao接口（继承BaseMapper)
            4.制作测试类测试Dao功能是否有效
 
-##### 分页查询测试：
+#### 分页查询测试：
 
 ```java
 @Test
@@ -579,7 +371,7 @@ public class MpConfig {
 
 
 
-##### 按条件查询测试：
+#### 按条件查询测试：
 
 ```java
 // 查询 name 字段 为 西游记 的数据，类似select * from book where name like %spring%
@@ -603,7 +395,7 @@ public class MpConfig {
 
 
 
-#### 为方便调试可以开启MyBatisPlus的日志
+### 为方便调试可以开启MyBatisPlus的日志
 
 application.yml
 
@@ -617,9 +409,9 @@ mybatis-plus:
 
 ```
 
-#### 业务层开发
+### 业务层开发
 
-##### 普通的业务开发操作
+#### 普通的业务开发操作
 
 新建 service/BookService  Interface
 
@@ -738,7 +530,7 @@ public class BookServiceTest {
 1.Service接口名称定义成业务名称，并与Dao接口名称进行区分
 2.制作测试类测试Service功能是否有效
 
-##### mybatis-plus 简化常规的业务操作
+#### mybatis-plus 简化常规的业务操作
 
 快速开发方案
 		使用MyBatisPlus提供有业务层通用接口  ISerivce  与业务层通用实现类(ServiceImpl<M,T>)
@@ -819,7 +611,7 @@ public class BookServiceTest {
 }
 ```
 
-#### 表现层开发
+### 表现层开发
 
 ​       基于Restful进行表现层接口开发
 ​       使用Postman测试表现层接口功能
@@ -877,7 +669,7 @@ public class BookController {
 }
 ```
 
-##### 表现层消息一致性处理
+#### 表现层消息一致性处理
 
 设计表现层返回结果的模型类，用于后端与前端进行数据格式统一，也称为前后端数据协议
 
@@ -968,7 +760,7 @@ public class BookController {
 2,返回值结果类型可以根据需求自行设定，没有固定格式
 3,返回值结果模型类用于后端与前端进行数据格式统一，也称为前后端数据协议
 
-##### springMVC异常处理器
+#### springMVC异常处理器
 
 当接口出现异常时，返回数据又不一致，需要进行处理（当要给不同异常做不同处理时，可以多写几个异常处理）
 
@@ -994,7 +786,7 @@ public class ProjectExceptionAdvice {
 }
 ```
 
-### 打包
+## 打包
 
 打开maven面板， 先clean,在点击package打包（点击 Toggle 'Skip Tests'Mode 跳过测试过程，提示不安全）
 
@@ -1053,7 +845,7 @@ taskki11/F/PID "进程PID号"
 taskki11 -f -t -im "进程名称"
 ```
 
-### 部署运行(配置服务环境)
+## 部署运行(配置服务环境)
 
 VIM中常用命令  https://blog.csdn.net/feosun/article/details/73196299
 
@@ -1200,7 +992,7 @@ navicat连接虚拟机的MySQL连不上，查看打开修改虚拟机的端口
 3.多个临时属性之间使用空格分隔
 4.临时属性必须是当前boot工程支持的属性，否则设置无效
 
-### 临时属性设置（开发环境）
+## 临时属性设置（开发环境）
 
 通过编程形式带参数启动SpringBoot程序，为程序添加运行参数
 
@@ -1216,6 +1008,7 @@ public class SpringMybatisApplication {
 	}
 
 }
+
 ```
 
 不携带参数启动SpringBoot程序
@@ -1229,9 +1022,10 @@ public class SpringMybatisApplication {
 	}
 
 }
+
 ```
 
-### 配置文件分类
+## 配置文件分类
 
 **1.SpringBoot中4级配置文件**
 1级：file:config/application.yml   【最高】
@@ -1258,9 +1052,9 @@ public class SpringMybatisApplication {
 
 
 
-### 多环境开发
+## 多环境开发
 
-#### application.yml中配置多个环境
+### application.yml中配置多个环境
 
 1,多环境开发需要设置若干种常用环境，例如开发、生产、测试环境
 2,yaml格式中设置多环境使用    ---    区分环境设置边界
@@ -1304,11 +1098,12 @@ spring:
 server:
   port: 82
 
+
 ```
 
 
 
-#### 多个配置文件
+### 多个配置文件
 
 1.主启动配置文件application.yml   （active配置环境文件名称用哪个）
 
@@ -1316,6 +1111,7 @@ server:
 spring:
   profiles:
     active: dev
+
 ```
 
 2.环境分类配置文件application-pro.yml
@@ -1323,6 +1119,7 @@ spring:
 ```
 server:
   port: 80
+
 ```
 
 3,环境分类配置文件application-dev.yml
@@ -1330,6 +1127,7 @@ server:
 ```
 server:
   port:81
+
 ```
 
 4.环境分类配置文件application-test.yml
@@ -1337,11 +1135,12 @@ server:
 ```
 server:
   port:82
+
 ```
 
 
 
-#### group属性设置配置文件分组
+### group属性设置配置文件分组
 
 多环境开发使用group属性设置配置文件分组，便于线上维护管理
 
@@ -1353,11 +1152,12 @@ spring:
       "dev":devDB,devRedis,devMVC
       "pro":proDB,proRedis,proMVC
       "test":testDB,testRedis,testMVC
+
 ```
 
 
 
-#### springboot与maven的多环境兼容
+### springboot与maven的多环境兼容
 
  [(214条消息) springboot与maven的多环境兼容解决方案_springboot兼容pom_沐雪架构师的博客-CSDN博客](https://blog.csdn.net/puzi0315/article/details/127196143) 
 
@@ -1389,6 +1189,7 @@ spring:
         </profile>
  
     </profiles>
+
 ```
 
 2  SpringBoot中引用Maven属性
@@ -1397,6 +1198,7 @@ spring:
 spring:
   profiles:
     active: @pom.profile@
+
 ```
 
 3  执行Maven打包指令，并在生成的boot打包文件 .jar文件中查看对应信息
@@ -1408,7 +1210,7 @@ spring:
 
 
 
-### 日志
+## 日志
 
 日志(log)作用：  
 
@@ -1444,11 +1246,12 @@ logging:
     rollingpolicy:
       max-file-size: 10MB   # 一个日志文件最大的大小
       file-name-pattern: server.%d{yyyy-MM-dd}.%i.log  #生成多条日志文件时,配置文件名格式
+
 ```
 
 
 
-### 热部署（只在开发环境有效）
+## 热部署（只在开发环境有效）
 
  [(214条消息) springboot实现热部署_springboot热部署_lwj_07的博客-CSDN博客](https://blog.csdn.net/lwj_07/article/details/126226074) 
 
@@ -1459,6 +1262,7 @@ logging:
     <artifactId>spring-boot-devtools</artifactId>
     <optional>true</optional>
 </dependency>
+
 ```
 
 设置高优先级属性禁用热部署
@@ -1475,15 +1279,16 @@ public class SpringMybatisApplication {
 	}
 
 }
+
 ```
 
 
 
 
 
-### 实用开发
+## 实用开发
 
-#### bean 属性绑定
+### bean 属性绑定
 
 application.yml
 
@@ -1492,6 +1297,7 @@ servers:
   ipAdress: 127.0.0.1
   port: 2345
   timeOut: -1
+
 
 ```
 
@@ -1506,6 +1312,7 @@ public class ServerConfig {
     private int port;
     private Long timeout;
 }
+
 ```
 
 解除使用@ConfigurationProperties注释警告（加 dependency ）
@@ -1517,6 +1324,7 @@ Spring Boot Configuration Annotation Processor not configured      Open Document
 			<groupId>org.springframework.boot</groupId>
 			<artifactId>spring-boot-configuration-processor</artifactId>
 		</dependency>
+
 ```
 
 
@@ -1530,11 +1338,13 @@ public DruidDataSource dataSource(){
      DruidDataSource ds new DruidDataSource();
      return ds;
 }
+
 ```
 
 ```
 datasource:
   driverclassName: com.mysql.jdbc.Driver
+
 ```
 
 @EnableConfigurationProperties注解可以将使用@ConfigurationProperties注解对应的类加入Spring容器
@@ -1543,7 +1353,7 @@ datasource:
 
 
 
-#### SpringBoot支持JDK8提供的时间与空间计量单位
+### SpringBoot支持JDK8提供的时间与空间计量单位
 
  @DurationUnit 注解在实体类中配置属性的 时间单位
 
@@ -1560,11 +1370,12 @@ public class ServerConfig {
     @DataSizeUnit(DataUnit.MEGABYTES)  // 容量属性单位是MB
     private DataSize dataSize;
 }
+
 ```
 
 
 
-#### bean属性校验
+## bean属性校验
 
 1  添加依赖：  导入JSR383规范
 
@@ -1573,6 +1384,7 @@ public class ServerConfig {
 			<groupId>javax.validation</groupId>
 			<artifactId>validation-api</artifactId>
 		</dependency>
+
 ```
 
 2  @Validated 用于开启配置校验
@@ -1580,7 +1392,6 @@ public class ServerConfig {
 @Max，@Min 等注解用于配置属性具体的配置规则 
 
 ```
-
 @Validated
 public class ServerConfig {
     private String ipAdress;
@@ -1595,6 +1406,7 @@ public class ServerConfig {
     @DataSizeUnit(DataUnit.MEGABYTES)  // 容量属性单位是MB
     private DataSize dataSize;
 }
+
 ```
 
 3  运行报错时，需要增加依赖   
@@ -1606,6 +1418,7 @@ public class ServerConfig {
 			<groupId>org.hibernate.validator</groupId>
 			<artifactId>hibernate-validator</artifactId>
 		</dependency>
+
 ```
 
 4  总结
@@ -1617,15 +1430,16 @@ public class ServerConfig {
 
 
 
-### 测试
+## 测试
 
-#### 临时参数
+### 临时参数
 
 application.yml
 
 ```
 test:
   prop: value1
+
 ```
 
 获取yml数据，或者临时参数。（临时参数优先级：args>properties >yml）
@@ -1640,11 +1454,12 @@ test:
             System.out.println(msg);
         }
     }
+
 ```
 
 
 
-#### 加载测试配置
+### 加载测试配置
 
 使用@Import注解加载当前测试类专用的配置（在测试中加载）
 
@@ -1662,9 +1477,10 @@ public class ConfigurationTest{
   }
 
 }
+
 ```
 
-#### web环境模拟测试
+### web环境模拟测试
 
 web环境模拟测试
 设置测试端口
@@ -1703,9 +1519,10 @@ public class WebTest{
         action.andExpect(result);
     }
 }
+
 ```
 
-#### 业务层测试事务回滚
+### 业务层测试事务回滚
 
 使测试时的数据不会加到数据库中
 
@@ -1714,6 +1531,7 @@ public class WebTest{
 ```
 @SpringBootTest
 @Transactional
+
 ```
 
 如果想在测试用例中提交事务，可以通过@Rol1back注解设置
@@ -1722,18 +1540,19 @@ public class WebTest{
 @SpringBootTest
 @Transactional
 @Rollback(false)
+
 ```
 
-#### SpringBoot测试用例设置随机数据
+### SpringBoot测试用例设置随机数据
 
  [(215条消息) SpringBoot测试用例设置随机数据_springboot生成随机id_梨轻巧的博客-CSDN博客](https://blog.csdn.net/m0_45877477/article/details/125481585) 
 
-### 数据层解决方案
+## 数据层解决方案
 
 现有数据层解决方案技术选型
 Druid +MyBatis-Plus +MySQL
 
-#### 内嵌的数据源
+### 内嵌的数据源
 
 SpringBoot提供了3种内嵌的数据源对象供开发者选择：
 
@@ -1750,34 +1569,35 @@ spring:
     password: root
   hikari:
     maximum-pool-size: 50
+
 ```
 
 
 
-#### 内置持久化解决方案一一JdbcTemplate
+### 内置持久化解决方案一一JdbcTemplate
 
  [SpringBoot使用JdbcTemplate_慕课手记 (imooc.com)](https://www.imooc.com/article/46879) 
 
-#### 内嵌数据库
+### 内嵌数据库
 
 SpringBoot提供了3种内嵌数据库供开发者选择，提高开发测试效率
 H2，HSQL，Derby
 
 
 
-#### NoSQL
+### NoSQL
 
 市面上常见的NoSQL解决方案
 Redis，Mongo，ES
 
-##### Redis
+#### Redis
 
 Redis是一款key-value存储结构的内存级NoSQL数据库
 支持多种数据存储格式
 支持持久化
 支持集群
 
-###### **springBoot整合redis**客户端
+##### **springBoot整合redis**客户端
 
  参考：  [(215条消息) springboot整合redis_springboot redis_lwj_07的博客-CSDN博客](https://blog.csdn.net/lwj_07/article/details/126265935) 
 
@@ -1790,6 +1610,7 @@ Redis是一款key-value存储结构的内存级NoSQL数据库
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-starter-data-redis</artifactId>
         </dependency>
+
 ```
 
 配置
@@ -1818,6 +1639,7 @@ spring:
         min-idle: 0
         # 连接池中最大连接数，负数表示没有限制
         max-active: 20
+
 ```
 
 
@@ -1867,6 +1689,7 @@ class ConfigurationApplicationTests {
 
 }
 
+
 ```
 
 要获取客户端中同步的数据要用 StringRedisTemplate
@@ -1888,9 +1711,10 @@ class ConfigurationApplicationTests {
 	}
 
 }
+
 ```
 
-###### jedis
+##### jedis
 
  [(216条消息) Redis 基础 Jedis -- Jedis（Java程序操作Redis的工具）_CodeJiao的博客-CSDN博客](https://blog.csdn.net/I_r_o_n_M_a_n/article/details/122685882) 
 
@@ -1900,7 +1724,7 @@ lettcus基于Netty框架进行与Redis服务器连接，底层设计中采用Sta
 
 
 
-##### MongoDB
+#### MongoDB
 
 MongoDB是一个开源、高性能、无模式的文档型数据库。NoSQL数据库产品中的一种，是最像关系型数据库的非
 关系型数据库
@@ -1921,6 +1745,7 @@ springBoot整合 mongoDB
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-starter-data-mongodb</artifactId>
         </dependency>
+
 ```
 
 ```
@@ -1938,9 +1763,10 @@ springBoot整合 mongoDB
 		List<User> userlist = mongoTemplate.findAll(User.class);
 		System.out.println(userlist);
 	}
+
 ```
 
-##### Elasticsearch (ES)
+#### Elasticsearch (ES)
 
 Elasticsearch是一个分布式全文搜索引擎
 
@@ -1948,9 +1774,9 @@ Elasticsearch是一个分布式全文搜索引擎
 
 文档参考： [(217条消息) ElasticSearch使用教程、设计到实战_ForFuture Code的博客-CSDN博客](https://blog.csdn.net/ganquanzhong/article/details/108633025) 
 
-### 整合第三方数据
+## 整合第三方数据
 
-#### 缓存
+### 缓存
 
 缓存是一种介于数据永久存储介质与数据应用之间的数据临时存储介质
 
@@ -1968,6 +1794,7 @@ public interface MsgService {
     public String  get(String tel);
     public Boolean check(String tel,String code);
 }
+
 ```
 
 msgServiceImpl.class
@@ -1989,6 +1816,7 @@ public class MsgServiceImpl implements MsgService {
         return code.equals(queryCode);
     }
 }
+
 ```
 
 MsgController.class
@@ -2010,6 +1838,7 @@ public class MsgController {
     }
 
 }
+
 ```
 
 
@@ -2023,6 +1852,7 @@ SpringBoot:提供了缓存技术，方便缓存使用
 			<groupId>org.springframework.boot</groupId>
 			<artifactId>spring-boot-starter-cache</artifactId>
 		</dependency>
+
 ```
 
 2  开启缓存功能 ：  在启动类上加上   @EnableCaching  注解
@@ -2037,6 +1867,7 @@ SpringBoot:提供了缓存技术，方便缓存使用
     public Book getById(Integer id) {
         return bookDao.selectById(id);
     }
+
 ```
 
  在不影响方法执行的情况下更新缓存时用CachePut
@@ -2053,9 +1884,9 @@ SpringBoot:提供了缓存技术，方便缓存使用
 
  [J2Cache: Java 两级缓存框架，可以让应用支持两级缓存框架 ehcache(Caffeine) + redis 。避免完全使用独立缓存系统所带来的网络IO开销问题 (gitee.com)](https://gitee.com/ld/J2Cache) 
 
-### 任务
+## 任务
 
-#### 定时任务
+### 定时任务
 
 市面上流行的定时任务技术：Quartz ，Spring Task
 
