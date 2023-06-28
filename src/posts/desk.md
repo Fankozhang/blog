@@ -924,6 +924,8 @@ const stream= await navigator.mediaDevices.getDisplayMedia({video:true})
     methods:{
       async startRecord (){
          this.stream= await navigator.mediaDevices.getUserMedia({
+             // 加上audio: true可以录制音频
+          audio: true,
           video:{
             width:1000,
             height:600
@@ -938,7 +940,6 @@ const stream= await navigator.mediaDevices.getDisplayMedia({video:true})
           this.recordInstance.start()
    //https://developer.mozilla.org/zhCN/docs/Web/API/MediaRecorder/dataavailable_event
           this.recordInstance.ondataavailable=(e)=>{
-            console.log(this.blobSlice,'1234','dataavailable')
             this.blobSlice.push(e.data)
           }
    

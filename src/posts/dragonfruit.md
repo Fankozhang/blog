@@ -22,6 +22,8 @@ typora-root-url: ..\.vuepress\public
 
  [uni-app快速上手 | uni-app官网 (dcloud.net.cn)](https://uniapp.dcloud.net.cn/quickstart.html#) 
 
+ [DCloud 插件市场](https://ext.dcloud.net.cn/) 
+
 ## uni-app发起网络请求
 
 ### 原生的uni.request发起请求

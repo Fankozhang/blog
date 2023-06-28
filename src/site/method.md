@@ -131,6 +131,33 @@ if ('download' in document.createElement('a')) { // 非IE下载
             },
 ```
 
+第二种
+
+ [你真的会用标签下载文件吗? (qq.com)](https://mp.weixin.qq.com/s/W_udbGlYEhdyH1mtdtbrsQ) 
+
+```
+ts
+复制代码
+const downloadByUrl = (url: string, filename: string) => {
+    if (!url) throw new Error('当前没有下载链接');
+
+    const a = document.createElement("a");
+    a.style.display = "none";
+    a.href = url;
+    a.download = filename;
+    // 使用target="_blank"时，添加rel="noopener noreferrer" 堵住钓鱼安全漏洞 防止新页面window指向之前的页面
+    a.rel = "noopener noreferrer";
+    document.body.append(a);
+    a.click();
+
+    setTimeout(() => {
+        a.remove();
+    }, 1000);
+};
+```
+
+
+
 ### 根据url获取文件名
 
 ```
@@ -539,6 +566,17 @@ go (id) {
       }
     }
 ```
+
+## vue  this.$router 跳转打开新页面
+
+```
+go (item) {
+      const url = this.$router.resolve({ path: '/job/company', query: { id: item.id } })
+      window.open(url.href, '_blank')
+    },
+```
+
+
 
 ## git中上传时忽略文件 .gitignore  配置
 
