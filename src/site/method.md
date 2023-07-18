@@ -493,13 +493,21 @@ vue项目开发中，我们已经开发实现了pc端的网站开发，当想要
 
 ### vue项目适配屏幕分辨率与屏幕的缩放适配
 
+修改initial-scale的数值，原值为1.0，根据屏幕显示调整。
+
+```
+<meta name="viewport"
+          content="width=device-width, user-scalable=no, initial-scale=0.28, maximum-scale=0.28, minimum-scale=0.28">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+```
+
  [(198条消息) vue项目适配屏幕分辨率与屏幕的缩放适配详细教程_vue 分辨率适配_汪小敏同学的博客-CSDN博客](https://blog.csdn.net/weixin_44692055/article/details/127843876) 
 
 
 
+## PC端网站在手机模式下打开显示不全的问题
 
-
-
+ [(227条消息) PC端网站在手机模式下打开显示不全的问题_手机pc端口 显示不全面_大大大颖er的博客-CSDN博客](https://blog.csdn.net/ddyy2695734664/article/details/113248509) 
 
 ## vue项目使用scss时，版本冲突
 
@@ -521,7 +529,11 @@ npm install sass-loader@10.2.0 --save-dev
 
 
 
+## Vue开发中出现Loading Chunk Failed 踩坑纪实
 
+（出现这个错误会页面空白）
+
+ [Vue开发中出现Loading Chunk Failed 踩坑纪实 - 掘金 (juejin.cn)](https://juejin.cn/post/7080189425975558181)    
 
 
 

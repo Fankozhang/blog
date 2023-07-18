@@ -144,3 +144,8 @@ tag:
 - [（网址加密成ooooooo...）ooooooooooooooooooooooo.ooo | URL Lengthner](https://ooooooooooooooooooooooo.ooo/) 
 
   
+
+开源
+
+- https://github.com/501351981/vue-office    支持多种文件(**docx、excel、pdf**)预览的vue组件库，支持vue2/3。 
+- 

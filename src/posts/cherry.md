@@ -133,7 +133,7 @@ jobs:
 
  [Linux Nginx安装及使用 - 掘金 (juejin.cn)](https://juejin.cn/post/6990643580809248781) 
 
- [Linux安装Nginx - 掘金 (juejin.cn)](https://juejin.cn/post/7136114724542316558) 
+ [Linux安装Nginx - 掘金 (juejin.cn)](https://juejin.cn/post/7136114724542316558)   方便快捷
 
 安装nginx的过程中出现 nginx: [emerg] still could not bind() 需要注意端口和进程占用的问题
 
@@ -144,6 +144,10 @@ jobs:
 
 
  [还在手动配置Nginx？太LOW了，这个超强大的 Nginx 可视化管理工具太牛逼了！ (qq.com)](https://mp.weixin.qq.com/s/33K0XfZ8bAT95qmrhzvRDw) 
+
+
+
+使用阿里服务器安装的时候要设置安全组 ，入口 和 出口 都要设置80端口的，否则网页打不开。
 
 ### 基本命令
 

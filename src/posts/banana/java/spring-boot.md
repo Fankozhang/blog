@@ -14,7 +14,7 @@ typora-root-url: ..\..\.vuepress\public
 
 # springboot
 
- [IDEA最右侧栏的Maven窗口不见了怎么调出来-百度经验 (baidu.com)](https://jingyan.baidu.com/article/48b558e35cbfc73e39c09a4e.html) 
+ [IDEA最右侧栏的Maven窗口不见了怎么调出来-百度经验 (baidu.com)](https://jingyan.baidu.com/article/48b558e35cbfc73e39c09a4e.html)    **按下Ctrl+Shift+A** 
 
 
 
@@ -179,7 +179,7 @@ spring:
 
 maven导入相关依赖
 
-### 实体类创建(l0mbok)
+### 实体类创建(lombok)
 
 **Book.class**
 
@@ -828,6 +828,10 @@ public class ProjectExceptionAdvice {
 
 指定端口号   java -jar  jar包文件名   **--server.port=8085** 
 
+ [(227条消息) jar包在linux上持续运行及终止运行的命令_linux 停止持久运行_羊糕的博客-CSDN博客](https://blog.csdn.net/qq_44142640/article/details/111687863) 
+
+ [(227条消息) Linux 解决nohup: 忽略输入并把输出追加到“nohup.out“和nohup: 忽略输入重定向错误到标准输出端_千与千与千的博客-CSDN博客](https://blog.csdn.net/liu_feng_zi_/article/details/118730467) 
+
 打包后运行，按条件查询时，出现类似 evaluating expression ‘ew.sqlSegment != null and ew.sqlSegment != ‘‘ and ew. mybaties plus问题  的错误：原因是mybatis-plus的版本不兼容，（3.5.2可以正常使用）
 
 Windonws.端口被占用
@@ -851,7 +855,7 @@ VIM中常用命令  https://blog.csdn.net/feosun/article/details/73196299
 
 linux安装java运行环境：jdk
 
-上传 jar 包 到use/local/app 文件夹下
+上传 jar 包 到usr/local/app 文件夹下
 
  linux下载mysql   usr/local/mysql 
 
@@ -877,7 +881,7 @@ Mysql 启动报错解析：Starting MySQL.. ERROR! The server quit without updat
 
 
 
-**linux安装MySQL总结**
+### **linux安装MySQL总结**
 
   /usr/local 目录下 
 
@@ -905,12 +909,17 @@ Mysql 启动报错解析：Starting MySQL.. ERROR! The server quit without updat
     character-set-server=utf8
     port = 3306
    sql_mode=NO_ENGINE_SUBSTITUTION,STRICT_TRANS_TABLES
+   max_allowed_packet = 500M
+   net_read_timeout = 120
+    net_write_timeout = 900
  [client]
    socket = /usr/local/mysql/mysql.sock
    default-character-set=utf8
 ```
 
- **创建mysql服务**    
+ (2013报错长连接  加 net_write_timeout = 900)
+
+**创建mysql服务**    
 
 （1）`cp -a /usr/local/mysql/support-files/mysql.server /etc/init.d/mysqld` 
 
@@ -991,6 +1000,43 @@ navicat连接虚拟机的MySQL连不上，查看打开修改虚拟机的端口
 2.临时属性添加方式：java -jar 工程名.jar --属性名=值
 3.多个临时属性之间使用空格分隔
 4.临时属性必须是当前boot工程支持的属性，否则设置无效
+
+
+
+### 扩展linux安装redis
+
+Redis下载与安装    
+在Linux系统安装Redis步骤：
+1.将Redis安装包上传到Linux  下载地址(https://download.redis.io/releases/)  
+
+（注意下载版本，有的版本下载make报错）
+
+2.解压安装包，命令：tar -zxvf redis-4.0.0.tar.gz -C /usr/local
+3.安装Redis的依赖环境gcc,命令：yum install gcc-c++
+4.进入/usr/local/redis-4.0.0,进行编译，命令：make
+5.进入redis的src目录，进行安装，命令：make install
+
+
+
+Linux中redis服务启动，可以使用redis-server,默认端口号为6379        ./redis.server 
+
+Ctrl+C停止Redis服务
+
+启动redis客户端   ./redis-cli      （命令keys *    查看所有数据   ）
+
+
+
+### 扩展linux安装jdk
+
+ [(227条消息) linux 安装jdk 两种方法：手动安装 和yum安装：_阿尔卑斯狼__的博客-CSDN博客](https://blog.csdn.net/m0_50217781/article/details/112414571) 
+
+ yum install -y java-1.8.0-[openjdk](https://so.csdn.net/so/search?q=openjdk&spm=1001.2101.3001.7020).x86_64 
+
+查看   java -[version](https://so.csdn.net/so/search?q=version&spm=1001.2101.3001.7020) 
+
+###  linux下打开对外开放端口号
+
+ [(227条消息) linux下打开对外开放端口号_linux开通端口_laidanlove250的博客-CSDN博客](https://blog.csdn.net/laidanlove250/article/details/97667113) 
 
 ## 临时属性设置（开发环境）
 
@@ -1904,5 +1950,131 @@ springboot整合Quartz
 
 
 
+## springBoot 项目常用maven配置
 
+```
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 https://maven.apache.org/xsd/maven-4.0.0.xsd">
+	<modelVersion>4.0.0</modelVersion>
+	<parent>
+		<groupId>org.springframework.boot</groupId>
+		<artifactId>spring-boot-starter-parent</artifactId>
+		<version>2.4.5</version>
+		<relativePath/> <!-- lookup parent from repository -->
+	</parent>
+	<groupId>com.example.mybatis</groupId>
+	<artifactId>demo</artifactId>
+	<version>0.0.1-SNAPSHOT</version>
+	<name>demo</name>
+	<description>Demo project for Spring Boot</description>
+	<properties>
+		<java.version>17</java.version>
+	</properties>
+	<dependencies>
+		<dependency>
+			<groupId>org.springframework.boot</groupId>
+			<artifactId>spring-boot-starter</artifactId>
+		</dependency>
+
+		<dependency>
+			<groupId>org.springframework.boot</groupId>
+			<artifactId>spring-boot-starter-test</artifactId>
+			<scope>test</scope>
+		</dependency>
+
+		<dependency>
+			<groupId>org.springframework.boot</groupId>
+			<artifactId>spring-boot-starter-web</artifactId>
+			<scope>compile</scope>
+		</dependency>
+
+		<dependency>
+			<groupId>com.baomidou</groupId>
+			<artifactId>mybatis-plus-boot-starter</artifactId>
+			<version>3.4.2</version>
+		</dependency>
+
+		<dependency>
+			<groupId>org.projectlombok</groupId>
+			<artifactId>lombok</artifactId>
+			<version>1.18.20</version>
+		</dependency>
+
+		<dependency>
+			<groupId>com.alibaba</groupId>
+			<artifactId>fastjson</artifactId>
+			<version>1.2.76</version>
+		</dependency>
+
+		<dependency>
+			<groupId>commons-lang</groupId>
+			<artifactId>commons-lang</artifactId>
+			<version>2.6</version>
+		</dependency>
+
+		<dependency>
+			<groupId>mysql</groupId>
+			<artifactId>mysql-connector-java</artifactId>
+			<scope>runtime</scope>
+		</dependency>
+
+		<dependency>
+			<groupId>com.alibaba</groupId>
+			<artifactId>druid-spring-boot-starter</artifactId>
+			<version>1.1.23</version>
+		</dependency>
+
+		<dependency>
+			<groupId>com.github.xiaoymin</groupId>
+			<artifactId>knife4j-spring-boot-starter</artifactId>
+			<version>3.0.2</version>
+		</dependency>
+	</dependencies>
+
+	<build>
+		<plugins>
+			<plugin>
+				<groupId>org.springframework.boot</groupId>
+				<artifactId>spring-boot-maven-plugin</artifactId>
+			</plugin>
+		</plugins>
+	</build>
+
+</project>
+
+```
+
+## springBoot 项目常用application.yml配置
+
+```
+server:
+  port: 8089
+spring:
+  application:
+    #应用的名称，可选
+    name: reggie_take_out
+  datasource:
+    druid:
+      driver-class-name: com.mysql.cj.jdbc.Driver
+      url: jdbc:mysql://localhost:3306/reggie?serverTimezone=Asia/Shanghai&useUnicode=true&characterEncoding=utf-8&zeroDateTimeBehavior=convertToNull&useSSL=false&allowPublicKeyRetrieval=true
+      username: root
+      password: root
+
+mybatis-plus:
+  configuration:
+    #在映射实体或者属性时，将数据库中表名和字段名中的下划线去掉，按照驼峰命名法映射
+    map-underscore-to-camel-case: true
+    log-impl: org.apache.ibatis.logging.stdout.StdOutImpl
+  global-config:
+    db-config:
+      # 设置统一的主键生成策略
+      id-type: ASSIGN_ID
+      # 设置实体类所对应的表的统一前缀
+      # table_prefix:t_
+
+reggie:
+  #  指定上传文件暂存的位置
+  path: D:\img\
+```
 
