@@ -1241,7 +1241,7 @@ CMD /bin/bash
 
 ###  虚悬镜像
 
-仓库名、标签都是<none>的镜像，俗称dangling image
+仓库名、标签都是< none >的镜像，俗称dangling image
 
 查看    **docker image ls -f dangling=true**
 

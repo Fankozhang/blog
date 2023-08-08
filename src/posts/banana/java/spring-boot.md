@@ -1661,12 +1661,12 @@ H2，HSQL，Derby
 
 
 
-### NoSQL
+### NoSQL（redis,mongo）
 
 市面上常见的NoSQL解决方案
 Redis，Mongo，ES
 
-#### Redis
+### Redis
 
 Redis是一款key-value存储结构的内存级NoSQL数据库
 支持多种数据存储格式
