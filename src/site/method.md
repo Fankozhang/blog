@@ -41,7 +41,9 @@ typora-root-url: ..\.vuepress\public
 
  [(206条消息) Vscode如何配置属于自己的ESlint_vscode eslint配置_·甘之如饴·的博客-CSDN博客](https://blog.csdn.net/G0000227/article/details/122093671) 
 
+## vscode看不到远程新建的分支，解决方法来了
 
+https://blog.csdn.net/qq_39606853/article/details/122192555
 
 ## 下载（url）
 
@@ -465,7 +467,24 @@ export default {
 
 ```
 
+### ant design vue a-select 下拉搜索
 
+```
+ <a-select
+            v-model:value="searchCondition.lj"
+            show-search   // 开启下拉搜索
+            optionFilterProp="label" // 用label属性过滤。
+          >
+            <a-select-option 
+              v-for=" item in list " 
+              :value="item.code" 
+              :key="index"
+              :label="item.name"
+            >
+              {{ item.name }}
+            </a-select-option>
+          </a-select>
+```
 
 
 
@@ -505,9 +524,162 @@ vue项目开发中，我们已经开发实现了pc端的网站开发，当想要
 
 
 
-## PC端网站在手机模式下打开显示不全的问题
+### PC端网站在手机模式下打开显示不全的问题
 
  [(227条消息) PC端网站在手机模式下打开显示不全的问题_手机pc端口 显示不全面_大大大颖er的博客-CSDN博客](https://blog.csdn.net/ddyy2695734664/article/details/113248509) 
+
+
+
+### 屏幕适配分辨率，不随屏幕缩放比变化
+
+utils/devicePixelRatio.js  (复制后在app.vue的created生命周期调用)
+
+```js
+class DevicePixelRatio {
+    constructor () {
+            // this.flag = false;
+        }
+        // 获取系统类型
+    _getSystem () {
+            // let flag = false;
+            var agent = navigator.userAgent.toLowerCase()
+            //		var isMac = /macintosh|mac os x/i.test(navigator.userAgent);
+            //		if(isMac) {
+            //			return false;
+            //		}
+            // 现只针对windows处理，其它系统暂无该情况，如有，继续在此添加
+            if (agent.indexOf("windows") >= 0) {
+                return true
+            }
+        }
+        // 获取页面缩放比例
+        //	_getDevicePixelRatio() {
+        //		let t = this;
+        //	}
+        // 监听方法兼容写法
+    _addHandler (element, type, handler) {
+            if (element.addEventListener) {
+                element.addEventListener(type, handler, false)
+            } else if (element.attachEvent) {
+                element.attachEvent("on" + type, handler)
+            } else {
+                element["on" + type] = handler
+            }
+        }
+        // 校正浏览器缩放比例
+    _correct () {
+            const t = this
+            // 页面devicePixelRatio（设备像素比例）变化后，计算页面body标签zoom修改其大小，来抵消devicePixelRatio带来的变化。
+            document.getElementsByTagName("body")[0].style.zoom = 1 / window.devicePixelRatio
+        }
+        // 监听页面缩放
+    _watch () {
+            const t = this
+            t._addHandler(window, "resize", function () { // 注意这个方法是解决全局有两个window.resize
+                // 重新校正
+                t._correct()
+            })
+        }
+        // 初始化页面比例
+    init () {
+        const t = this
+        if (t._getSystem()) { // 判断设备，目前只在windows系统下校正浏览器缩放比例
+            // 初始化页面校正浏览器缩放比例
+            t._correct()
+            // 开启监听页面缩放
+            t._watch()
+        }
+    }
+}
+export default DevicePixelRatio
+
+```
+
+App.vue
+
+```vue
+<template>
+  <a-config-provider :locale="locale">
+    <div id="app">
+      <router-view />
+
+    </div>
+  </a-config-provider>
+</template>
+
+<script>
+import DevicePixelRatio from './utils/devicePixelRatio'
+
+export default {
+  data () {
+    return {}
+  },
+  created () {
+    new DevicePixelRatio().init()
+  }
+  watch: {
+    $route: () => {
+      document.body.scrollTop = 0
+      document.documentElement.scrollTop = 0
+    }
+  }
+}
+</script>
+
+```
+
+### postcss
+
+**使用postcss和相关插件时一定要注意包的版本的冲突**
+
+npm install postcss postcss-loader -D 
+
+https://juejin.cn/post/7062717813764390948
+
+ **[postcss-px2vp](https://github.com/sexyHuang/postcss-px2vp)**
+
+### vue 使用postcss-pxtorem 实现自适应
+
+ [(230条消息) vue-cli中使用postcss-px-to-viewport 将px转换成vw_px to vw_蒲公英芽的博客-CSDN博客](https://blog.csdn.net/Charissa2017/article/details/105420971) 
+
+### vue 使用postcss-pxtorem 实现自适应
+
+https://juejin.cn/post/7052955004683943950
+
+https://juejin.cn/post/7041826704574119966
+
+- postcss-pxtorem：将px转换为px
+- amfe-flexible：为html、body添加font-size，窗口调整时候重新设置font-size
+
+```
+npm install amfe-flexible --save
+npm install postcss-pxtorem --save-dev
+```
+
+ 如果报错，则需要指定postcss-pxtorem版本，如： npm install [postcss-pxtorem@5.1.1](https://link.juejin.cn/?target=mailto%3Apostcss-pxtorem%405.1.1) --save-dev 
+
+main.js引入
+
+```
+import 'amfe-flexible'
+```
+
+创建postcss.config.js配置文件
+
+```
+module.exports = {
+    plugins: {
+        autoprefixer: {},
+        // flexible配置
+        "postcss-pxtorem": {
+            "rootValue": 75, // 设计稿宽度的1/10，自己根据项目需要设置
+            "propList": ["*"] // 需要做转化处理的属性，如`hight`、`width`、`margin`等，`*`表示全部
+        }
+    }
+}
+```
+
+
 
 ## vue项目使用scss时，版本冲突
 

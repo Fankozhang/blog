@@ -14,9 +14,13 @@ typora-root-url: ..\..\.vuepress\public
 
 # springboot
 
+### 学前拓展：mybatis    [B站视频资料](https://www.aliyundrive.com/drive/folder/64b62f7c7f489a9922244688af39ca6ae035ebb2) 
+
+
+
+idea操作，编译报错解决
+
  [IDEA最右侧栏的Maven窗口不见了怎么调出来-百度经验 (baidu.com)](https://jingyan.baidu.com/article/48b558e35cbfc73e39c09a4e.html)    **按下Ctrl+Shift+A** 
-
-
 
 java： 错误：无效的源发行版：14
 
@@ -180,6 +184,30 @@ spring:
 maven导入相关依赖
 
 ### 实体类创建(lombok)
+
+```java
+// 仅用作实体类注解展示
+@TableName("user")
+public class User {
+    //@TableId 将属性所对应的字段指定为主键
+    //@TableId,注解的value,属性用于指定主键的字段
+    //@TableId注解的type属性设置主罐生成策略
+    @TableId(value = "id",type = IdType.AUTO)
+    private Integer id;
+    //指定属性所对应的字段名 如数据库字段名为 （user_name）
+    @TableField("name")
+    private String name;
+    private String pwd;
+
+    @TableField("is_deleted")
+    @TableLogic  // 逻辑删除，数据库字段加（is_deleted）
+    private Integer isDelated;
+
+    private String token;
+
+
+}
+```
 
 **Book.class**
 
@@ -624,6 +652,8 @@ public class BookServiceTest {
 2.接收参数
 		实体数据：@RequestBody
 		路径变量：@PathVariable
+
+ [(228条消息) Controller层接收前端页面传参种类及实现_前端传值到controller_爱学习的小健的博客-CSDN博客](https://blog.csdn.net/CJPSR/article/details/131094717) 
 
 controller/BookController      restful接口
 
@@ -1643,11 +1673,21 @@ Redis是一款key-value存储结构的内存级NoSQL数据库
 支持持久化
 支持集群
 
+ [参考B站redis视频](https://www.bilibili.com/video/BV1CL411778r?p=1&vd_source=f25f5a8d75a3a60d5a288f726803ec11) 
+
+redis配置文件：  [Redis配置文件详解 - 掘金 (juejin.cn)](https://juejin.cn/post/7103413121108148231?searchId=2023072217271551246D108BFEAC7A75B5)   [Redis配置文件Redis.conf详解 - 掘金 (juejin.cn)](https://juejin.cn/post/7225596319447187515?searchId=2023072217271551246D108BFEAC7A75B5#heading-18) 
+
+redis 常用指令   [redis 常用指令 - 掘金 (juejin.cn)](https://juejin.cn/post/7083793185142505503?searchId=20230722175214B26171A4359A33735BBA) 
+
+*redis可视化工具*   https://gitee.com/qishibo/AnotherRedisDesktopManager/releases
+
 ##### **springBoot整合redis**客户端
 
  参考：  [(215条消息) springboot整合redis_springboot redis_lwj_07的博客-CSDN博客](https://blog.csdn.net/lwj_07/article/details/126265935) 
 
 ​               [(215条消息) 如何用SpringBoot整合Redis（详细讲解~）_我是一棵卷心菜的博客-CSDN博客](https://blog.csdn.net/weixin_59654772/article/details/125692784) 
+
+​               [SpringBoot教程(十四) | SpringBoot集成Redis(全网最全) - 掘金 (juejin.cn)](https://juejin.cn/post/7076244567569203208#heading-7) 
 
 依赖：
 
@@ -1759,6 +1799,345 @@ class ConfigurationApplicationTests {
 }
 
 ```
+
+##### RedisTemplate自定义配置及序列化
+
+增加RedisConfig的配置类（ [ redistemplate使用前需要配置一下connectionfactory和序列化方式_](https://blog.csdn.net/Good_omen/article/details/123993468) ）
+
+```java
+@Configuration
+public class RedisConfig {
+    /**
+     * 自定义RedisTemplate
+     * redisTemplate 序列化使用的jdkSerializeable，存储二进制字节码, 所以自定义序列化类
+     * @param redisConnectionFactory
+     * @return
+     */
+    @Bean
+    public RedisTemplate<String, Object> redisTemplate(RedisConnectionFactory redisConnectionFactory) {
+
+        RedisTemplate<String, Object> redisTemplate = new RedisTemplate<>();
+
+        // 设置value的序列化规则和 key的序列化规则
+        redisTemplate.setKeySerializer(new StringRedisSerializer());
+        //通用
+        redisTemplate.setValueSerializer(new GenericJackson2JsonRedisSerializer());
+
+        //  hash类型
+        redisTemplate.setHashKeySerializer(new StringRedisSerializer());
+        redisTemplate.setHashValueSerializer(new GenericJackson2JsonRedisSerializer());
+
+        //注入连接工厂
+        redisTemplate.setConnectionFactory(redisConnectionFactory);
+        return redisTemplate;
+    }
+}
+
+```
+
+
+
+##### redisTemplate判断key是否过期且存在?
+
+```java
+@Autowired
+private RedisTemplate<String, Object> redisTemplate;
+ 
+@Autowired
+private StringRedisTemplate template;
+ 
+/**
+ * 判断key是否存在
+ * @param key
+ * @return
+ */
+public boolean exists(String key) {
+	return template.hasKey(key);
+}
+ 
+/**
+ * 判断key是否过期
+ * @param key
+ * @return
+ */
+public boolean isExpire(String key) {
+	return expire(key) > 0?false:true;
+}
+ 
+ 
+/**
+ * 从redis中获取key对应的过期时间;
+ * 如果该值有过期时间，就返回相应的过期时间;
+ * 如果该值没有设置过期时间，就返回-1;
+ * 如果没有该值，就返回-2;
+ * @param key
+ * @return
+ */
+public long expire(String key) {
+	return redisTemplate.opsForValue().getOperations().getExpire(key);
+}
+```
+
+#####  RedisTemplate常用方法
+
+ [(230条消息) RedisTemplate常用方法（超详细）_Yan Yang的博客-CSDN博客](https://blog.csdn.net/zzvar/article/details/118388897) 
+
+ [RedisTemplate操作Redis，这一篇文章就够了（一） - 掘金 (juejin.cn)](https://juejin.cn/post/7175756564752990267#heading-48) 
+
+##### redisTemplate.opsForValue()方法
+
+ [(230条消息) redisTemplate.opsForValue()中方法讲解_Archie_java的博客-CSDN博客](https://blog.csdn.net/qq_43842093/article/details/121527498) 
+
+ [(230条消息) RedisTemplate使用最详解（一）--- opsForValue()_opsforvalue().set_学习中啊哈哈的博客-CSDN博客](https://blog.csdn.net/weixin_43658899/article/details/121062760) 
+
+##### redis使用（手机号获取验证码）
+
+```java
+// redis测试
+// 手机验证码功能
+@Slf4j
+@RestController
+@CrossOrigin   // 解决跨域
+public class PhoneValidateController {
+    @Autowired
+    private RedisTemplate redisTemplate;
+    @Autowired
+    private StringRedisTemplate stringRedisTemplate;
+    // 生成验证码4位（调用手机号API短信接口）
+    public int getGenerateCode(){
+        int num=(int) (Math.random()*10000);
+        return num;
+    }
+    /**
+     * 用户在客户端输入手机号，点击发送后随机生成4位数字码。有效期为60秒。
+     * 输入验证码，点击验证，返回成功或者失败。
+     * 获取验证码清求
+     * 根据用户输入的手机号生成对应KEY key=phone:code:手机号码
+     * 如果KEY不存在，对KEY进行赋值，并设置过期时间：60秒。
+     * 如果KEY存在：提示：验证码还在有效期内（己发送，请查看手机）
+     */
+    // 获取访客ip地址
+    public String getCurrentIp(HttpServletRequest servletRequest){
+        return servletRequest.getRemoteAddr();
+    }
+    // 获取验证码请求
+    @ResponseBody
+    @GetMapping("/getValidateCode")
+    public Object getValidateCode(@RequestParam("phoneNumber") String phoneNumber,HttpServletRequest servletRequest){
+        // 存放手机验证码的 redis key
+        String key="phone:code:"+phoneNumber;
+        ValueOperations<String,String> ops= stringRedisTemplate.opsForValue();
+        // 全局ip锁定的key
+        String phoneCodeIpLockKey="phone:code:lock"+this.getCurrentIp(servletRequest);
+        if(stringRedisTemplate.hasKey(phoneCodeIpLockKey)){
+            return "超过校验次数，有恶意访问行为，以被系统限制访问";
+        }
+
+        /**
+         * T0D0 且每个IP地址。在5分钟内只能验证3次。并给相应信息提示。锁定这个IP 12小附。
+         * 保护模式（手机短信资费）
+         * 1、生成保护key phone:code:ip
+         * 2、判断保护key是否存在
+         * 如果不存在，进行+1并设定过期时间5分钟，
+         * 如果存在，进行+1
+         * 3、判惭保护ky值是否大于3,如果大于，生成一个新的锁IPKEY:
+         * phone:code:lock:ip 过期时间为：12小时
+         */
+        String proteckKey="phone:code"+this.getCurrentIp(servletRequest);
+        if(!stringRedisTemplate.hasKey(proteckKey)){
+            ops.increment(proteckKey);
+            stringRedisTemplate.expire(proteckKey,12,TimeUnit.HOURS);
+        }else{
+            ops.increment(proteckKey);
+        }
+        log.info("ops.get(proteckKey)"+ops.get(proteckKey));
+        if(Integer.parseInt(ops.get(proteckKey))>=3){
+            //IP需要被锁定12小时
+            ops.set(phoneCodeIpLockKey,phoneCodeIpLockKey);
+            stringRedisTemplate.expire(phoneCodeIpLockKey,12,TimeUnit.HOURS);
+            return "超过校验次数，有恶意访问行为，以被系统限制访问";
+        }
+
+        if(!stringRedisTemplate.hasKey(key)){
+            int phoneCode=this.getGenerateCode();
+            log.info("手机号已发送API知信接口，验证码是"+phoneCode);
+            ops.set(key, phoneCode+"", 5, TimeUnit.SECONDS);
+            return "检证码发送成功，请查看手机短信";
+        }else{
+            return "验证码获取失败，请避免重复获取，耐心等待，还剩时间"+stringRedisTemplate.getExpire(key,TimeUnit.SECONDS)+"秒";
+        }
+    }
+
+    /**
+     * 确定按钮将前合用户输入的验证码信.息和Rdis中KEY查询进行比较
+     * 如果相等验证码比较成功，用户手机绑定成功/登录成功。
+     * 如果比较失败，验证码输入错误
+     */
+    @GetMapping("/validate")
+    @ResponseBody
+    public Object validate(@RequestParam("code") String code,@RequestParam("phoneNumber") String phoneNumber){
+        ValueOperations<String,String> ops= stringRedisTemplate.opsForValue();
+        // 生成 redis key
+        String key="phone:code:"+phoneNumber;
+        if(code.equals(ops.get(key))){
+            log.info("手机号码校验成功，执行登录等相应业务逻缉");
+            // 清空redis相应key :节省内存空间
+            return "手机号码校验成功/登求成功";
+        }
+        return "验证码校验失败";
+    }
+
+}
+
+```
+
+##### redis使用（百度首页热点新闻列表）
+
+ListCacheServiceImpl
+
+```java
+@Service
+@Slf4j
+public class ListCacheServiceImpl {
+    /**
+     * 需求：热点新闹列表获取最新5条首页新闻。
+     * 1、查询：默认首页显示5条热点新闻。具备分页功能。
+     * 2、后台管理员可以通过置顶新闻。
+     */
+    @Autowired
+    private RedisTemplate<String, Object> redisTemplate;
+    //ListOperations<String, String> listOper=redisTemplate.opsForList();
+    @Resource(name = "redisTemplate")
+    ListOperations<String, String> listOper;
+    // 初始化5条新闻
+    public  void initBaiduNews5(){
+        String key="baidu:new:top5";
+        listOper.rightPush(key,"1.新闻一");
+        listOper.rightPush(key,"2.新闻一");
+        listOper.rightPush(key,"3.新闻一");
+        listOper.rightPush(key,"4.新闻一");
+        listOper.rightPush(key,"5.新闻一");
+        listOper.rightPush(key,"6.新闻一");
+    }
+    public Object getTop5(){
+        String key="baidu:new:top5";
+        List<String> list=listOper.range(key,0,4);
+        return list;
+    }
+    // 官方小编可以商业化置顶新闻
+    public Long addBaiDuNewsTop(String context){
+        String key="baidu:new:top5";
+        return listOper.leftPush(key,context);
+    }
+}
+```
+
+test测试功能
+
+```java
+// Redis List案例1模仿百度首页新闻展示（查的是Redis非MS0L)
+	@Autowired
+	private ListCacheServiceImpl listCacheServiceImpl;
+	@Test
+	public void testGetBaiDuTop5(){
+		// 初始化将MYSQL数据(虚拟数据)存入Redis
+		listCacheServiceImpl.initBaiduNews5();
+		List<String> list= (List<String>) listCacheServiceImpl.getTop5();
+		for(Object o : list){
+			System.out.println(o);
+		}
+		listCacheServiceImpl.addBaiDuNewsTop("置顶新闻");
+		List<String> list2= (List<String>) listCacheServiceImpl.getTop5();
+		for(Object o : list2){
+			System.out.println(o);
+		}
+	}
+
+```
+
+
+
+##### redis使用（任务队列，商城）
+
+ProductQueueServiceImpl  生成的快递流程的任务队列
+
+```java
+
+@Service
+@Slf4j
+public class ProductQueueServiceImpl {
+    @Autowired
+    private RedisTemplate<String, Object> redisTemplate;
+    @Resource(name = "redisTemplate")
+    ListOperations<String, String> listOper;
+   // 1 生成物流队列（客户完成支付功能会根据商家发货地址~用户收货地址）
+   public List<String> initProductQueue(String cardId){
+       // 待执行的任务队列
+       String key="product:queue:execute:"+cardId;
+       listOper.leftPush(key,"1、商家发货（快递小哥上门取货）");
+       listOper.leftPush(key,"2、北京市海淀区--》北京首都国际机场");
+       listOper.leftPush(key,"3、北京首都机场--》南京禄口机场");
+       listOper.leftPush(key,"4、禄口机场---》建邺区");
+       listOper.leftPush(key,"5、建邺区--》南京千锋二楼");
+       listOper.leftPush(key,"6、已签收");
+       return null;
+   }
+   // 2 消费队列
+   public String touchQueue(String cardId){
+        //待执行的任务队列
+       String key="product:queue:execute:"+cardId;
+       //己完成队列
+       String succKey="product:queue:success:"+cardId;
+       return listOper.rightPopAndLeftPush(key,succKey);
+   }
+   // 3 商家/物流公司：这个快递还有几顶任务未完成？
+    public List<String> productQueueExcut(String cardId){
+        //待执行的任务队列
+        String key="product:queue:execute:"+cardId;
+        return listOper.range(key,0,-1);
+    }
+    // 4 买家：我的快递到哪了？
+    public List<String> productQueueSuccess(String cardId){
+        //待执行的任务队列
+        String succKey="product:queue:success:"+cardId;
+        return listOper.range(succKey,0,-1);
+    }
+}
+```
+
+test测试功能
+
+```java
+@Autowired
+	private ProductQueueServiceImpl productQueueServiceImpl;
+	@Test
+	public void testProductQueue(){
+		System.out.println("买家支付成功物流队列运输开始");
+		String cardId="123654896214";
+		productQueueServiceImpl.initProductQueue(cardId);
+		System.out.println("当前需要待执行的任务队列是");
+		List<String> list=productQueueServiceImpl.productQueueExcut(cardId);
+		for(String s:list){
+			System.out.println(s);
+		}
+		System.out.println("快递小哥开始进行触发队列事件");
+		String queueMessage=productQueueServiceImpl.touchQueue(cardId);
+		System.out.println("快递小哥完成了任务队列："+queueMessage+"\n");
+		productQueueServiceImpl.productQueueSuccess(cardId);
+		System.out.println("当前需要待执行的任务队列是：");
+		List<String> list1=productQueueServiceImpl.productQueueExcut(cardId);
+		for(String s:list1){
+			System.out.println(s);
+		}
+		System.out.println("我的货物到那儿了");
+		List<String> list2=productQueueServiceImpl.productQueueSuccess(cardId);
+		for(String s:list2){
+			System.out.println(s);
+		}
+	}
+```
+
+
 
 ##### jedis
 
@@ -2077,4 +2456,164 @@ reggie:
   #  指定上传文件暂存的位置
   path: D:\img\
 ```
+
+
+
+
+
+## JWT
+
+什么是JWT?
+JSON Web Token,通过数字签名的方式，以JSQN对象为载体，在不同的服务终端之间安全的传输信息。
+JWT有什么用？
+JW工最常见的场景就是授权认证，一旦用户登录，后续每个请求都将包含JWT，系统在每次处理用户请求的之前，都要先进行JWT安全校验，通过之后再进行处理。
+JWT的组成
+JWT由3部分组成，用拼接
+
+ [(228条消息) JWT的组成_Jint001的博客-CSDN博客](https://blog.csdn.net/qq_44972847/article/details/109249604) 
+
+- 头部(header)
+- 载荷(payload)
+- 签证(signature)
+
+```
+ <dependency>
+     <groupId>io.jsonwebtoken</groupId>
+     <artifactId>jjwt</artifactId>
+     <version>0.9.1</version>
+ </dependency>
+```
+
+**生成和解析 JWT**
+
+```java
+@SpringBootTest
+class DemoApplicationTests {
+	private long time=1000*60*60*24;  //  超时时间（毫秒计算）
+	private String signature="admin";  // 签名(自定义)
+	@Test
+	public void jwt(){
+		// 生成token
+		JwtBuilder jwtBuilder= Jwts.builder();
+		String jwtToken=jwtBuilder
+				// header
+				.setHeaderParam("type","JWT")
+				.setHeaderParam("alg", "HS256")
+				// payload
+				.claim("name","tom")
+				.claim("pwd","123456")
+				.setSubject("admin-test")
+				// 过时时间
+				.setExpiration(new Date(System.currentTimeMillis()+time))
+				.setId(UUID.randomUUID().toString())
+		        // Signature
+		        .signWith(SignatureAlgorithm.HS512,signature)
+				// 拼接起来
+				.compact();
+		System.out.println(jwtToken);
+
+	}
+
+	@Test
+	public void Parse(){
+		// 解析token
+		String token="eyJ0eXBlIjoiSldUIiwiYWxnIjoiSFM1MTIifQ.eyJuYW1lIjoidG9tIiwicHdkIjoiMTIzNDU2Iiwic3ViIjoiYWRtaW4tdGVzdCIsImV4cCI6MTY4OTc1MzUwMywianRpIjoiNzgzOTE5NTMtM2EwNy00ZWNkLTkyZTgtMjNkNjZmODdiNTIyIn0.YcmlLiXIwYJOL83ynRz4JiPRf0UyLtIhu2iE16PzuLk6ETEyu_Jxjo8gewWTdDl-oOD8bUiNDxUmHMKmLayn9g";
+		JwtParser jwtParser=Jwts.parser();
+		Jws<Claims> claimsJws =jwtParser.setSigningKey(signature).parseClaimsJws(token);
+		Claims claims=claimsJws.getBody();
+		System.out.println(claims.get("name"));
+		System.out.println(claims.get("pwd"));
+		System.out.println(claims.getId());
+		System.out.println(claims.getExpiration());
+		System.out.println(claims.getSubject());
+
+	}
+
+}
+```
+
+## 登录
+
+**工具类**
+
+```java
+//  工具类
+public class JwtUtil {
+    private static long time=1000*60*60*24;  //  超时时间,有效期（毫秒计算）
+    private static String signature="admin";  // 签名(自定义)
+    public static String createToken(){
+        // 生成token
+        JwtBuilder jwtBuilder= Jwts.builder();
+        String jwtToken=jwtBuilder
+                // header
+                .setHeaderParam("type","JWT")
+                .setHeaderParam("alg", "HS256")
+                // payload
+                .claim("name","admin")
+                .claim("pwd","123456")
+                .setSubject("admin-test")
+                // 过时时间
+                .setExpiration(new Date(System.currentTimeMillis()+time))
+                .setId(UUID.randomUUID().toString())
+                // Signature
+                .signWith(SignatureAlgorithm.HS512,signature)
+                // 拼接起来
+                .compact();
+        return jwtToken;
+    }
+
+    public  static Boolean checkToken(String token){
+        if(token==null){
+            return false;
+        }
+        try {
+            Jws<Claims> claimsJws=Jwts.parser().setSigningKey(signature).parseClaimsJws(token);
+        } catch (ExpiredJwtException e) {
+            return false;
+        }
+        return true;
+    }
+}
+
+```
+
+UserController.java
+
+```java
+@RestController
+@RequestMapping("/users")
+public class UserController {
+    private final String NAME="admin";
+    private final String PWD="123456";
+    @Autowired
+    private UserService userService;
+
+    @GetMapping
+    public List<User> getUserList(){
+        return userService.list();
+    }
+
+    // 登录验证，返回token
+    @GetMapping("/login")
+    public User login(User user){
+        if(NAME.equals(user.getName()) && PWD.equals(user.getPwd())){
+            // 添加token
+            user.setToken(JwtUtil.createToken());
+            return user;
+        }
+        return null;
+    }
+    
+    // 验证token
+    @GetMapping("/checkToken")
+    public Boolean checkToken(HttpServletRequest request){
+        String token = request.getHeader("token");
+        return JwtUtil.checkToken(token);
+    }
+
+
+}
+```
+
+ [(228条消息) 使用springBoot实现token校验_springboot 校验token_秃头小陈~的博客-CSDN博客](https://blog.csdn.net/qq_41450736/article/details/113523308) 
 

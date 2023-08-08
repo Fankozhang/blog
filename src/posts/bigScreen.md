@@ -79,9 +79,13 @@ mounted(){
           })
           
            // resize方法监听图表容器的大小并改变图表大小
-           window.onresize = function() {
-                myChart.resize();
-              }
+           //window.onresize = function() {
+           // myChart.resize();
+           // }
+           //  在vue项目中使用时推荐下面的写法，根据屏幕大小缩放（可以把echarts.init的示例存到data中，使用this.mymyChart进行操作）
+          // resize方法监听图表容器的大小并改变图表大小
+             window.addEventListener('resize', () => {
+                myChart.resize()
           
       }
 

@@ -24,6 +24,44 @@ typora-root-url: ..\.vuepress\public
 
  [DCloud 插件市场](https://ext.dcloud.net.cn/) 
 
+
+
+## 引入uview2.0
+
+创建uni-ui项目，基于uni-app的ui组件库(不是默认模板)
+
+插件市场下载u-view插件并导入
+
+1. 引入uView主JS库
+
+> 在项目根目录中的main.js中，引入并使用uView的JS库，注意这两行要放在import Vue之后。
+
+```javascript
+javascript复制代码// main.js
+import uView from '@/uni_modules/uview-ui'
+Vue.use(uView)
+```
+
+在项目根目录的uni.scss中引入此文件。
+
+```scss
+scss复制代码/* uni.scss */
+@import '@/uni_modules/uview-ui/theme.scss';
+```
+
+```scss
+// 在App.vue中首行的位置引入，注意给style标签加入lang="scss"属性
+
+<style lang="scss">
+	/* 注意要写在第一行，同时给style标签加入lang="scss"属性 */
+	@import "@/uni_modules/uview-ui/index.scss";
+</style>
+```
+
+
+
+
+
 ## uni-app发起网络请求
 
 ### 原生的uni.request发起请求
@@ -524,5 +562,206 @@ pages代表分包的页面文件路径（注意，有几个页面，就有几个
         height: 100%;
     }
 </style>
+```
+
+
+
+## uni-cloud开发
+
+ [uniCloud云开发视频教程-从基础入门到项目开发实战-uniapp进阶课文章管理系统（云函数/云数据库/云存储](https://www.bilibili.com/video/BV1PP411E7qG/?spm_id_from=333.337.search-card.all.click&vd_source=f25f5a8d75a3a60d5a288f726803ec11) 
+
+ [uni-app官网 (dcloud.net.cn)](https://uniapp.dcloud.net.cn/uniCloud/#) 
+
+（uni-cloud-project）
+
+创建空的uni-app项目，右键关联阿里云服务器    [服务空间 - uniCloud (dcloud.net.cn)](https://unicloud.dcloud.net.cn/) 
+
+uniCloud项目显示关联到的服务空间，则绑定成功
+
+
+
+### 客户端和云函数的通信
+
+uni-app客户端和传统服务器通信时，使用`uni.request`的ajax请求方式。uniCloud下不再使用它，有更好的云端一体的通信方式。
+
+uniCloud体系里，客户端和服务端的云函数通信，有4种方式：
+
+|              |                      传统的restful方式                       |                       callfunction方式                       |                          云对象方式                          |                         clientDB方式                         |
+| :----------: | :----------------------------------------------------------: | :----------------------------------------------------------: | :----------------------------------------------------------: | :----------------------------------------------------------: |
+|     简述     | 通过配置[云函数URL化](https://uniapp.dcloud.net.cn/uniCloud/http)，把云函数转为传统的http链接 |                  云函数默认并不自带http链接                  |      把callfunction的函数式调用，升级为模块化的对象调用      |                    客户端直接操作云数据库                    |
+| 前端调用方式 |                           传统ajax                           | uni-app客户端通过`uniCloud.callFunction(functionname)`来调用云函数 | uni-app客户端通过`uniCloud.importObject(objectname)`导入一个云对象，直接使用这个对象的方法 | uni-app客户端通过``组件或`uniCloud.database()` API来访问uniCloud数据库。也支持搭配action云函数追加服务器逻辑 |
+|   适用场景   | http链接需要自己注册域名。如果前端是uni-app，则不推荐使用URL化。如果是非uni-app的系统需要访问云函数，只能使用URL化 | 相比云函数URL，callfunction更加安全、更serverless，不暴露域名和ip，不怕攻击，也无需注册域名 | uni-app 3.4起支持。相比callfunction方式。代码更加精简、逻辑更加清晰、开发更加高效 | 如果uni-app前端发起的服务器请求目的主要是查询或操作数据库，则推荐使用clientDB方式 |
+
+云函数是uniCloud的基础，本质上 clientDB 和 云对象 都是建立在云函数上针对特定场景的优化。
+
+- clientDB针对的场景是数据库操作，它优化了可以不写或少写服务器代码
+- 云对象针对的场景是非数据库操作或不宜前端暴露的数据库操作时，和uni-app客户端的通信方式。它优化了代码结构，更精简、简单
+
+
+
+### clientDB方式
+
+ clientDB分API方式和组件方式，此处使用API方式来演示 
+
+```js
+// 客户端js直接操作云数据库，查询list表的数据。无需服务器代码
+const db = uniCloud.database() // 获取云数据库的引用
+db.collection('list').get()
+  .then((res)=>{
+    // res 为数据库查询结果
+  }).catch((err)=>{
+    console.log(err); 
+  })
+```
+
+
+
+### 云函数
+
+/uniCloud/uniFunctions  右键新建云函数    myCloudFunc(一个文件夹，文件夹名就是云函数名，index.js是函数的主体)
+
+/uniCloud/uniFunctions/index.js
+
+```
+'use strict';
+exports.main = async (event, context) => {
+	//event为客户端上传的参数
+	console.log('event : ', event)
+	
+	//返回数据给客户端
+	// return "uniapp study"
+	return event
+};
+```
+
+views文件夹下的 index.vue 文件内调用云函数
+
+```
+onLoad() {
+			uni.callFunction({
+				name:'myCloudFunc',
+				data:{
+					name:'占山',
+					age:'20'
+				}
+			}).then(res=>{
+				console.log(res)
+			})
+		},
+```
+
+#### callFunction方法
+
+`uniCloud.callFunction`需要一个json对象作为参数，其中包含2个字段
+
+| 字段 |  类型  | 必填 |         说明         |
+| :--: | :----: | :--: | :------------------: |
+| name | String |  是  |      云函数名称      |
+| data | Object |  否  | 客户端需要传递的参数 |
+
+**返回json**
+
+|   字段    |      类型      |                             说明                             |
+| :-------: | :------------: | :----------------------------------------------------------: |
+|  result   |     Object     |                 云函数中代码return的返回结果                 |
+| requestId |     String     | 云函数请求序列号，用于错误排查，可以在uniCloud web控制台的云函数日志中查到 |
+|  header   |     Object     |                       服务器header信息                       |
+|  errCode  | Number或String |                         服务器错误码                         |
+|  success  |      bool      |                         执行是否成功                         |
+
+获取集合的引用
+
+```
+const db = uniCloud.database();
+// 获取 `user` 集合的引用(即表名)
+const collection = db.collection('user');
+```
+
+在云数据库中创建表（nosql）
+
+创建users表；
+
+新建云函数  cloudDemoFunc
+
+```js
+'use strict';
+exports.main = async (event, context) => {
+	//event为客户端上传的参数
+	const db = uniCloud.database();
+	// 获取 `users` 集合的引用
+	const res =await  db.collection('users');
+	//返回数据给客户端
+	return res.get()
+};
+```
+
+
+
+#### 集合 Collection
+
+通过 `db.collection(name)` 可以获取指定集合的引用，在集合上可以进行以下操作
+
+| 类型     | 接口    | 说明                                                         |
+| -------- | ------- | ------------------------------------------------------------ |
+| 写       | add     | 新增记录（触发请求）                                         |
+| 计数     | count   | 获取符合条件的记录条数                                       |
+| 读       | get     | 获取集合中的记录，如果有使用 where 语句定义查询条件，则会返回匹配结果集 (触发请求) |
+| 引用     | doc     | 获取对该集合中指定 id 的记录的引用                           |
+| 查询条件 | where   | 通过指定条件筛选出匹配的记录，可搭配查询指令（eq, gt, in, ...）使用 |
+|          | skip    | 跳过指定数量的文档，常用于分页，传入 offset                  |
+|          | orderBy | 排序方式                                                     |
+|          | limit   | 返回的结果集(文档数量)的限制，有默认值和上限值               |
+|          | field   | 指定需要返回的字段                                           |
+
+查询及更新指令用于在 `where` 中指定字段需满足的条件，指令可通过 `db.command` 对象取得。
+
+
+
+#### 记录 Record / Document
+
+通过 `db.collection(collectionName).doc(docId)` 可以获取指定集合上指定 _id 的记录的引用，在记录上可以进行以下操作
+
+| 接口 | 说明   |                                                              |
+| ---- | ------ | ------------------------------------------------------------ |
+| 写   | update | 局部更新记录(触发请求)只更新传入的字段。如果被更新的记录不存在，会直接返回更新失败 |
+|      | set    | 覆写记录;会删除操作的记录中的所有字段，创建传入的字段。如果操作的记录不存在，会自动创建新的记录 |
+|      | remove | 删除记录(触发请求)                                           |
+| 读   | get    | 获取记录(触发请求)                                           |
+
+doc(docId)方法的参数只能是字符串，即数据库默认的_id字段。
+
+如需要匹配多个`_id`的记录，应使用where方法。可以在where方法里用in指令匹配一个包含`_id`的数组。
+
+新增文档时数据库会自动生成_id字段，也可以自行将_id设置为其他值
+
+
+
+### 云对象
+
+新建云对象 sum
+
+```
+module.exports = {
+	sum(a, b) {
+		// 此处省略a和b的有效性校验
+		return a + b
+	}
+}
+```
+
+index.vue
+
+```js
+methods:{
+			async sum () { //注意方法或生命周期需使用async异步方式
+			    const sumNum = uniCloud.importObject('sumNum')
+				try {
+					const res = await sumNum.sum(1,2) //导入云对象后就可以直接调用该对象的方法了，注意使用异步await
+					console.log(res) // 结果是3
+				} catch (e) {
+					console.log(e)
+				}
+			}
+		}
 ```
 

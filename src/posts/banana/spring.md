@@ -23,6 +23,10 @@ typora-root-url: ..\..\.vuepress\public
 
 ## swagger（瑞吉外卖）
 
+ [(参考文章) knife4j：快速入门_@enableknife4j_林雨涵的博客-CSDN博客](https://blog.csdn.net/qq_43718048/article/details/121331567) 
+
+ [(229条消息) swagger文档增强工具knife4j使用详解_baobao555#的博客-CSDN博客](https://blog.csdn.net/weixin_45070175/article/details/122252918) 
+
 使用方式
 操作步骤：
 1、导入knife4j的maven坐标
@@ -39,7 +43,7 @@ typora-root-url: ..\..\.vuepress\public
 
 webMvcConfig （加两个注解  @EnableSwagger2  @EnableKnife4j）
 
-```
+```java
 @Slf4j
 @Configuration
 @EnableSwagger2
