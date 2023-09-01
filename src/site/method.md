@@ -41,9 +41,27 @@ typora-root-url: ..\.vuepress\public
 
  [(206条消息) Vscode如何配置属于自己的ESlint_vscode eslint配置_·甘之如饴·的博客-CSDN博客](https://blog.csdn.net/G0000227/article/details/122093671) 
 
-## vscode看不到远程新建的分支，解决方法来了
+### vscode看不到远程新建的分支，解决方法来了
 
 https://blog.csdn.net/qq_39606853/article/details/122192555
+
+### 快速删除文件夹下所有文件
+
+在我们的项目安装依赖时，会生成 node_modules 文件夹，当出现依赖相关的问题难以解决时，可能会需要删除
+
+node_modules 文件夹，在重新安装，但删除的过程很慢，此时有快速删除的方法。
+
+全局安装  rimraf
+
+```
+npm install rimraf -g
+```
+
+cd 到需要清空的文件夹父目录 ，控制台输入    `rimraf  ‘要删除的文件名’`    ，即可删除此目录下（包括所有子目录）下的所有文件。当所有文件被清空后，删除对应的文件夹，就可以很快速的删除了。
+
+```
+rimraf node_modules
+```
 
 ## 下载（url）
 
@@ -252,6 +270,7 @@ form是外层表单数据，form1,form2,form3为外层表单里的基本数据�
       >
         <a-input />
       </a-form-model-item>
+        
       <a-form-model-item
         label="平台年龄"
         :prop="'form4.' + index + '.age'"
@@ -269,6 +288,37 @@ form是外层表单数据，form1,form2,form3为外层表单里的基本数据�
       <a-button @click="addForm">新增</a-button>
     </div>
 </a-form-model>
+```
+
+```
+<el-form-item label="类别" :prop="'form.' + index + '.type'"
+                    :rules="[
+                      {
+                        required: true,
+                        message: '教育类别不能为空',
+                        trigger: 'change',
+                      }
+                    ]">
+                      <el-select :disabled="disabled"
+                        v-model="educForm.form[index].type"
+                        placeholder="请选择教育类别"
+                        maxlength="30"
+                        style="width: 100%"
+                      >
+                        <el-option
+                          v-for="dict in educType"
+                          :key="dict.value"
+                          :label="dict.label"
+                          :value="dict.value"
+                        ></el-option>
+                      </el-select>
+                    </el-form-item>
+
+data:{
+	 educForm:{
+        form:[{},{}]
+      }
+}
 ```
 
 增加子表单时
@@ -681,6 +731,270 @@ module.exports = {
 
 
 
+## element UI
+
+### element的table错位
+
+https://blog.csdn.net/coralime/article/details/122979010
+
+1. 给表格添加ref标志
+
+```html
+  <el-table ref="tableRef" :data="tableData"></el-table>
+```
+
+2. doLayout 对 Table 进行重新布局
+
+   ```js
+   watch: {
+         // tableData是el-table绑定的数据
+         tableData: {
+           // 解决表格显示错位问题
+           handler () {
+             this.$nextTick(() => {
+               // tableRef是el-table绑定的ref属性值
+               this.$refs.tableRef.doLayout() // 对 Table 进行重新布局
+             })
+           },
+           deep: true
+         }
+       }
+   ```
+
+   
+
+### TimePicker设置只能选择当前时间之前或之后的时间
+
+ picker-options 当前时间日期选择器特有的选项 
+
+```
+<el-date-picker
+	v-model="item.endYear"
+    :picker-options="pickerOptions"
+    type="datetime"
+    >
+</el-date-picker>
+```
+
+```
+:picker-options=“pickerOptions” 是限制选择时间的属性
+
+data() {
+    // 这里存放数据
+    return {
+      pickerOptions:{
+          disabledDate (time) {
+            //disabledDate 文档上：设置禁用状态，参数为当前日期，要求返回 Boolean
+            return time.getTime() > Date.now()//选当前时间之前的时间
+            //return time.getTime() < Date.now()//选当前时间之后的时间
+          }
+      },
+    }
+  }
+
+```
+
+### element 表格实现导入
+
+```vue
+<template>
+    <div >
+        <el-dialog
+      :title="upload.title"
+      :visible.sync="upload.open"
+      width="400px"
+      append-to-body
+    >
+    
+      <el-upload
+        ref="upload"
+        :limit="1"
+        :data="uploadData"
+        accept=".xlsx, .xls"
+        :headers="upload.headers"
+        :action="upload.url"
+        :disabled="upload.isUploading"
+        :before-upload="beforFileUp"
+        :on-progress="handleFileUploadProgress"
+        :on-success="handleFileSuccess"
+        :auto-upload="true"
+        drag
+      >
+        <i class="el-icon-upload"></i>
+        <div class="el-upload__text">将文件拖到此处，或<em>点击上传</em></div>
+        <div class="el-upload__tip text-center" slot="tip">
+          <span>仅允许导入xls、xlsx格式文件。</span>
+          <el-link
+            type="primary"
+            :underline="false"
+            style="font-size: 12px; vertical-align: baseline"
+            @click="importTemplate"
+            >下载模板</el-link
+          >
+        </div>
+      </el-upload>
+      <div slot="footer" class="dialog-footer">
+        <!-- <el-button type="primary" @click="submitFileForm">确 定</el-button> -->
+        <el-button @click="upload.open = false">取 消</el-button>
+      </div>
+    </el-dialog>
+    </div>
+</template>
+
+<script>
+import { getToken } from "@/utils/auth";
+export default {
+    data () {
+        return {
+            upload: {
+        // 是否显示弹出层（员工导入）
+        open: false,
+        // 弹出层标题（员工导入）
+        title: "导入",
+        // 是否禁用上传
+        isUploading: false,
+        // 是否更新已经存在的员工数据
+        // updateSupport: 0,
+        // 设置上传的请求头部
+        headers: { Authorization: "Bearer " + getToken() },
+        // 上传的地址
+        url: process.env.VUE_APP_BASE_API + "/performance/abcdefg",
+      },
+      // 上传时要传递的参数
+        uploadData:{
+            taskId:'',
+            templateId:'',
+            fileName:''
+        },
+        fileName:''
+        }
+    },
+    components: {
+        
+    },
+    created() {
+        
+    },
+    mounted() {
+        
+    },
+    methods: {
+        submitFileForm(){
+
+        },
+        handleFileSuccess(response, file, fileList) {
+            console.log('13579',response, file, fileList)
+      this.upload.open = false;
+      this.upload.isUploading = false;
+      this.$refs.upload.clearFiles();
+    //   this.$alert(
+    //     "<div style='overflow: auto;overflow-x: hidden;max-height: 70vh;padding: 10px 20px 0;'>" +
+    //       response.msg +
+    //       "</div>",
+    //     "导入结果",
+    //     { dangerouslyUseHTMLString: true }
+    //   );
+    //   this.getList();
+    console.log("上传成功")
+    this.$emit("getTableData")
+    },
+    beforFileUp(file){
+        console.log("before",file)
+        this.uploadData.fileName=file.name
+    },
+        // 文件上传中处理
+    handleFileUploadProgress(event, file, fileList) {
+        // console.log('before',file)
+        // this.uploadData.fileName=file.name
+        this.upload.isUploading = true;
+    },
+        importExcelHandleOpen(){
+            this.upload.open = true
+        },
+        importTemplate(){
+            this.download('performance/abc', {
+        ...this.queryParams
+      }, `user_template_${new Date().getTime()}.xlsx`)
+        }
+    },
+};
+</script>
+
+<style lang='less' scoped>
+
+</style>
+```
+
+
+
+
+
+
+
+## 数据格式转化
+
+### 列表形数据转树形数据
+
+来自若依框架
+
+```js
+/**
+ * 构造树型结构数据
+ * @param {*} data 数据源
+ * @param {*} id id字段 默认 'id'
+ * @param {*} parentId 父节点字段 默认 'parentId'
+ * @param {*} children 孩子节点字段 默认 'children'
+ */
+export function handleTree(data, id, parentId, children) {
+  let config = {
+    id: id || 'id',
+    parentId: parentId || 'parentId',
+    childrenList: children || 'children'
+  };
+
+  var childrenListMap = {};
+  var nodeIds = {};
+  var tree = [];
+
+  for (let d of data) {
+    let parentId = d[config.parentId];
+    if (childrenListMap[parentId] == null) {
+      childrenListMap[parentId] = [];
+    }
+    nodeIds[d[config.id]] = d;
+    childrenListMap[parentId].push(d);
+  }
+
+  for (let d of data) {
+    let parentId = d[config.parentId];
+    if (nodeIds[parentId] == null) {
+      tree.push(d);
+    }
+  }
+
+  for (let t of tree) {
+    adaptToChildrenList(t);
+  }
+
+  function adaptToChildrenList(o) {
+    if (childrenListMap[o[config.id]] !== null) {
+      o[config.childrenList] = childrenListMap[o[config.id]];
+    }
+    if (o[config.childrenList]) {
+      for (let c of o[config.childrenList]) {
+        adaptToChildrenList(c);
+      }
+    }
+  }
+  return tree;
+}
+
+```
+
+
+
+
+
 ## vue项目使用scss时，版本冲突
 
 下载scss后，启动项目报错，这个错误发生的原因是node和scss的版本不兼容，出现这种问题需要去网上查找兼容的scss版本，在重新安装。（找这个还挺麻烦的，来回卸载重下（试错）还是很费时的。版本冲突很麻烦，推荐使用less）
@@ -750,6 +1064,37 @@ go (id) {
       }
     }
 ```
+
+## vue路由导航守卫
+
+```js
+// router文件中
+{
+    path:'/...'
+    name:'...'
+    meta:{isLogin:true}  // true显示，false不显示
+}
+
+//  路由全局首位
+router.beforeEach((to,from,next)=>{
+    //   登录验证  1 进入路由界面是否需要验证
+    //  2  再验证是否登录
+    if(to.meta.isLogin){    // true需要登录
+    //  再验证是否登录，假设已经登录
+        let token=window.sessionStorage.getItem('token');
+        if(token){
+            next()        
+        }else{
+            //  没有登陆过，跳转登录界面
+            next('/login')        
+        }    
+    }else{
+        next()    
+    }
+})
+```
+
+
 
 ## vue  this.$router 跳转打开新页面
 
@@ -829,24 +1174,6 @@ request.interceptors.response.use(
     return res.data},
     (error)=>{ return Promise.reject(new Error('faile'))}
 )
-```
-
-## 快速删除文件夹下所有文件
-
-在我们的项目安装依赖时，会生成 node_modules 文件夹，当出现依赖相关的问题难以解决时，可能会需要删除
-
-node_modules 文件夹，在重新安装，但删除的过程很慢，此时有快速删除的方法。
-
-全局安装  rimraf
-
-```
-npm install rimraf -g
-```
-
-cd 到需要清空的文件夹父目录 ，控制台输入    `rimraf  ‘要删除的文件名’`    ，即可删除此目录下（包括所有子目录）下的所有文件。当所有文件被清空后，删除对应的文件夹，就可以很快速的删除了。
-
-```
-rimraf node_modules
 ```
 
 ## axios请求获取本地静态文件(动态获取json数据)
@@ -949,6 +1276,34 @@ css  注意：/deep/  不能缺少
 
 
 
+
+
+## vue keep-alive 页面缓存
+
+router
+
+```
+ {
+    path: '/companyFronts/index',
+    name: 'companyFonts',
+    component: () => import('@/views/companyFronts/jobIndex/index.vue'),
+    meta: { title: '企业列表', icon: '', affix: true, keepAlive: true }
+  },
+```
+
+.vue
+
+```
+<div id="app">
+      <keep-alive>
+        <router-view v-if="$route.meta.keepAlive"></router-view>
+      </keep-alive>
+      <router-view v-if="!$route.meta.keepAlive"></router-view>
+    </div>
+```
+
+
+
 ## Ant Design of Vue
 
 
@@ -1040,4 +1395,132 @@ methods:{
 ```
 
 
+
+### ant design vue表格实现导入
+
+importExcel.vue
+
+```vue
+<template>
+  <a-modal
+    :title="title"
+    :visible="open"
+    :confirm-loading="uploading"
+    @cancel="importExcelHandleCancel"
+    @ok="importExcelHandleChange"
+  >
+    <a-spin tip="上传中..." :spinning="uploading">
+      <a-upload-dragger
+        name="file"
+        accept=".xlsx, .xls"
+        :file-list="fileList"
+        :multiple="false"
+        :remove="handleRemove"
+        :before-upload="beforeUpload"
+      >
+        <p class="ant-upload-drag-icon">
+          <a-icon type="inbox" />
+        </p>
+        <p class="ant-upload-text">请将文件拖拽到此处上传</p>
+        <p class="ant-upload-hint">
+          请先导出再导入上传，支持单个上传，也可以点击后选择文件上传
+        </p>
+      </a-upload-dragger>
+      <a @click="importTemplate">下载模板</a>
+    </a-spin>
+  </a-modal>
+</template>
+
+<script>
+import { importPositionData } from "@/api/rpo/recruit"
+export default {
+  name: "ImportExcel",
+  props: {},
+  components: {},
+  data () {
+    return {
+      title: "导入",
+      open: false,
+      uploadStatus: "",
+      fileList: [],
+      // 是否禁用上传
+      uploading: false,
+      updateSupport: 0,
+      tableData: [],
+      projcetid: ''
+    }
+  },
+  filters: {},
+  created () {},
+  computed: {},
+  watch: {},
+  methods: {
+    importTemplate () {
+      const arr = []
+      for (let i = 0; i < this.tableData.length; i++) {
+        arr.push(this.tableData[i].id)
+      }
+      this.download(
+        "/position/positionInfo/downloadTemplateExcel",
+        { },
+        `职位导入_${new Date().getTime()}.xlsx`
+      )
+    },
+    /** 导入excel窗体关闭 */
+    importExcelHandleCancel (e) {
+      this.open = false
+      this.fileList = []
+      // 关闭后刷新列表
+      this.$emit("ok")
+    },
+    /** 导入excel窗体开启 */
+    importExcelHandleOpen (val) {
+      this.tableData = val
+      this.open = true
+    },
+    beforeUpload (file) {
+      this.fileList = [file]
+      return false
+    },
+    /** 导入excel */
+    importExcelHandleChange () {
+      this.uploading = true
+      const { fileList } = this
+      const formData = new FormData()
+      formData.append("file", fileList[0])
+      // formData.append('updateSupport', this.updateSupport)
+      console.log(formData, fileList[0])
+      importPositionData(formData)
+        .then((response) => {
+          this.fileList = []
+          this.$message.success(response.msg)
+          this.open = false
+          this.$emit("ok")
+        })
+        .finally(() => {
+          this.uploading = false
+        })
+    },
+    handleCheckedUpdateSupport () {
+      this.updateSupport = this.updateSupport === 0 ? 1 : 0
+    },
+    handleRemove () {
+      this.fileList = []
+      this.uploading = false
+    }
+  }
+}
+</script>
+```
+
+父组件
+
+```vue
+<importExcel ref="importExcel"></importExcel>
+
+<a-button type="dashed" @click="$refs.importExcel.importExcelHandleOpen()">
+            <a-icon type="vertical-align-top" />
+            批量导入
+          </a-button>
+```
 

@@ -221,3 +221,9 @@ dao不用引
 
 
 
+尚硅谷SSM新版视频教程-2023版
+B站直达：https://www.bilibili.com/video/BV1AP411s7D7
+百度网盘：https://pan.baidu.com/s/12roPcN1oBmDKk3wwnMSu_A?pwd=yyds 提取码：yyds
+阿里云盘：https://www.aliyundrive.com/s/SGmyMwGpsZv（教程配套资料请从百度网盘下载）
+
+资料 ： [教案 · 东方凝洛/尚硅谷ssm-springboot-2023视频资料 - 码云 - 开源中国 (gitee.com)](https://gitee.com/fankozhang/ssm/tree/master/教案) 

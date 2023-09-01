@@ -2617,3 +2617,171 @@ public class UserController {
 
  [(228条消息) 使用springBoot实现token校验_springboot 校验token_秃头小陈~的博客-CSDN博客](https://blog.csdn.net/qq_41450736/article/details/113523308) 
 
+
+
+## RabbitMQ
+
+参考文档： [Docker安装部署RabbitMQ - 掘金 (juejin.cn)](https://juejin.cn/post/7198430801850105916)  
+
+[超详细的RabbitMQ入门](https://developer.aliyun.com/article/769883) 
+
+ [RabbitMQ详解之你要的RabbitMQ这里都有_adobehu的博客-CSDN博客](https://blog.csdn.net/huzecom/article/details/103499692) 
+
+ [01-今日课程介绍_哔哩哔哩_bilibili](https://www.bilibili.com/video/BV1Xm4y1i7HP?p=1&vd_source=f25f5a8d75a3a60d5a288f726803ec11) 
+
+### docker安装RabbitMQ
+
+```
+docker pull rabbitmq:management
+```
+
+### 创建并运行容器
+
+```
+ docker run -id --name=rabbitmq -v rabbitmq-home:/var/lib/rabbitmq -p 15672:15672 -p 5672:5672 -e RABBITMQ_DEFAULT_USER=fankozhang -e RABBITMQ_DEFAULT_PASS=123456 rabbitmq:management 
+```
+
+- `15672`端口：RabbitMQ的**管理页面**端口
+- `5672`端口：RabbitMQ的**消息接收**端口
+- `RABBITMQ_DEFAULT_USER`环境变量：指定RabbitMQ的**用户名**，这里我指定为`fankozhang`，大家部署时替换成自己定义的
+- `RABBITMQ_DEFAULT_PASS`环境变量：指定RabbitMQ的**密码**，这里我指定为`123456`，大家部署时替换成自己定义的
+
+这样容器就部署完成了！在浏览器访问你的`服务器地址:15672`即可访问到RabbitMQ的管理界面，用户名和密码即为刚刚指定的环境变量的配置值。
+
+ http://127.0.0.1:15672 （使用服务器的 ip 地址）  打开RabbitMQ的管理页面（使用设置的用户名和密码可以登录进去）
+
+RabbitMQ的组成，它是有这几部分：
+
+- Broker：消息队列服务进程。此进程包括两个部分：Exchange和Queue。
+- Exchange：消息队列交换机。**按一定的规则将消息路由转发到某个队列**。
+- Queue：消息队列，存储消息的队列。
+- Producer：消息生产者。生产方客户端将消息同交换机路由发送到队列中。
+- Consumer：消息消费者。消费队列中存储的消息。
+
+这些组成部分是如何协同工作的呢，大概的流程如下
+
+- 消息生产者连接到RabbitMQ Broker，创建connection，开启channel。
+- 生产者声明交换机类型、名称、是否持久化等。
+- 生产者发送消息，并指定消息是否持久化等属性和routing key。
+- exchange收到消息之后，**根据routing key路由到跟当前交换机绑定的相匹配的队列**里面。
+- 消费者监听接收到消息之后开始业务处理。
+
+#### 示例（ [B站视频地址](https://www.bilibili.com/video/BV1Am4y1z7Tu?p=1&vd_source=f25f5a8d75a3a60d5a288f726803ec11) ）
+
+创建生产者
+
+```java
+@SpringBootApplication
+public class DemoApplication {
+
+	public static void main(String[] args) throws Exception {
+		String exchangeName="xc_exchange_name"; //交换机名称
+		String queueName ="xc_queue_name";      //队列名称
+		// 创建连接工厂，设置连接信息
+		ConnectionFactory factory=new ConnectionFactory();
+		factory.setHost("123.56.80.155");
+		factory.setUsername("fankozhang");
+		factory.setPassword("123456");
+		factory.setPort(5672);
+
+		// 创建连接
+		Connection connection=factory.newConnection();
+        //创建信道
+		Channel channel=connection.createChannel();
+
+		//创建交换机(参数如下)
+		//1,交换机名称
+		//2.交换机类型，direct,topic,fanout headers
+		//3.指定交换机是否需要持久化，如果设置为true,那么交换机的元数据要待久化
+		//4.指定交换机在没有队列绑定时，是否需要删除，设置false表示不删除
+		//5.Map<String,Object>类型，用来指定我们换机其他的一些机构化参数，我们在这里直接设置成null
+		channel.exchangeDeclare(exchangeName, BuiltinExchangeType.DIRECT,true,false,null);
+
+		//生成一个队列(参数如下)
+		//1.队列名称
+		//2.队列是否需要持久化，但是要注意，这里的特久化只是队列名称等这些元数据的持久化，不是队列中消息的持久化
+		//3.表示队列是不是私有的，如果是私有的，只有创建他的应用程序才能消费消怠
+		//4.队列在没有消费者订阅的情况下是否自动删除
+		//5.队列的一些结构化信息，比如声明死信队列，磁盘队列会用到
+
+		channel.queueDeclare(queueName, true,false,false,null);
+		//将我们的交换机和队列绑定(参数如下)
+		//1.队列名称
+		//2.交换饥名称
+		//3.路山健，在我门直连馍式下，可以为我们的队列名称
+		channel.queueBind(queueName,exchangeName,queueName);
+
+		// 发送消息
+		String msg="hello world";
+		//发送消息
+		//1.发送到娜个交换视
+		//2.队列名称
+		//3.其他参数信息
+		//4.发送消息的消息体
+		channel.basicPublish(exchangeName,queueName,null, msg.getBytes());
+
+        // 关闭连接
+		channel.close();
+		connection.close();
+	}
+
+}
+```
+
+创建消费者(消费上面生产者生产的消息，创建连接信息和上面保持一致)
+
+```java
+@SpringBootApplication
+public class DemoApplication {
+
+	public static void main(String[] args) throws Exception{
+
+		// 创建连接工厂，设置连接信息
+		ConnectionFactory factory=new ConnectionFactory();
+		factory.setHost("123.56.80.155");
+		factory.setUsername("fankozhang");
+		factory.setPassword("123456");
+		factory.setPort(5672);
+		// 创建连接
+		Connection connection=factory.newConnection();
+		//创建信道
+		Channel channel=connection.createChannel();
+
+
+		//按受消息的回调函数
+		DeliverCallback deliverCallBack=(consumerTage,message)->{
+				System.out.println("接收到消息"+new String(message.getBody()));
+		};
+		//取消消息的回调函数
+		CancelCallback cancelCallback=consumerTage->{
+			System.out.println("消息中断");
+		};
+		//消费消息
+		//1.消费哪个队列
+		//2.消费成功之后是否需要自动应答，t♪U:自动应答
+		//3.按受消息的回调函数
+		//4.取消消息的回调函数
+		channel.basicConsume("xc_queue_name",true,deliverCallBack,cancelCallback);
+	}
+
+
+}
+
+```
+
+
+
+### RabbitMQ交换机类型
+
+ [RabbitMQ交换机类型简述 ](https://www.cnblogs.com/hsiang/p/14747030.html) 
+
+RabbitMQ一共四种交换机，如下所示：
+
+1. Direct Exchange：直连交换机，根据Routing Key(路由键)进行投递到不同队列。
+2. Fanout Exchange：扇形交换机，采用广播模式，根据绑定的交换机，路由到与之对应的所有队列。
+3. Topic Exchange：主题交换机，对路由键进行模式匹配后进行投递，符号#表示一个或多个词，*表示一个词。
+4. Header Exchange：头交换机，不处理路由键。而是根据发送的消息内容中的headers属性进行匹配。
+
+## 文章收藏
+
+ [告别繁琐：SpringBoot 拦截器与统一功能处理 (qq.com)](https://mp.weixin.qq.com/s/evA1d1vY9Nqt72zFNQvgeA) 

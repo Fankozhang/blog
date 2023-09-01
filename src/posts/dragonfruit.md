@@ -601,7 +601,7 @@ uniCloud体系里，客户端和服务端的云函数通信，有4种方式：
 
 ### clientDB方式
 
- clientDB分API方式和组件方式，此处使用API方式来演示 
+ clientDB分API方式和组件方式，此处使用API方式来演示 (必须要配合DB Schema 使用)
 
 ```js
 // 客户端js直接操作云数据库，查询list表的数据。无需服务器代码
@@ -765,3 +765,97 @@ methods:{
 		}
 ```
 
+
+
+创建云对象 cloudObj1
+
+```js
+const db = uniCloud.database();
+module.exports = {
+	_before: function () { // 通用预处理器
+
+	},
+	async get(){
+		 return await db.collection('users').get()
+	}
+}
+```
+
+index.vue(获取数据的方法)
+
+```js
+           async getTheList(){
+				
+				const cloudObj1 = uniCloud.importObject('cloudObj1')
+				try {
+					const res = await cloudObj1.get()
+					// console.log(res) // 结果是3
+					this.lists=res.data
+				} catch (e) {
+					console.log(e)
+				}
+			},
+```
+
+
+
+### 云存储
+
+### DB Schema
+
+user表的schema(基础格式)  permission里面字段级控制，包括读写两种权限，分别称为：read、write 
+
+只有配置了权限之后，client连接数据库才不会有权限问题
+
+```json
+
+{
+  "bsonType": "object",
+  "required": [],
+  "permission": {
+    "read": true, // 任何用户都可以读
+    "create": false, // 禁止新增数据记录（admin权限用户不受限）
+    "update": false, // 禁止更新数据（admin权限用户不受限）
+    "delete": false // 禁止删除数据（admin权限用户不受限）
+  },
+  "properties": {
+    "_id":{
+    },
+    "name":{
+    },
+    "pwd": {
+      "bsonType": "password", // 即使不配置权限，此字段也无法在客户端读写
+      "title": "密码"
+    }
+  }
+}
+```
+
+配置了Schema之后，使用client连接数据库就不会报错了。
+
+```js
+async clientGetList(){
+				const db = uniCloud.database() // 获取云数据库的引用
+				db.collection('users').get()
+				  .then((res)=>{
+				    // res 为数据库查询结果
+					console.log("client",res)
+				  }).catch((err)=>{
+				    console.log(err); 
+				  })
+			},
+```
+
+
+
+### uni-id用户体系
+
+ 下载插件：下载地址：https://ext.dcloud.net.cn/plugin?name=uni-id-pages 
+
+ uni-id的云端配置文件在 `uniCloud/cloudfunctions/common/uni-config-center/uni-id/config.json` 中（没有这个目录的自己创建，配置文件在   [uni-app官网 (dcloud.net.cn)](https://uniapp.dcloud.net.cn/uniCloud/uni-id-summary.html#config)  找到复制进来    注意复制后要符合json格式，去除所有注释【 passwordSecret 和  tokenSecret  自己设置，不能为空】）。
+
+ 
+
+### 注意
+
+项目体验在微信小程序上，要发送到体验版的时候，应该在hbuiler里面点击发布，并在微信小程序后台配置域名。
