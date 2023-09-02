@@ -6,7 +6,7 @@ tag:
   - java
   - ssm
   - spring-boot
-typora-root-url: ..\..\.vuepress\public
+typora-root-url: ..\..\..\.vuepress\public
 ---
 
 # Java

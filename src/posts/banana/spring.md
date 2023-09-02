@@ -1,3 +1,7 @@
+---
+typora-root-url: ..\..\.vuepress\public
+---
+
 ## date: 2022-01-05
 category:
   - java
@@ -10,7 +14,7 @@ typora-root-url: ..\..\.vuepress\public
 
 
 
-# 实战项目
+# 实战项目(外卖项目)
 
  下载地址：https://pan.baidu.com/s/1LxIxcHDO7SYB96SE-GZfuQ
 提取码：dor4 
@@ -199,7 +203,7 @@ public class BannerController {
     }
 ```
 
-## 苍穹外卖
+## 苍穹外卖（瑞吉外卖补充版）
 
  [阿里云盘 (aliyundrive.com)](https://www.aliyundrive.com/drive/legacy/folder/64e5c7a9fdf0f4eb00d045e3a53e4dcf24f6fb31) 
 
@@ -207,13 +211,13 @@ public class BannerController {
 
 使用nginx部署前端项目后，访问：http://localhost/#/login
 
-### 对前端传过来的明文密码进行md5加密处理
+## 对前端传过来的明文密码进行md5加密处理
 
 ```
  password = DigestUtils.md5DigestAsHex(password.getBytes());
 ```
 
-### 接口返回结构封装
+## 接口返回结构封装
 
 https://juejin.cn/post/7118885304957665288#springboot%E6%8E%A5%E5%8F%A3---%E5%A6%82%E4%BD%95%E4%BC%98%E9%9B%85%E7%9A%84%E5%AF%B9%E6%8E%A5%E5%8F%A3%E8%BF%94%E5%9B%9E%E5%86%85%E5%AE%B9%E7%BB%9F%E4%B8%80%E5%B0%81%E8%A3%85
 
@@ -256,7 +260,7 @@ public class Result<T> implements Serializable {
 
 
 
-### 全局异常处理器
+## 全局异常处理器
 
 什么是异常处理器： [springboot对异常信息统一处理(@ExceptionHandler与@RestControllerAdvice那点事情)_](https://blog.csdn.net/xueyijin/article/details/122527688) 
 
@@ -305,9 +309,9 @@ public class GlobalExceptionHandler {
 
 
 
-### 员工管理(单表 增改查)
+## 员工管理(单表 增改查)
 
-#### 新增员工
+### 新增员工
 
 EmployeeController
 
@@ -365,7 +369,7 @@ EmployeeMapper
     void insert(Employee employee);
 ```
 
-#### jwt令牌校验的拦截器
+### jwt令牌校验的拦截器
 
 ```java
 /**
@@ -419,7 +423,7 @@ public class JwtTokenAdminInterceptor implements HandlerInterceptor {
 
 
 
-#### ThreadLocal 
+### ThreadLocal 
 
 （新增时  设置当前记录创建人id和修改人id  需要用到ThreadLocal ）
 
@@ -471,7 +475,7 @@ employee.setCreateUser(BaseContext.getCurrentId());
 
 
 
-#### 员工分页查询
+### 员工分页查询
 
 根据分页查询接口设计对应的DTO
 
@@ -650,7 +654,7 @@ private LocalDateTime createTime;
 
 
 
-#### 启用禁用员工账号
+### 启用禁用员工账号
 
 状态为“禁用”的员工账号不能登录系统
 
@@ -728,13 +732,13 @@ EmployeeMapper.xml
 </mapper>
 ```
 
-#### 编辑员工
+### 编辑员工
 
 编辑员工功能涉及到两个接口：
 根据id查询员工信息
 编辑员工信息
 
-##### 根据id查询员工信息
+#### 根据id查询员工信息
 
 EmployeeController
 
@@ -782,7 +786,7 @@ EmployeeMapper
  Employee getById(Long id);
 ```
 
-##### 编辑员工信息
+#### 编辑员工信息
 
 EmployeeController
 
@@ -824,9 +828,9 @@ EmployeeServiceImpl
 
 mapper使用的  和 调用与 启用禁用员工账号 时的 update方法
 
-###  分类管理(单表 增删改查)
+##  分类管理(单表 增删改查)
 
-#### categoryController
+### categoryController
 
 ```java
 /**
@@ -919,7 +923,7 @@ public class CategoryController {
 }
 ```
 
-#### categoryService
+### categoryService
 
 ```java
 public interface CategoryService {
@@ -965,7 +969,7 @@ public interface CategoryService {
 }
 ```
 
-#### categoryServiceImpl
+### categoryServiceImpl
 
 ```java
 /**
@@ -1080,7 +1084,7 @@ public class CategoryServiceImpl implements CategoryService {
 
 ```
 
-#### categoryServiceMapper
+### categoryServiceMapper
 
 ```java
 @Mapper
@@ -1126,7 +1130,7 @@ public interface CategoryMapper {
 }
 ```
 
-#### categoryServiceMapper.xml
+### categoryServiceMapper.xml
 
 ```xml
 <?xml version="1.0" encoding="UTF-8" ?>
@@ -1184,7 +1188,7 @@ public interface CategoryMapper {
 
 ```
 
-#### 注意：
+### 注意：
 
 查询当前分类是否关联了菜品/套餐，有关联的不能删除
 
@@ -1192,7 +1196,7 @@ public interface CategoryMapper {
 
 
 
-### 公共字段自动填充
+## 公共字段自动填充
 
 实现思路
 
@@ -1207,7 +1211,7 @@ public interface CategoryMapper {
 自定义切面类 AutoFillAspect，统一拦截加入了 AutoFill 注解的方法，通过反射为公共字段赋值
 在 Mapper 的方法上加入 AutoFill 注解
 
-#### AutoFill（自定义注解）
+### AutoFill（自定义注解）
 
 (上面的category的mapper中已经有使用到了 AutoFill 注解了)
 
@@ -1231,7 +1235,7 @@ public @interface AutoFill {
 }
 ```
 
-#### OperationType
+### OperationType
 
 ```java
 package com.sky.enumeration;
@@ -1254,7 +1258,7 @@ public enum OperationType {
 }
 ```
 
-#### AutoFillAspect(自定义切面)
+### AutoFillAspect(自定义切面)
 
 ```java
 package com.sky.aspect;
@@ -1347,7 +1351,7 @@ public class AutoFillAspect {
 
 ```
 
-#### AutoFillConstant
+### AutoFillConstant
 
 ```java
 package com.sky.constant;
@@ -1366,7 +1370,7 @@ public class AutoFillConstant {
 }
 ```
 
-#### BaseContext
+### BaseContext
 
 ```java
 
@@ -1391,7 +1395,7 @@ public class BaseContext {
 }
 ```
 
-#### 在mapper实际使用
+### 在mapper实际使用
 
 (在方法上增加注解就可以了)
 
@@ -1406,9 +1410,9 @@ public class BaseContext {
 
 
 
-### 文件上传(阿里云oss)
+## 文件上传(阿里云oss)
 
-#### 使用阿里云 oss
+### 使用阿里云 oss
 
 使用参考： [springboot整合阿里云OSS存储（对象存储）图文详解-———入门操作指南。_springboot oss对象存储并添加到数据库_new DFP的博客-CSDN博客](https://blog.csdn.net/weixin_53472653/article/details/123579585) 
 
@@ -1453,7 +1457,7 @@ sky:
 
 
 
-#### AliOssProperties
+### AliOssProperties
 
 ```java
 package com.sky.properties;
@@ -1475,7 +1479,7 @@ public class AliOssProperties {
 }
 ```
 
-#### AliOssUtil
+### AliOssUtil
 
 ```java
 package com.sky.utils;
@@ -1549,7 +1553,7 @@ public class AliOssUtil {
 
 ```
 
-#### OssConfiguration
+### OssConfiguration
 
 ```java
 package com.sky.config;
@@ -1582,7 +1586,7 @@ public class OssConfiguration {
 
 
 
-#### 上传通用接口
+### 上传通用接口
 
 ```java
 package com.sky.controller.admin;
@@ -1645,11 +1649,11 @@ public class CommonController {
 
 
 
-### 菜品接口(一对多)
+## 菜品接口(一对多)
 
-#### 一个菜品，对应多种口味
+### 一个菜品，对应多种口味
 
-#### DishDto
+### DishDto
 
 ```java
 @Data
@@ -1674,7 +1678,7 @@ public class DishDTO implements Serializable {
 }
 ```
 
-#### 开发新增菜品接口
+### 开发新增菜品接口
 
 DishController
 
@@ -1829,7 +1833,7 @@ DishFlavorMapper.xml
 </mapper>
 ```
 
-#### 菜品分页查询
+### 菜品分页查询
 
 根据页码展示菜品信息
 每页展示10条数据
@@ -1972,7 +1976,7 @@ DishMapper.xml
     </select>
 ```
 
-#### 删除菜品(可批量删除)
+### 删除菜品(可批量删除)
 
 可以一次删除一个菜品，也可以批量删除菜品
 起售中的菜品不能删除
@@ -2100,7 +2104,7 @@ DishFlavorMapper
     void deleteByDishId(Long dishId);
 ```
 
-#### 根据id查询菜品
+### 根据id查询菜品
 
 DishController
 
@@ -2184,7 +2188,7 @@ DishFlavorMapper
 
 
 
-#### 修改菜品
+### 修改菜品
 
 根据id查询菜品
 根据类型查询分类（已实现）
@@ -2289,7 +2293,7 @@ DishMapper.xml
 
 
 
-#### 菜品起售停售
+### 菜品起售停售
 
 DishController
 
@@ -2454,7 +2458,7 @@ setmealMapper.xml
 
 
 
-#### 根据套餐id查询包含的菜品列表
+### 根据套餐id查询包含的菜品列表
 
 DishController
 
@@ -2511,9 +2515,9 @@ setmealMapper
     List<DishItemVO> getDishItemBySetmealId(Long setmealId);
 ```
 
-### 店铺营业状态设置
+## 店铺营业状态设置
 
-#### Redis（基本操作见springBoot）
+### Redis（基本操作见springBoot）
 
 Spring Data Redis 是 Spring 的一部分，对 Redis 底层开发包进行了高度封装。
 在 Spring 项目中，可以使用Spring Data Redis来简化操作。
@@ -2600,7 +2604,7 @@ public class RedisConfiguration {
 
 
 
-#### 接口设计：
+### 接口设计：
 
 设置营业状态
 管理端查询营业状态
@@ -2616,9 +2620,9 @@ public class RedisConfiguration {
 
 约定：1表示营业 0表示打烊
 
-#### ShopController
+### ShopController
 
-##### (管理端)
+#### (管理端)
 
 ```java
 @RestController("adminShopController")
@@ -2660,7 +2664,7 @@ public class ShopController {
 
 ```
 
-##### （用户端）
+#### （用户端）
 
 ```java
 @RestController("userShopController")
@@ -2688,7 +2692,7 @@ public class ShopController {
 }
 ```
 
-### 接口文档分组（管理端和客户端）
+## 接口文档分组（管理端和客户端）
 
 WebMvcConfiguration
 
@@ -2748,7 +2752,7 @@ WebMvcConfiguration
 
 
 
-### HttpClient介绍 – 作用
+## HttpClient介绍 – 作用
 
 HttpClient是Apache的一个子项目，是高效的、功能丰富的支持HTTP协议的客户端编程工具包。
 
@@ -2783,7 +2787,7 @@ HttpPost
 创建Http请求对象
 调用HttpClient的execute方法发送请求
 
-##### 入门案例
+### 入门案例
 
 ```java
 //@SpringBootTest
@@ -2857,7 +2861,7 @@ public class HttpClientTest {
 }
 ```
 
-### 微信小程序开发
+## 微信小程序开发
 
 index.wxml
 
@@ -2943,11 +2947,11 @@ Page({
 
 ```
 
-### 小程序登录文档：
+## 小程序登录文档：
 
  [小程序登录 / 小程序登录 (qq.com)](https://developers.weixin.qq.com/miniprogram/dev/OpenApiDoc/user-login/code2Session.html) 
 
-### 登录接口开发
+## 登录接口开发
 
 数据库设计（user表）：
 
@@ -2962,7 +2966,7 @@ Page({
 | avatar      | varchar(500)    | 微信用户头像路径       |          |
 | create_time | datetime        | 注册时间               |          |
 
-#### jwt生成配置
+### jwt生成配置
 
 JwtProperties
 
@@ -3049,3 +3053,1705 @@ sky:
     refundNotifyUrl: https://58869fb.r2.cpolar.top/notify/refundSuccess
 ```
 
+
+
+### 需求分析和设计
+
+Dto
+
+```java
+/**
+ * C端用户登录
+ */
+@Data
+public class UserLoginDTO implements Serializable {
+
+    private String code;
+
+}
+```
+
+Vo
+
+```java
+@Data
+@Builder
+@NoArgsConstructor
+@AllArgsConstructor
+public class UserLoginVO implements Serializable {
+
+    private Long id;
+    private String openid;
+    private String token;
+
+}
+```
+
+
+
+UserController
+
+```java
+@RestController
+@RequestMapping("/user/user")
+@Api(tags = "C端用户相关接口")
+@Slf4j
+public class UserController {
+
+    @Autowired
+    private UserService userService;
+    @Autowired
+    private JwtProperties jwtProperties;
+
+    /**
+     * 微信登录
+     * @param userLoginDTO
+     * @return
+     */
+    @PostMapping("/login")
+    @ApiOperation("微信登录")
+    public Result<UserLoginVO> login(@RequestBody UserLoginDTO userLoginDTO){
+        log.info("微信用户登录：{}",userLoginDTO.getCode());
+
+        //微信登录
+        User user = userService.wxLogin(userLoginDTO);
+
+        //为微信用户生成jwt令牌
+        Map<String, Object> claims = new HashMap<>();
+        claims.put(JwtClaimsConstant.USER_ID,user.getId());
+        String token = JwtUtil.createJWT(jwtProperties.getUserSecretKey(), jwtProperties.getUserTtl(), claims);
+
+        UserLoginVO userLoginVO = UserLoginVO.builder()
+                .id(user.getId())
+                .openid(user.getOpenid())
+                .token(token)
+                .build();
+        return Result.success(userLoginVO);
+    }
+}
+```
+
+UserService
+
+```java
+public interface UserService {
+
+    /**
+     * 微信登录
+     * @param userLoginDTO
+     * @return
+     */
+    User wxLogin(UserLoginDTO userLoginDTO);
+}
+```
+
+UserServiceImpl
+
+```java
+@Service
+@Slf4j
+public class UserServiceImpl implements UserService {
+
+    //微信服务接口地址
+    public static final String WX_LOGIN = "https://api.weixin.qq.com/sns/jscode2session";
+
+    @Autowired
+    private WeChatProperties weChatProperties;
+    @Autowired
+    private UserMapper userMapper;
+
+    /**
+     * 微信登录
+     * @param userLoginDTO
+     * @return
+     */
+    public User wxLogin(UserLoginDTO userLoginDTO) {
+        String openid = getOpenid(userLoginDTO.getCode());
+
+        //判断openid是否为空，如果为空表示登录失败，抛出业务异常
+        if(openid == null){
+            throw new LoginFailedException(MessageConstant.LOGIN_FAILED);
+        }
+
+        //判断当前用户是否为新用户
+        User user = userMapper.getByOpenid(openid);
+
+        //如果是新用户，自动完成注册
+        if(user == null){
+            user = User.builder()
+                    .openid(openid)
+                    .createTime(LocalDateTime.now())
+                    .build();
+            userMapper.insert(user);
+        }
+
+        //返回这个用户对象
+        return user;
+    }
+
+    /**
+     * 调用微信接口服务，获取微信用户的openid
+     * @param code
+     * @return
+     */
+    private String getOpenid(String code){
+        //调用微信接口服务，获得当前微信用户的openid
+        Map<String, String> map = new HashMap<>();
+        map.put("appid",weChatProperties.getAppid());
+        map.put("secret",weChatProperties.getSecret());
+        map.put("js_code",code);
+        map.put("grant_type","authorization_code");
+        String json = HttpClientUtil.doGet(WX_LOGIN, map);
+
+        JSONObject jsonObject = JSON.parseObject(json);
+        String openid = jsonObject.getString("openid");
+        return openid;
+    }
+}
+
+```
+
+UserMapper
+
+```java
+@Mapper
+public interface UserMapper {
+
+    /**
+     * 根据openid查询用户
+     * @param openid
+     * @return
+     */
+    @Select("select * from user where openid = #{openid}")
+    User getByOpenid(String openid);
+
+    /**
+     * 插入数据
+     * @param user
+     */
+    void insert(User user);
+
+    @Select("select * from user where id = #{id}")
+    User getById(Long userId);
+
+    /**
+     * 根据动态条件统计用户数量
+     * @param map
+     * @return
+     */
+    Integer countByMap(Map map);
+}
+```
+
+WebMvcConfiguration  (去除小程序端登录的token验证)
+
+```java
+ @Autowired
+    private JwtTokenAdminInterceptor jwtTokenAdminInterceptor;
+    @Autowired
+    private JwtTokenUserInterceptor jwtTokenUserInterceptor;
+
+    /**
+     * 注册自定义拦截器
+     * @param registry
+     */
+    @Override
+    protected void addInterceptors(InterceptorRegistry registry) {
+        log.info("开始注册自定义拦截器...");
+        registry.addInterceptor(jwtTokenAdminInterceptor)
+                .addPathPatterns("/admin/**")
+                .excludePathPatterns("/admin/employee/login");
+
+        registry.addInterceptor(jwtTokenUserInterceptor)
+                .addPathPatterns("/user/**")
+                .excludePathPatterns("/user/user/login")
+                .excludePathPatterns("/user/shop/status");
+    }
+```
+
+JwtTokenUserInterceptor (小程序端jwt令牌校验的拦截器)
+
+```java
+/**
+ * jwt令牌校验的拦截器
+ */
+@Component
+@Slf4j
+public class JwtTokenUserInterceptor implements HandlerInterceptor {
+
+    @Autowired
+    private JwtProperties jwtProperties;
+
+    /**
+     * 校验jwt
+     *
+     * @param request
+     * @param response
+     * @param handler
+     * @return
+     * @throws Exception
+     */
+    @Override
+    public boolean preHandle(HttpServletRequest request, HttpServletResponse response, Object handler) throws Exception {
+        //判断当前拦截到的是Controller的方法还是其他资源
+        if (!(handler instanceof HandlerMethod)) {
+            //当前拦截到的不是动态方法，直接放行
+            return true;
+        }
+
+        //1、从请求头中获取令牌
+        String token = request.getHeader(jwtProperties.getUserTokenName());
+
+        //2、校验令牌
+        try {
+            log.info("jwt校验:{}", token);
+            Claims claims = JwtUtil.parseJWT(jwtProperties.getUserSecretKey(), token);
+            Long userId = Long.valueOf(claims.get(JwtClaimsConstant.USER_ID).toString());
+            log.info("当前用户的id：", userId);
+            BaseContext.setCurrentId(userId);
+            //3、通过，放行
+            return true;
+        } catch (Exception ex) {
+            //4、不通过，响应401状态码
+            response.setStatus(401);
+            return false;
+        }
+    }
+}
+
+```
+
+## 导入商品浏览功能代码
+
+### 接口设计：
+
+查询分类
+根据分类id查询菜品
+根据分类id查询套餐
+根据套餐id查询包含的菜品
+
+CategoryController
+
+```java
+@RestController("userCategoryController")
+@RequestMapping("/user/category")
+@Api(tags = "C端-分类接口")
+public class CategoryController {
+
+    @Autowired
+    private CategoryService categoryService;
+
+    /**
+     * 查询分类
+     * @param type
+     * @return
+     */
+    @GetMapping("/list")
+    @ApiOperation("查询分类")
+    public Result<List<Category>> list(Integer type) {
+        List<Category> list = categoryService.list(type);
+        return Result.success(list);
+    }
+}
+```
+
+DishController
+
+```java
+@RestController("userDishController")
+@RequestMapping("/user/dish")
+@Slf4j
+@Api(tags = "C端-菜品浏览接口")
+public class DishController {
+    @Autowired
+    private DishService dishService;
+    @Autowired
+    private RedisTemplate redisTemplate;
+
+    /**
+     * 根据分类id查询菜品
+     *
+     * @param categoryId
+     * @return
+     */
+    @GetMapping("/list")
+    @ApiOperation("根据分类id查询菜品")
+    public Result<List<DishVO>> list(Long categoryId) {
+
+        //构造redis中的key，规则：dish_分类id
+        String key = "dish_" + categoryId;
+
+        //查询redis中是否存在菜品数据
+        List<DishVO> list = (List<DishVO>) redisTemplate.opsForValue().get(key);
+        if(list != null && list.size() > 0){
+            //如果存在，直接返回，无须查询数据库
+            return Result.success(list);
+        }
+
+        Dish dish = new Dish();
+        dish.setCategoryId(categoryId);
+        dish.setStatus(StatusConstant.ENABLE);//查询起售中的菜品
+
+        //如果不存在，查询数据库，将查询到的数据放入redis中
+        list = dishService.listWithFlavor(dish);
+        redisTemplate.opsForValue().set(key, list);
+
+        return Result.success(list);
+    }
+
+}
+
+```
+
+DishService
+
+```
+List<DishVO> listWithFlavor(Dish dish);
+```
+
+DishServiceImpl
+
+```java
+/**
+     * 条件查询菜品和口味
+     * @param dish
+     * @return
+     */
+    public List<DishVO> listWithFlavor(Dish dish) {
+        List<Dish> dishList = dishMapper.list(dish);
+
+        List<DishVO> dishVOList = new ArrayList<>();
+
+        for (Dish d : dishList) {
+            DishVO dishVO = new DishVO();
+            BeanUtils.copyProperties(d,dishVO);
+
+            //根据菜品id查询对应的口味
+            List<DishFlavor> flavors = dishFlavorMapper.getByDishId(d.getId());
+
+            dishVO.setFlavors(flavors);
+            dishVOList.add(dishVO);
+        }
+
+        return dishVOList;
+    }
+```
+
+
+
+SetMealController
+
+```java
+@RestController("userSetmealController")
+@RequestMapping("/user/setmeal")
+@Api(tags = "C端-套餐浏览接口")
+public class SetmealController {
+    @Autowired
+    private SetmealService setmealService;
+
+    /**
+     * 条件查询
+     *
+     * @param categoryId
+     * @return
+     */
+    @GetMapping("/list")
+    @ApiOperation("根据分类id查询套餐")
+    @Cacheable(cacheNames = "setmealCache",key = "#categoryId") //key: setmealCache::100
+    public Result<List<Setmeal>> list(Long categoryId) {
+        Setmeal setmeal = new Setmeal();
+        setmeal.setCategoryId(categoryId);
+        setmeal.setStatus(StatusConstant.ENABLE);
+
+        List<Setmeal> list = setmealService.list(setmeal);
+        return Result.success(list);
+    }
+
+    /**
+     * 根据套餐id查询包含的菜品列表
+     *
+     * @param id
+     * @return
+     */
+    @GetMapping("/dish/{id}")
+    @ApiOperation("根据套餐id查询包含的菜品列表")
+    public Result<List<DishItemVO>> dishList(@PathVariable("id") Long id) {
+        List<DishItemVO> list = setmealService.getDishItemById(id);
+        return Result.success(list);
+    }
+}
+
+```
+
+SetMealService
+
+```java
+ /**
+     * 条件查询
+     * @param setmeal
+     * @return
+     */
+    List<Setmeal> list(Setmeal setmeal);
+```
+
+SetMealServiceImpl
+
+```java
+/**
+     * 条件查询
+     * @param setmeal
+     * @return
+     */
+    public List<Setmeal> list(Setmeal setmeal) {
+        List<Setmeal> list = setmealMapper.list(setmeal);
+        return list;
+    }
+```
+
+SetMealMapper
+
+```java
+ /**
+     * 动态条件查询套餐
+     * @param setmeal
+     * @return
+     */
+    List<Setmeal> list(Setmeal setmeal);
+```
+
+SetMealMapper.xml
+
+```xml
+<select id="list" parameterType="Setmeal" resultType="Setmeal">
+        select * from setmeal
+        <where>
+            <if test="name != null">
+                and name like concat('%',#{name},'%')
+            </if>
+            <if test="categoryId != null">
+                and category_id = #{categoryId}
+            </if>
+            <if test="status != null">
+                and status = #{status}
+            </if>
+        </where>
+    </select>
+```
+
+
+
+## 缓存菜品(缓存操作)
+
+每次切换菜品菜单都请求一次，效率低，可以将菜品数据缓存起来
+
+缓存逻辑分析：
+每个分类下的菜品保存一份缓存数据
+数据库中菜品数据有变更时清理缓存数据
+
+
+
+```java
+@RestController("userDishController")
+@RequestMapping("/user/dish")
+@Slf4j
+@Api(tags = "C端-菜品浏览接口")
+public class DishController {
+    @Autowired
+    private DishService dishService;
+    @Autowired
+    private RedisTemplate redisTemplate;
+
+    /**
+     * 根据分类id查询菜品
+     *
+     * @param categoryId
+     * @return
+     */
+    @GetMapping("/list")
+    @ApiOperation("根据分类id查询菜品")
+    public Result<List<DishVO>> list(Long categoryId) {
+
+        //构造redis中的key，规则：dish_分类id
+        String key = "dish_" + categoryId;
+
+        //查询redis中是否存在菜品数据
+        List<DishVO> list = (List<DishVO>) redisTemplate.opsForValue().get(key);
+        if(list != null && list.size() > 0){
+            //如果存在，直接返回，无须查询数据库
+            return Result.success(list);
+        }
+
+        Dish dish = new Dish();
+        dish.setCategoryId(categoryId);
+        dish.setStatus(StatusConstant.ENABLE);//查询起售中的菜品
+
+        //如果不存在，查询数据库，将查询到的数据放入redis中
+        list = dishService.listWithFlavor(dish);
+        redisTemplate.opsForValue().set(key, list);
+
+        return Result.success(list);
+    }
+
+}
+```
+
+当数据库数据发生改变时，应当及时清理缓存
+
+（哪个缓存数据受影响，清除哪个缓存数据，以下仅展示新增时清理缓存数据）
+
+```java
+ @Autowired
+ private RedisTemplate redisTemplate;
+ 
+ //清理缓存数据
+ /**
+     * 新增菜品
+     *
+     * @param dishDTO
+     * @return
+     */
+    @PostMapping
+    @ApiOperation("新增菜品")
+    public Result save(@RequestBody DishDTO dishDTO) {
+        log.info("新增菜品：{}", dishDTO);
+        dishService.saveWithFlavor(dishDTO);
+
+        //清理缓存数据(一条数据)
+        String key = "dish_" + dishDTO.getCategoryId();
+        cleanCache(key);
+        //将所有的菜品缓存数据清理掉，所有以dish_开头的key
+        cleanCache("dish_*");
+        
+        return Result.success();
+    }
+    
+     /**
+     * 清理缓存数据的方法
+     * @param pattern
+     */
+    private void cleanCache(String pattern){
+        Set keys = redisTemplate.keys(pattern);
+        redisTemplate.delete(keys);
+    }
+```
+
+## 缓存套餐(缓存操作 spring cache)
+
+Spring Cache是一个框架，实现了基于注解的缓存功能，只需要简单地加一个注解，就能实现缓存功能。
+Spring Cache提供了一层抽象，底层可以切换不同的缓存实现，例如：
+EHCache, Caffeine, Redis
+
+1 分钟快速上手 Spring Cache:  https://juejin.cn/post/7067090649245286408
+
+https://juejin.cn/post/7220292698854752313#heading-1
+
+```
+<dependency>
+   <groupId>org.springframework.boot</groupId>
+   <artifactId>spring-boot-starter-cache</artifactId>
+</dependency>
+```
+
+### 常用注解说明
+
+@EnableCaching                    开启缓存注解功能，通常加在启动类上
+@Cacheable                           在方法执行前先查询缓存中是否有数据，如果有数据，则直接返回缓存数据；如果
+                                                  没有缓存数据，调用方法并将方法返回值放到缓存中
+@CachePut                             将方法的返回值放到缓存中
+@CacheEvict                           将一条或多条数据从缓存中删除
+
+
+
+### 实现功能
+
+具体的实现思路如下：
+导入Spring Cache和Redist相关maven坐标
+在启动类上加入@EnableCachingi注解，开启缓存注解功能
+在用户端接口SetmealController的list方法上加入@Cacheable注解
+在管理端接口SetmealController的save、delete、update、startOrStop等方法上加入CacheEvicti注解
+
+
+
+```java
+@SpringBootApplication
+@EnableTransactionManagement //开启注解方式的事务管理
+@Slf4j
+@EnableCaching // 启动类上加入@EnableCachingi注解，开启缓存注解功能
+public class SkyApplication {
+    public static void main(String[] args) {
+        SpringApplication.run(SkyApplication.class, args);
+        log.info("server started");
+    }
+}
+```
+
+```java
+//   用户端接口SetmealController的list方法上加入@Cacheable注解
+@RestController("userSetmealController")
+@RequestMapping("/user/setmeal")
+@Api(tags = "C端-套餐浏览接口")
+public class SetmealController {
+    @Autowired
+    private SetmealService setmealService;
+
+    /**
+     * 条件查询
+     *
+     * @param categoryId
+     * @return
+     */
+    @GetMapping("/list")
+    @ApiOperation("根据分类id查询套餐")
+    @Cacheable(cacheNames = "setmealCache",key = "#categoryId") //key: setmealCache::100
+    public Result<List<Setmeal>> list(Long categoryId) {
+        Setmeal setmeal = new Setmeal();
+        setmeal.setCategoryId(categoryId);
+        setmeal.setStatus(StatusConstant.ENABLE);
+
+        List<Setmeal> list = setmealService.list(setmeal);
+        return Result.success(list);
+    }
+}
+```
+
+
+
+```java
+/**
+ * 套餐管理（管理端接口SetmealController的save、delete、update、startOrStop等方法上加入      CacheEvicti注解）
+ */
+@RestController
+@RequestMapping("/admin/setmeal")
+@Api(tags = "套餐相关接口")
+@Slf4j
+public class SetmealController {
+
+    @Autowired
+    private SetmealService setmealService;
+
+    /**
+     * 新增套餐
+     *
+     * @param setmealDTO
+     * @return
+     */
+    @PostMapping
+    @ApiOperation("新增套餐")
+    @CacheEvict(cacheNames = "setmealCache",key = "#setmealDTO.categoryId")//key: setmealCache::100
+    public Result save(@RequestBody SetmealDTO setmealDTO) {
+        setmealService.saveWithDish(setmealDTO);
+        return Result.success();
+    }
+
+    /**
+     * 分页查询
+     *
+     * @param setmealPageQueryDTO
+     * @return
+     */
+    @GetMapping("/page")
+    @ApiOperation("分页查询")
+    public Result<PageResult> page(SetmealPageQueryDTO setmealPageQueryDTO) {
+        PageResult pageResult = setmealService.pageQuery(setmealPageQueryDTO);
+        return Result.success(pageResult);
+    }
+
+    /**
+     * 批量删除套餐
+     *
+     * @param ids
+     * @return
+     */
+    @DeleteMapping
+    @ApiOperation("批量删除套餐")
+    @CacheEvict(cacheNames = "setmealCache",allEntries = true)
+    public Result delete(@RequestParam List<Long> ids) {
+        setmealService.deleteBatch(ids);
+        return Result.success();
+    }
+
+    /**
+     * 根据id查询套餐，用于修改页面回显数据
+     *
+     * @param id
+     * @return
+     */
+    @GetMapping("/{id}")
+    @ApiOperation("根据id查询套餐")
+    public Result<SetmealVO> getById(@PathVariable Long id) {
+        SetmealVO setmealVO = setmealService.getByIdWithDish(id);
+        return Result.success(setmealVO);
+    }
+
+    /**
+     * 修改套餐
+     *
+     * @param setmealDTO
+     * @return
+     */
+    @PutMapping
+    @ApiOperation("修改套餐")
+    @CacheEvict(cacheNames = "setmealCache",allEntries = true)
+    public Result update(@RequestBody SetmealDTO setmealDTO) {
+        setmealService.update(setmealDTO);
+        return Result.success();
+    }
+
+    /**
+     * 套餐起售停售
+     *
+     * @param status
+     * @param id
+     * @return
+     */
+    @PostMapping("/status/{status}")
+    @ApiOperation("套餐起售停售")
+    @CacheEvict(cacheNames = "setmealCache",allEntries = true)
+    public Result startOrStop(@PathVariable Integer status, Long id) {
+        setmealService.startOrStop(status, id);
+        return Result.success();
+    }
+}
+```
+
+## 购物车功能
+
+### 接口设计：
+
+,请求方式：POST
+,请求路径：user/shoppingCart/add
+,请求参数：套餐id、菜品id、口味
+
+
+
+### 数据库设计（shopping_cart表）：
+
+| **字段名**  | **数据类型**  | **说明**     | **备注** |
+| ----------- | ------------- | ------------ | -------- |
+| id          | bigint        | 主键         | 自增     |
+| name        | varchar(32)   | 商品名称     | 冗余字段 |
+| image       | varchar(255)  | 商品图片路径 | 冗余字段 |
+| user_id     | bigint        | 用户id       | 逻辑外键 |
+| dish_id     | bigint        | 菜品id       | 逻辑外键 |
+| setmeal_id  | bigint        | 套餐id       | 逻辑外键 |
+| dish_flavor | varchar(50)   | 菜品口味     |          |
+| number      | int           | 商品数量     |          |
+| amount      | decimal(10,2) | 商品单价     | 冗余字段 |
+| create_time | datetime      | 创建时间     |          |
+
+### 添加购物车
+
+#### 根据添加购物车接口的参数设计DTO：
+
+```java
+@Data
+public class ShoppingCartDTO implements Serializable {
+    // 参数都是非必传的
+    private Long dishId;          // 菜品id
+    private Long setmealId;       // 套餐id
+    private String dishFlavor;    // 口味
+
+}
+
+```
+
+
+
+### 根据接口创建ShoppingCartController
+
+```java
+@RestController
+@RequestMapping("/user/shoppingCart")
+@Slf4j
+@Api(tags = "C端购物车相关接口")
+public class ShoppingCartController {
+
+    @Autowired
+    private ShoppingCartService shoppingCartService;
+
+    /**
+     * 添加购物车
+     * @param shoppingCartDTO
+     * @return
+     */
+    @PostMapping("/add")
+    @ApiOperation("添加购物车")
+    public Result add(@RequestBody ShoppingCartDTO shoppingCartDTO){
+        log.info("添加购物车，商品信息为：{}",shoppingCartDTO);
+        shoppingCartService.addShoppingCart(shoppingCartDTO);
+        return Result.success();
+    }
+
+    /**
+     * 查看购物车
+     * @return
+     */
+    @GetMapping("/list")
+    @ApiOperation("查看购物车")
+    public Result<List<ShoppingCart>> list(){
+        List<ShoppingCart> list = shoppingCartService.showShoppingCart();
+        return Result.success(list);
+    }
+
+    /**
+     * 清空购物车
+     * @return
+     */
+    @DeleteMapping("/clean")
+    @ApiOperation("清空购物车")
+    public Result clean(){
+        shoppingCartService.cleanShoppingCart();
+        return Result.success();
+    }
+
+    /**
+     * 删除购物车中一个商品
+     * @param shoppingCartDTO
+     * @return
+     */
+    @PostMapping("/sub")
+    @ApiOperation("删除购物车中一个商品")
+    public Result sub(@RequestBody ShoppingCartDTO shoppingCartDTO){
+        log.info("删除购物车中一个商品，商品：{}", shoppingCartDTO);
+        shoppingCartService.subShoppingCart(shoppingCartDTO);
+        return Result.success();
+    }
+}
+
+```
+
+### ShoppingCartService
+
+```java
+public interface ShoppingCartService {
+
+    /**
+     * 添加购物车
+     * @param shoppingCartDTO
+     */
+    void addShoppingCart(ShoppingCartDTO shoppingCartDTO);
+
+    /**
+     * 查看购物车
+     * @return
+     */
+    List<ShoppingCart> showShoppingCart();
+
+    /**
+     * 清空购物车
+     */
+    void cleanShoppingCart();
+
+    /**
+     * 删除购物车中一个商品
+     * @param shoppingCartDTO
+     */
+    void subShoppingCart(ShoppingCartDTO shoppingCartDTO);
+}
+```
+
+### ShoppingCartServiceImpl
+
+```java
+@Service
+@Slf4j
+public class ShoppingCartServiceImpl implements ShoppingCartService {
+
+    @Autowired
+    private ShoppingCartMapper shoppingCartMapper;
+    @Autowired
+    private DishMapper dishMapper;
+    @Autowired
+    private SetmealMapper setmealMapper;
+
+    /**
+     * 添加购物车
+     * @param shoppingCartDTO
+     */
+    public void addShoppingCart(ShoppingCartDTO shoppingCartDTO) {
+        //判断当前加入到购物车中的商品是否已经存在了
+        ShoppingCart shoppingCart = new ShoppingCart();
+        BeanUtils.copyProperties(shoppingCartDTO,shoppingCart);
+        Long userId = BaseContext.getCurrentId();
+        shoppingCart.setUserId(userId);
+
+        List<ShoppingCart> list = shoppingCartMapper.list(shoppingCart);
+
+        //如果已经存在了，只需要将数量加一
+        if(list != null && list.size() > 0){
+            ShoppingCart cart = list.get(0);
+            cart.setNumber(cart.getNumber() + 1);//update shopping_cart set number = ? where id = ?
+            shoppingCartMapper.updateNumberById(cart);
+        }else {
+            //如果不存在，需要插入一条购物车数据
+            //判断本次添加到购物车的是菜品还是套餐
+            Long dishId = shoppingCartDTO.getDishId();
+            if(dishId != null){
+                //本次添加到购物车的是菜品
+                Dish dish = dishMapper.getById(dishId);
+                shoppingCart.setName(dish.getName());
+                shoppingCart.setImage(dish.getImage());
+                shoppingCart.setAmount(dish.getPrice());
+            }else{
+                //本次添加到购物车的是套餐
+                Long setmealId = shoppingCartDTO.getSetmealId();
+                Setmeal setmeal = setmealMapper.getById(setmealId);
+                shoppingCart.setName(setmeal.getName());
+                shoppingCart.setImage(setmeal.getImage());
+                shoppingCart.setAmount(setmeal.getPrice());
+            }
+            shoppingCart.setNumber(1);
+            shoppingCart.setCreateTime(LocalDateTime.now());
+            shoppingCartMapper.insert(shoppingCart);
+        }
+    }
+
+    /**
+     * 查看购物车
+     * @return
+     */
+    public List<ShoppingCart> showShoppingCart() {
+        //获取到当前微信用户的id
+        Long userId = BaseContext.getCurrentId();
+        ShoppingCart shoppingCart = ShoppingCart.builder()
+                .userId(userId)
+                .build();
+        List<ShoppingCart> list = shoppingCartMapper.list(shoppingCart);
+        return list;
+    }
+
+    /**
+     * 清空购物车
+     */
+    public void cleanShoppingCart() {
+        //获取到当前微信用户的id
+        Long userId = BaseContext.getCurrentId();
+        shoppingCartMapper.deleteByUserId(userId);
+    }
+
+    /**
+     * 删除购物车中一个商品
+     * @param shoppingCartDTO
+     */
+    public void subShoppingCart(ShoppingCartDTO shoppingCartDTO) {
+        ShoppingCart shoppingCart = new ShoppingCart();
+        BeanUtils.copyProperties(shoppingCartDTO,shoppingCart);
+        //设置查询条件，查询当前登录用户的购物车数据
+        shoppingCart.setUserId(BaseContext.getCurrentId());
+
+        List<ShoppingCart> list = shoppingCartMapper.list(shoppingCart);
+
+        if(list != null && list.size() > 0){
+            shoppingCart = list.get(0);
+
+            Integer number = shoppingCart.getNumber();
+            if(number == 1){
+                //当前商品在购物车中的份数为1，直接删除当前记录
+                shoppingCartMapper.deleteById(shoppingCart.getId());
+            }else {
+                //当前商品在购物车中的份数不为1，修改份数即可
+                shoppingCart.setNumber(shoppingCart.getNumber() - 1);
+                shoppingCartMapper.updateNumberById(shoppingCart);
+            }
+        }
+    }
+}
+
+```
+
+### ShoppingCartMapper
+
+```java
+
+@Mapper
+public interface ShoppingCartMapper {
+
+    /**
+     * 动态条件查询
+     * @param shoppingCart
+     * @return
+     */
+    List<ShoppingCart> list(ShoppingCart shoppingCart);
+
+    /**
+     * 根据id修改商品数量
+     * @param shoppingCart
+     */
+    @Update("update shopping_cart set number = #{number} where id = #{id}")
+    void updateNumberById(ShoppingCart shoppingCart);
+
+    /**
+     * 插入购物车数据
+     * @param shoppingCart
+     */
+    @Insert("insert into shopping_cart (name, user_id, dish_id, setmeal_id, dish_flavor, number, amount, image, create_time) " +
+            " values (#{name},#{userId},#{dishId},#{setmealId},#{dishFlavor},#{number},#{amount},#{image},#{createTime})")
+    void insert(ShoppingCart shoppingCart);
+
+    /**
+     * 根据用户id删除购物车数据
+     * @param userId
+     */
+    @Delete("delete from shopping_cart where user_id = #{userId}")
+    void deleteByUserId(Long userId);
+
+    /**
+     * 根据id删除购物车数据
+     * @param id
+     */
+    @Delete("delete from shopping_cart where id = #{id}")
+    void deleteById(Long id);
+
+    /**
+     * 批量插入购物车数据
+     *
+     * @param shoppingCartList
+     */
+    void insertBatch(List<ShoppingCart> shoppingCartList);
+}
+
+```
+
+### ShoppingCartMapper.xml
+
+```
+<mapper namespace="com.sky.mapper.ShoppingCartMapper">
+
+    <select id="list" resultType="com.sky.entity.ShoppingCart">
+        select * from shopping_cart
+        <where>
+            <if test="userId != null">
+                and user_id = #{userId}
+            </if>
+            <if test="setmealId != null">
+                and setmeal_id = #{setmealId}
+            </if>
+            <if test="dishId != null">
+                and dish_id = #{dishId}
+            </if>
+            <if test="dishFlavor != null">
+                and dish_flavor = #{dishFlavor}
+            </if>
+        </where>
+    </select>
+
+    <insert id="insertBatch" parameterType="list">
+        insert into shopping_cart (name, image, user_id, dish_id, setmeal_id, dish_flavor, number, amount, create_time)
+        values
+        <foreach collection="shoppingCartList" item="sc" separator=",">
+            (#{sc.name},#{sc.image},#{sc.userId},#{sc.dishId},#{sc.setmealId},#{sc.dishFlavor},#{sc.number},#{sc.amount},#{sc.createTime})
+        </foreach>
+    </insert>
+</mapper>
+```
+
+## 导入地址簿功能代码
+
+### AddressBookController
+
+```java
+@RestController
+@RequestMapping("/user/addressBook")
+@Api(tags = "C端地址簿接口")
+public class AddressBookController {
+
+    @Autowired
+    private AddressBookService addressBookService;
+
+    /**
+     * 查询当前登录用户的所有地址信息
+     *
+     * @return
+     */
+    @GetMapping("/list")
+    @ApiOperation("查询当前登录用户的所有地址信息")
+    public Result<List<AddressBook>> list() {
+        AddressBook addressBook = new AddressBook();
+        addressBook.setUserId(BaseContext.getCurrentId());
+        List<AddressBook> list = addressBookService.list(addressBook);
+        return Result.success(list);
+    }
+
+    /**
+     * 新增地址
+     *
+     * @param addressBook
+     * @return
+     */
+    @PostMapping
+    @ApiOperation("新增地址")
+    public Result save(@RequestBody AddressBook addressBook) {
+        addressBookService.save(addressBook);
+        return Result.success();
+    }
+
+    @GetMapping("/{id}")
+    @ApiOperation("根据id查询地址")
+    public Result<AddressBook> getById(@PathVariable Long id) {
+        AddressBook addressBook = addressBookService.getById(id);
+        return Result.success(addressBook);
+    }
+
+    /**
+     * 根据id修改地址
+     *
+     * @param addressBook
+     * @return
+     */
+    @PutMapping
+    @ApiOperation("根据id修改地址")
+    public Result update(@RequestBody AddressBook addressBook) {
+        addressBookService.update(addressBook);
+        return Result.success();
+    }
+
+    /**
+     * 设置默认地址
+     *
+     * @param addressBook
+     * @return
+     */
+    @PutMapping("/default")
+    @ApiOperation("设置默认地址")
+    public Result setDefault(@RequestBody AddressBook addressBook) {
+        addressBookService.setDefault(addressBook);
+        return Result.success();
+    }
+
+    /**
+     * 根据id删除地址
+     *
+     * @param id
+     * @return
+     */
+    @DeleteMapping
+    @ApiOperation("根据id删除地址")
+    public Result deleteById(Long id) {
+        addressBookService.deleteById(id);
+        return Result.success();
+    }
+
+    /**
+     * 查询默认地址
+     */
+    @GetMapping("default")
+    @ApiOperation("查询默认地址")
+    public Result<AddressBook> getDefault() {
+        //SQL:select * from address_book where user_id = ? and is_default = 1
+        AddressBook addressBook = new AddressBook();
+        addressBook.setIsDefault(1);
+        addressBook.setUserId(BaseContext.getCurrentId());
+        List<AddressBook> list = addressBookService.list(addressBook);
+
+        if (list != null && list.size() == 1) {
+            return Result.success(list.get(0));
+        }
+
+        return Result.error("没有查询到默认地址");
+    }
+
+}
+
+```
+
+### AddressBookService
+
+```java
+public interface AddressBookService {
+
+    List<AddressBook> list(AddressBook addressBook);
+
+    void save(AddressBook addressBook);
+
+    AddressBook getById(Long id);
+
+    void update(AddressBook addressBook);
+
+    void setDefault(AddressBook addressBook);
+
+    void deleteById(Long id);
+
+}
+```
+
+### AddressBookServiceImpl
+
+```java
+@Service
+@Slf4j
+public class AddressBookServiceImpl implements AddressBookService {
+    @Autowired
+    private AddressBookMapper addressBookMapper;
+
+    /**
+     * 条件查询
+     *
+     * @param addressBook
+     * @return
+     */
+    public List<AddressBook> list(AddressBook addressBook) {
+        return addressBookMapper.list(addressBook);
+    }
+
+    /**
+     * 新增地址
+     *
+     * @param addressBook
+     */
+    public void save(AddressBook addressBook) {
+        addressBook.setUserId(BaseContext.getCurrentId());
+        addressBook.setIsDefault(0);
+        addressBookMapper.insert(addressBook);
+    }
+
+    /**
+     * 根据id查询
+     *
+     * @param id
+     * @return
+     */
+    public AddressBook getById(Long id) {
+        AddressBook addressBook = addressBookMapper.getById(id);
+        return addressBook;
+    }
+
+    /**
+     * 根据id修改地址
+     *
+     * @param addressBook
+     */
+    public void update(AddressBook addressBook) {
+        addressBookMapper.update(addressBook);
+    }
+
+    /**
+     * 设置默认地址
+     *
+     * @param addressBook
+     */
+    @Transactional
+    public void setDefault(AddressBook addressBook) {
+        //1、将当前用户的所有地址修改为非默认地址 update address_book set is_default = ? where user_id = ?
+        addressBook.setIsDefault(0);
+        addressBook.setUserId(BaseContext.getCurrentId());
+        addressBookMapper.updateIsDefaultByUserId(addressBook);
+
+        //2、将当前地址改为默认地址 update address_book set is_default = ? where id = ?
+        addressBook.setIsDefault(1);
+        addressBookMapper.update(addressBook);
+    }
+
+    /**
+     * 根据id删除地址
+     *
+     * @param id
+     */
+    public void deleteById(Long id) {
+        addressBookMapper.deleteById(id);
+    }
+
+}
+
+```
+
+### AddressBookMapper
+
+```java
+@Mapper
+public interface AddressBookMapper {
+
+    /**
+     * 条件查询
+     * @param addressBook
+     * @return
+     */
+    List<AddressBook> list(AddressBook addressBook);
+
+    /**
+     * 新增
+     * @param addressBook
+     */
+    @Insert("insert into address_book" +
+            "        (user_id, consignee, phone, sex, province_code, province_name, city_code, city_name, district_code," +
+            "         district_name, detail, label, is_default)" +
+            "        values (#{userId}, #{consignee}, #{phone}, #{sex}, #{provinceCode}, #{provinceName}, #{cityCode}, #{cityName}," +
+            "                #{districtCode}, #{districtName}, #{detail}, #{label}, #{isDefault})")
+    void insert(AddressBook addressBook);
+
+    /**
+     * 根据id查询
+     * @param id
+     * @return
+     */
+    @Select("select * from address_book where id = #{id}")
+    AddressBook getById(Long id);
+
+    /**
+     * 根据id修改
+     * @param addressBook
+     */
+    void update(AddressBook addressBook);
+
+    /**
+     * 根据 用户id修改 是否默认地址
+     * @param addressBook
+     */
+    @Update("update address_book set is_default = #{isDefault} where user_id = #{userId}")
+    void updateIsDefaultByUserId(AddressBook addressBook);
+
+    /**
+     * 根据id删除地址
+     * @param id
+     */
+    @Delete("delete from address_book where id = #{id}")
+    void deleteById(Long id);
+
+}
+
+```
+
+### AddressBookMapper.xml
+
+```java
+<mapper namespace="com.sky.mapper.AddressBookMapper">
+
+    <select id="list" parameterType="AddressBook" resultType="AddressBook">
+        select * from address_book
+        <where>
+            <if test="userId != null">
+                and user_id = #{userId}
+            </if>
+            <if test="phone != null">
+                and phone = #{phone}
+            </if>
+            <if test="isDefault != null">
+                and is_default = #{isDefault}
+            </if>
+        </where>
+    </select>
+
+    <update id="update" parameterType="addressBook">
+        update address_book
+        <set>
+            <if test="consignee != null">
+                consignee = #{consignee},
+            </if>
+            <if test="sex != null">
+                sex = #{sex},
+            </if>
+            <if test="phone != null">
+                phone = #{phone},
+            </if>
+            <if test="detail != null">
+                detail = #{detail},
+            </if>
+            <if test="label != null">
+                label = #{label},
+            </if>
+            <if test="isDefault != null">
+                is_default = #{isDefault},
+            </if>
+        </set>
+        where id = #{id}
+    </update>
+
+</mapper>
+```
+
+## 用户下单
+
+### 接口设计（分析）：
+
+请求方式：POST
+请求路径：/user/order/submit
+参数：
+地址簿id
+配送状态（立即送出、选择送出时间）
+打包费
+总金额
+备注
+餐具数量
+
+返回数据：
+下单时间
+订单总金额
+订单号
+订单id
+
+![javaCreateSimple](/waimaiOrder.png)
+
+### 数据库设计：订单表 orders
+
+| **字段名**          | **数据类型**  | **说明** | **备注**                                        |
+| ------------------- | ------------- | -------- | ----------------------------------------------- |
+| id                  | bigint        | 主键     | 自增                                            |
+| number              | varchar(50)   | 订单号   |                                                 |
+| **status**          | int           | 订单状态 | 1待付款 2待接单 3已接单 4派送中 5已完成 6已取消 |
+| **user_id**         | bigint        | 用户id   | 逻辑外键                                        |
+| **address_book_id** | bigint        | 地址id   | 逻辑外键                                        |
+| order_time          | datetime      | 下单时间 |                                                 |
+| checkout_time       | datetime      | 付款时间 |                                                 |
+| pay_method          | int           | 支付方式 | 1微信支付 2支付宝支付                           |
+| **pay_status**      | tinyint       | 支付状态 | 0未支付 1已支付 2退款                           |
+| amount              | decimal(10,2) | 订单金额 |                                                 |
+| remark              | varchar(100)  | 备注信息 |                                                 |
+
+| phone                   | varchar(11)  | 手机号       | 冗余字段                  |
+| ----------------------- | ------------ | ------------ | :------------------------ |
+| address                 | varchar(255) | 详细地址信息 | 冗余字段                  |
+| consignee               | varchar(32)  | 收货人       | 冗余字段                  |
+| cancel_reason           | varchar(255) | 订单取消原因 |                           |
+| rejection_reason        | varchar(255) | 拒单原因     |                           |
+| cancel_time             | datetime     | 订单取消时间 |                           |
+| estimated_delivery_time | datetime     | 预计送达时间 |                           |
+| delivery_status         | tinyint      | 配送状态     | 1立即送出 0选择具体时间   |
+| delivery_time           | datetime     | 送达时间     |                           |
+| pack_amount             | int          | 打包费       |                           |
+| tableware_number        | int          | 餐具数量     |                           |
+| tableware_status        | tinyint      | 餐具数量状态 | 1按餐量提供 0选择具体数量 |
+
+### 数据库设计：订单明细表 order_detail
+
+| **字段名**     | **数据类型**  | **说明**     | **备注** |
+| -------------- | ------------- | ------------ | -------- |
+| id             | bigint        | 主键         | 自增     |
+| name           | varchar(32)   | 商品名称     | 冗余字段 |
+| image          | varchar(255)  | 商品图片路径 | 冗余字段 |
+| **order_id**   | bigint        | 订单id       | 逻辑外键 |
+| **dish_id**    | bigint        | 菜品id       | 逻辑外键 |
+| **setmeal_id** | bigint        | 套餐id       | 逻辑外键 |
+| dish_flavor    | varchar(50)   | 菜品口味     |          |
+| number         | int           | 商品数量     |          |
+| amount         | decimal(10,2) | 商品单价     |          |
+
+### 用户下单接口的参数设计DTO
+
+```java
+@Data
+public class OrdersSubmitDTO implements Serializable {
+    //地址簿id
+    private Long addressBookId;
+    //付款方式
+    private int payMethod;
+    //备注
+    private String remark;
+    //预计送达时间
+    @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd HH:mm:ss")
+    private LocalDateTime estimatedDeliveryTime;
+    //配送状态  1立即送出  0选择具体时间
+    private Integer deliveryStatus;
+    //餐具数量
+    private Integer tablewareNumber;
+    //餐具数量状态  1按餐量提供  0选择具体数量
+    private Integer tablewareStatus;
+    //打包费
+    private Integer packAmount;
+    //总金额
+    private BigDecimal amount;
+}
+
+```
+
+### 根据用户下单接口的返回结果设计VO
+
+```java
+@Data
+@Builder
+@NoArgsConstructor
+@AllArgsConstructor
+public class OrderSubmitVO implements Serializable {
+    //订单id
+    private Long id;
+    //订单号
+    private String orderNumber;
+    //订单金额
+    private BigDecimal orderAmount;
+    //下单时间
+    private LocalDateTime orderTime;
+}
+```
+
+### OrderController(用户端)
+
+```java
+@RestController("userOrderController")
+@RequestMapping("/user/order")
+@Api(tags = "用户端订单相关接口")
+@Slf4j
+public class OrderController {
+    @Autowired
+    private OrderService orderService;
+
+    /**
+     * 用户下单
+     * @param ordersSubmitDTO
+     * @return
+     */
+    @PostMapping("/submit")
+    @ApiOperation("用户下单")
+    public Result<OrderSubmitVO> submit(@RequestBody OrdersSubmitDTO ordersSubmitDTO){
+        log.info("用户下单，参数为：{}",ordersSubmitDTO);
+        OrderSubmitVO orderSubmitVO = orderService.submitOrder(ordersSubmitDTO);
+        return Result.success(orderSubmitVO);
+    }
+}
+```
+
+### OrderService
+
+```java
+public interface OrderService {
+    OrderSubmitVO submitOrder(OrdersSubmitDTO ordersSubmitDTO);
+}
+```
+
+### OrderServiceImpl
+
+```java
+@Service
+public class OrderServiceImpl implements OrderService {
+    @Autowired
+    private OrderMapper orderMapper;
+    @Autowired
+    private AddressBookMapper addressBookMapper;
+    @Autowired
+    private ShoppingCartMapper shoppingCartMapper;
+    @Autowired
+    private OrderDetailMapper orderDetailMapper;
+    @Override
+    public OrderSubmitVO submitOrder(OrdersSubmitDTO ordersSubmitDTO) {
+        //1. 处理各种业务异常（地址簿为空、购物车数据为空）
+        AddressBook addressBook = addressBookMapper.getById(ordersSubmitDTO.getAddressBookId());
+        if(addressBook == null){
+            //抛出业务异常
+            throw new AddressBookBusinessException(MessageConstant.ADDRESS_BOOK_IS_NULL);
+        }
+
+        //检查用户的收货地址是否超出配送范围
+        //checkOutOfRange(addressBook.getCityName() + addressBook.getDistrictName() + addressBook.getDetail());
+
+        //查询当前用户的购物车数据
+        Long userId = BaseContext.getCurrentId();
+
+        ShoppingCart shoppingCart = new ShoppingCart();
+        shoppingCart.setUserId(userId);
+        List<ShoppingCart> shoppingCartList = shoppingCartMapper.list(shoppingCart);
+
+        if(shoppingCartList == null || shoppingCartList.size() == 0){
+            //抛出业务异常
+            throw new ShoppingCartBusinessException(MessageConstant.SHOPPING_CART_IS_NULL);
+        }
+
+        //2. 向订单表插入1条数据
+        Orders orders = new Orders();
+        BeanUtils.copyProperties(ordersSubmitDTO, orders);
+        orders.setOrderTime(LocalDateTime.now());
+        orders.setPayStatus(Orders.UN_PAID);
+        orders.setStatus(Orders.PENDING_PAYMENT);
+        orders.setNumber(String.valueOf(System.currentTimeMillis()));
+        orders.setAddress(addressBook.getDetail());
+        orders.setPhone(addressBook.getPhone());
+        orders.setConsignee(addressBook.getConsignee());
+        orders.setUserId(userId);
+
+        orderMapper.insert(orders);
+
+        List<OrderDetail> orderDetailList = new ArrayList<>();
+        //3. 向订单明细表插入n条数据
+        for (ShoppingCart cart : shoppingCartList) {
+            OrderDetail orderDetail = new OrderDetail();//订单明细
+            BeanUtils.copyProperties(cart, orderDetail);
+            orderDetail.setOrderId(orders.getId());//设置当前订单明细关联的订单id
+            orderDetailList.add(orderDetail);
+        }
+
+        orderDetailMapper.insertBatch(orderDetailList);
+
+        //4. 清空当前用户的购物车数据
+        shoppingCartMapper.deleteByUserId(userId);
+
+        //5. 封装VO返回结果
+        OrderSubmitVO orderSubmitVO = OrderSubmitVO.builder()
+                .id(orders.getId())
+                .orderTime(orders.getOrderTime())
+                .orderNumber(orders.getNumber())
+                .orderAmount(orders.getAmount())
+                .build();
+
+        return orderSubmitVO;
+        //return null;
+    }
+}
+
+```
+
+### OrderMapper
+
+```java
+@Mapper
+public interface OrderMapper {
+
+    /**
+     * 插入订单数据
+     * @param orders
+     */
+    void insert(Orders orders);
+
+}
+```
+
+### OrderDetailMapper
+
+```java
+@Mapper
+public interface OrderDetailMapper {
+    /**
+     * 批量插入订单明细数据
+     * @param orderDetailList
+     */
+    void insertBatch(List<OrderDetail> orderDetailList);
+}
+```
+
+### OrderMapper.xml
+
+```xml
+<mapper namespace="com.sky.mapper.OrderMapper">
+
+    <insert id="insert" parameterType="Orders" useGeneratedKeys="true" keyProperty="id">
+        insert into orders (number, status, user_id, address_book_id, order_time, checkout_time, pay_method, pay_status,
+                            amount, remark, phone, address, consignee, estimated_delivery_time, delivery_status,
+                            pack_amount, tableware_number, tableware_status)
+        values
+               (#{number}, #{status}, #{userId}, #{addressBookId}, #{orderTime}, #{checkoutTime}, #{payMethod},
+                #{payStatus},#{amount}, #{remark}, #{phone}, #{address}, #{consignee}, #{estimatedDeliveryTime},
+                #{deliveryStatus},#{packAmount}, #{tablewareNumber}, #{tablewareStatus})
+    </insert>
+
+
+</mapper>
+
+```
+
+### OrderMapperDetail.xml
+
+```java
+<mapper namespace="com.sky.mapper.OrderDetailMapper">
+
+    <insert id="insertBatch">
+        insert into order_detail (name, image, order_id, dish_id, setmeal_id, dish_flavor, number, amount)
+            values
+        <foreach collection="orderDetailList" item="od" separator=",">
+            (#{od.name},#{od.image},#{od.orderId},#{od.dishId},#{od.setmealId},#{od.dishFlavor},#{od.number},#{od.amount})
+        </foreach>
+    </insert>
+</mapper>
+```
+
+## 订单支付
+
+微信支付：https://pay.weixin.qq.com/static/product/product_index.shtml
+
+注册需要商户号，个人暂不支持
+
+![javaCreateSimple](/wxpay.png)
