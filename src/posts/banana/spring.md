@@ -4679,8 +4679,78 @@ public class OrderServiceImpl implements OrderService {
                 .build();
 
         return orderSubmitVO;
-        //return null;
     }
+    
+     @Value("${sky.shop.address}")
+    private String shopAddress;
+
+    @Value("${sky.baidu.ak}")
+    private String ak;
+
+    /**
+     * 检查客户的收货地址是否超出配送范围
+     * @param address
+     */
+    private void checkOutOfRange(String address) {
+        Map map = new HashMap();
+        map.put("address",shopAddress);
+        map.put("output","json");
+        map.put("ak",ak);
+
+        //获取店铺的经纬度坐标
+        String shopCoordinate = HttpClientUtil.doGet("https://api.map.baidu.com/geocoding/v3", map);
+
+        JSONObject jsonObject = JSON.parseObject(shopCoordinate);
+        if(!jsonObject.getString("status").equals("0")){
+            throw new OrderBusinessException("店铺地址解析失败");
+        }
+
+        //数据解析
+        JSONObject location = jsonObject.getJSONObject("result").getJSONObject("location");
+        String lat = location.getString("lat");
+        String lng = location.getString("lng");
+        //店铺经纬度坐标
+        String shopLngLat = lat + "," + lng;
+
+        map.put("address",address);
+        //获取用户收货地址的经纬度坐标
+        String userCoordinate = HttpClientUtil.doGet("https://api.map.baidu.com/geocoding/v3", map);
+
+        jsonObject = JSON.parseObject(userCoordinate);
+        if(!jsonObject.getString("status").equals("0")){
+            throw new OrderBusinessException("收货地址解析失败");
+        }
+
+        //数据解析
+        location = jsonObject.getJSONObject("result").getJSONObject("location");
+        lat = location.getString("lat");
+        lng = location.getString("lng");
+        //用户收货地址经纬度坐标
+        String userLngLat = lat + "," + lng;
+
+        map.put("origin",shopLngLat);
+        map.put("destination",userLngLat);
+        map.put("steps_info","0");
+
+        //路线规划
+        String json = HttpClientUtil.doGet("https://api.map.baidu.com/directionlite/v1/driving", map);
+
+        jsonObject = JSON.parseObject(json);
+        if(!jsonObject.getString("status").equals("0")){
+            throw new OrderBusinessException("配送路线规划失败");
+        }
+
+        //数据解析
+        JSONObject result = jsonObject.getJSONObject("result");
+        JSONArray jsonArray = (JSONArray) result.get("routes");
+        Integer distance = (Integer) ((JSONObject) jsonArray.get(0)).get("distance");
+
+        if(distance > 5000){
+            //配送距离超过5000米
+            throw new OrderBusinessException("超出配送范围");
+        }
+    }
+
 }
 
 ```
@@ -4748,10 +4818,1392 @@ public interface OrderDetailMapper {
 </mapper>
 ```
 
-## 订单支付
+## 订单支付（可先不看）
 
 微信支付：https://pay.weixin.qq.com/static/product/product_index.shtml
 
 注册需要商户号，个人暂不支持
 
 ![javaCreateSimple](/wxpay.png)
+
+![javaCreateSimple](/wxpay1.png)
+
+![javaCreateSimple](/wxpay2.png)
+
+### 代码实现
+
+![javaCreateSimple](/wxpay3.png)
+
+### orderController
+
+```java
+/**
+     * 订单支付
+     *
+     * @param ordersPaymentDTO
+     * @return
+     */
+    @PutMapping("/payment")
+    @ApiOperation("订单支付")
+    public Result<OrderPaymentVO> payment(@RequestBody OrdersPaymentDTO ordersPaymentDTO) throws Exception {
+        log.info("订单支付：{}", ordersPaymentDTO);
+        OrderPaymentVO orderPaymentVO = orderService.payment(ordersPaymentDTO);
+        log.info("生成预支付交易单：{}", orderPaymentVO);
+        return Result.success(orderPaymentVO);
+    }
+```
+
+### OrderService
+
+```java
+public interface OrderService {
+    OrderPaymentVO payment(OrdersPaymentDTO ordersPaymentDTO);
+}
+```
+
+### OrderServiceImpl
+
+```java
+ @Autowired
+ private UserMapper userMapper;
+ @Autowired
+ private WeChatPayUtil weChatPayUtil;
+ 
+ /**
+     * 订单支付
+     *
+     * @param ordersPaymentDTO
+     * @return
+     */
+    @Override
+    public OrderPaymentVO payment(OrdersPaymentDTO ordersPaymentDTO) throws Exception {
+        // 当前登录用户id
+        Long userId = BaseContext.getCurrentId();
+        User user = userMapper.getById(userId);
+
+        //调用微信支付接口，生成预支付交易单
+        JSONObject jsonObject = weChatPayUtil.pay(
+                ordersPaymentDTO.getOrderNumber(), //商户订单号
+                new BigDecimal(0.01), //支付金额，单位 元
+                "苍穹外卖订单", //商品描述
+                user.getOpenid() //微信用户的openid
+        );
+
+        if (jsonObject.getString("code") != null && jsonObject.getString("code").equals("ORDERPAID")) {
+            throw new OrderBusinessException("该订单已支付");
+        }
+
+        OrderPaymentVO vo = jsonObject.toJavaObject(OrderPaymentVO.class);
+        vo.setPackageStr(jsonObject.getString("package"));
+
+        return vo;
+    }
+```
+
+### WeChatPayUtil
+
+```java
+package com.sky.utils;
+
+import com.alibaba.fastjson.JSON;
+import com.alibaba.fastjson.JSONObject;
+import com.sky.properties.WeChatProperties;
+import com.wechat.pay.contrib.apache.httpclient.WechatPayHttpClientBuilder;
+import com.wechat.pay.contrib.apache.httpclient.util.PemUtil;
+import org.apache.commons.lang.RandomStringUtils;
+import org.apache.http.HttpHeaders;
+import org.apache.http.client.methods.CloseableHttpResponse;
+import org.apache.http.client.methods.HttpGet;
+import org.apache.http.client.methods.HttpPost;
+import org.apache.http.entity.ContentType;
+import org.apache.http.entity.StringEntity;
+import org.apache.http.impl.client.CloseableHttpClient;
+import org.apache.http.util.EntityUtils;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Component;
+
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileNotFoundException;
+import java.math.BigDecimal;
+import java.security.PrivateKey;
+import java.security.Signature;
+import java.security.cert.X509Certificate;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Base64;
+import java.util.List;
+
+/**
+ * 微信支付工具类
+ */
+@Component
+public class WeChatPayUtil {
+
+    //微信支付下单接口地址
+    public static final String JSAPI = "https://api.mch.weixin.qq.com/v3/pay/transactions/jsapi";
+
+    //申请退款接口地址
+    public static final String REFUNDS = "https://api.mch.weixin.qq.com/v3/refund/domestic/refunds";
+
+    @Autowired
+    private WeChatProperties weChatProperties;
+
+    /**
+     * 获取调用微信接口的客户端工具对象
+     *
+     * @return
+     */
+    private CloseableHttpClient getClient() {
+        PrivateKey merchantPrivateKey = null;
+        try {
+            //merchantPrivateKey商户API私钥，如何加载商户API私钥请看常见问题
+            merchantPrivateKey = PemUtil.loadPrivateKey(new FileInputStream(new File(weChatProperties.getPrivateKeyFilePath())));
+            //加载平台证书文件
+            X509Certificate x509Certificate = PemUtil.loadCertificate(new FileInputStream(new File(weChatProperties.getWeChatPayCertFilePath())));
+            //wechatPayCertificates微信支付平台证书列表。你也可以使用后面章节提到的“定时更新平台证书功能”，而不需要关心平台证书的来龙去脉
+            List<X509Certificate> wechatPayCertificates = Arrays.asList(x509Certificate);
+
+            WechatPayHttpClientBuilder builder = WechatPayHttpClientBuilder.create()
+                    .withMerchant(weChatProperties.getMchid(), weChatProperties.getMchSerialNo(), merchantPrivateKey)
+                    .withWechatPay(wechatPayCertificates);
+
+            // 通过WechatPayHttpClientBuilder构造的HttpClient，会自动的处理签名和验签
+            CloseableHttpClient httpClient = builder.build();
+            return httpClient;
+        } catch (FileNotFoundException e) {
+            e.printStackTrace();
+            return null;
+        }
+    }
+
+    /**
+     * 发送post方式请求
+     *
+     * @param url
+     * @param body
+     * @return
+     */
+    private String post(String url, String body) throws Exception {
+        CloseableHttpClient httpClient = getClient();
+
+        HttpPost httpPost = new HttpPost(url);
+        httpPost.addHeader(HttpHeaders.ACCEPT, ContentType.APPLICATION_JSON.toString());
+        httpPost.addHeader(HttpHeaders.CONTENT_TYPE, ContentType.APPLICATION_JSON.toString());
+        httpPost.addHeader("Wechatpay-Serial", weChatProperties.getMchSerialNo());
+        httpPost.setEntity(new StringEntity(body, "UTF-8"));
+
+        CloseableHttpResponse response = httpClient.execute(httpPost);
+        try {
+            String bodyAsString = EntityUtils.toString(response.getEntity());
+            return bodyAsString;
+        } finally {
+            httpClient.close();
+            response.close();
+        }
+    }
+
+    /**
+     * 发送get方式请求
+     *
+     * @param url
+     * @return
+     */
+    private String get(String url) throws Exception {
+        CloseableHttpClient httpClient = getClient();
+
+        HttpGet httpGet = new HttpGet(url);
+        httpGet.addHeader(HttpHeaders.ACCEPT, ContentType.APPLICATION_JSON.toString());
+        httpGet.addHeader(HttpHeaders.CONTENT_TYPE, ContentType.APPLICATION_JSON.toString());
+        httpGet.addHeader("Wechatpay-Serial", weChatProperties.getMchSerialNo());
+
+        CloseableHttpResponse response = httpClient.execute(httpGet);
+        try {
+            String bodyAsString = EntityUtils.toString(response.getEntity());
+            return bodyAsString;
+        } finally {
+            httpClient.close();
+            response.close();
+        }
+    }
+
+    /**
+     * jsapi下单
+     *
+     * @param orderNum    商户订单号
+     * @param total       总金额
+     * @param description 商品描述
+     * @param openid      微信用户的openid
+     * @return
+     */
+    private String jsapi(String orderNum, BigDecimal total, String description, String openid) throws Exception {
+        JSONObject jsonObject = new JSONObject();
+        jsonObject.put("appid", weChatProperties.getAppid());
+        jsonObject.put("mchid", weChatProperties.getMchid());
+        jsonObject.put("description", description);
+        jsonObject.put("out_trade_no", orderNum);
+        jsonObject.put("notify_url", weChatProperties.getNotifyUrl());
+
+        JSONObject amount = new JSONObject();
+        amount.put("total", total.multiply(new BigDecimal(100)).setScale(2, BigDecimal.ROUND_HALF_UP).intValue());
+        amount.put("currency", "CNY");
+
+        jsonObject.put("amount", amount);
+
+        JSONObject payer = new JSONObject();
+        payer.put("openid", openid);
+
+        jsonObject.put("payer", payer);
+
+        String body = jsonObject.toJSONString();
+        return post(JSAPI, body);
+    }
+
+    /**
+     * 小程序支付
+     *
+     * @param orderNum    商户订单号
+     * @param total       金额，单位 元
+     * @param description 商品描述
+     * @param openid      微信用户的openid
+     * @return
+     */
+    public JSONObject pay(String orderNum, BigDecimal total, String description, String openid) throws Exception {
+        //统一下单，生成预支付交易单
+        String bodyAsString = jsapi(orderNum, total, description, openid);
+        //解析返回结果
+        JSONObject jsonObject = JSON.parseObject(bodyAsString);
+        System.out.println(jsonObject);
+
+        String prepayId = jsonObject.getString("prepay_id");
+        if (prepayId != null) {
+            String timeStamp = String.valueOf(System.currentTimeMillis() / 1000);
+            String nonceStr = RandomStringUtils.randomNumeric(32);
+            ArrayList<Object> list = new ArrayList<>();
+            list.add(weChatProperties.getAppid());
+            list.add(timeStamp);
+            list.add(nonceStr);
+            list.add("prepay_id=" + prepayId);
+            //二次签名，调起支付需要重新签名
+            StringBuilder stringBuilder = new StringBuilder();
+            for (Object o : list) {
+                stringBuilder.append(o).append("\n");
+            }
+            String signMessage = stringBuilder.toString();
+            byte[] message = signMessage.getBytes();
+
+            Signature signature = Signature.getInstance("SHA256withRSA");
+            signature.initSign(PemUtil.loadPrivateKey(new FileInputStream(new File(weChatProperties.getPrivateKeyFilePath()))));
+            signature.update(message);
+            String packageSign = Base64.getEncoder().encodeToString(signature.sign());
+
+            //构造数据给微信小程序，用于调起微信支付
+            JSONObject jo = new JSONObject();
+            jo.put("timeStamp", timeStamp);
+            jo.put("nonceStr", nonceStr);
+            jo.put("package", "prepay_id=" + prepayId);
+            jo.put("signType", "RSA");
+            jo.put("paySign", packageSign);
+
+            return jo;
+        }
+        return jsonObject;
+    }
+
+    /**
+     * 申请退款
+     *
+     * @param outTradeNo    商户订单号
+     * @param outRefundNo   商户退款单号
+     * @param refund        退款金额
+     * @param total         原订单金额
+     * @return
+     */
+    public String refund(String outTradeNo, String outRefundNo, BigDecimal refund, BigDecimal total) throws Exception {
+        JSONObject jsonObject = new JSONObject();
+        jsonObject.put("out_trade_no", outTradeNo);
+        jsonObject.put("out_refund_no", outRefundNo);
+
+        JSONObject amount = new JSONObject();
+        amount.put("refund", refund.multiply(new BigDecimal(100)).setScale(2, BigDecimal.ROUND_HALF_UP).intValue());
+        amount.put("total", total.multiply(new BigDecimal(100)).setScale(2, BigDecimal.ROUND_HALF_UP).intValue());
+        amount.put("currency", "CNY");
+
+        jsonObject.put("amount", amount);
+        jsonObject.put("notify_url", weChatProperties.getRefundNotifyUrl());
+
+        String body = jsonObject.toJSONString();
+
+        //调用申请退款接口
+        return post(REFUNDS, body);
+    }
+}
+
+```
+
+### 支付回调相关接口
+
+```java
+package com.sky.controller.nofity;
+
+import com.alibaba.druid.support.json.JSONUtils;
+import com.alibaba.fastjson.JSON;
+import com.alibaba.fastjson.JSONObject;
+import com.sky.properties.WeChatProperties;
+import com.sky.service.OrderService;
+import com.wechat.pay.contrib.apache.httpclient.util.AesUtil;
+import lombok.extern.slf4j.Slf4j;
+import org.apache.http.entity.ContentType;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RestController;
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
+import java.io.BufferedReader;
+import java.nio.charset.StandardCharsets;
+import java.util.HashMap;
+
+/**
+ * 支付回调相关接口
+ */
+@RestController
+@RequestMapping("/notify")
+@Slf4j
+public class PayNotifyController {
+    @Autowired
+    private OrderService orderService;
+    @Autowired
+    private WeChatProperties weChatProperties;
+
+    /**
+     * 支付成功回调
+     *
+     * @param request
+     */
+    @RequestMapping("/paySuccess")
+    public void paySuccessNotify(HttpServletRequest request, HttpServletResponse response) throws Exception {
+        //读取数据
+        String body = readData(request);
+        log.info("支付成功回调：{}", body);
+
+        //数据解密
+        String plainText = decryptData(body);
+        log.info("解密后的文本：{}", plainText);
+
+        JSONObject jsonObject = JSON.parseObject(plainText);
+        String outTradeNo = jsonObject.getString("out_trade_no");//商户平台订单号
+        String transactionId = jsonObject.getString("transaction_id");//微信支付交易号
+
+        log.info("商户平台订单号：{}", outTradeNo);
+        log.info("微信支付交易号：{}", transactionId);
+
+        //业务处理，修改订单状态、来单提醒
+        orderService.paySuccess(outTradeNo);
+
+        //给微信响应
+        responseToWeixin(response);
+    }
+
+    /**
+     * 读取数据
+     *
+     * @param request
+     * @return
+     * @throws Exception
+     */
+    private String readData(HttpServletRequest request) throws Exception {
+        BufferedReader reader = request.getReader();
+        StringBuilder result = new StringBuilder();
+        String line = null;
+        while ((line = reader.readLine()) != null) {
+            if (result.length() > 0) {
+                result.append("\n");
+            }
+            result.append(line);
+        }
+        return result.toString();
+    }
+
+    /**
+     * 数据解密
+     *
+     * @param body
+     * @return
+     * @throws Exception
+     */
+    private String decryptData(String body) throws Exception {
+        JSONObject resultObject = JSON.parseObject(body);
+        JSONObject resource = resultObject.getJSONObject("resource");
+        String ciphertext = resource.getString("ciphertext");
+        String nonce = resource.getString("nonce");
+        String associatedData = resource.getString("associated_data");
+
+        AesUtil aesUtil = new AesUtil(weChatProperties.getApiV3Key().getBytes(StandardCharsets.UTF_8));
+        //密文解密
+        String plainText = aesUtil.decryptToString(associatedData.getBytes(StandardCharsets.UTF_8),
+                nonce.getBytes(StandardCharsets.UTF_8),
+                ciphertext);
+
+        return plainText;
+    }
+
+    /**
+     * 给微信响应
+     * @param response
+     */
+    private void responseToWeixin(HttpServletResponse response) throws Exception{
+        response.setStatus(200);
+        HashMap<Object, Object> map = new HashMap<>();
+        map.put("code", "SUCCESS");
+        map.put("message", "SUCCESS");
+        response.setHeader("Content-type", ContentType.APPLICATION_JSON.toString());
+        response.getOutputStream().write(JSONUtils.toJSONString(map).getBytes(StandardCharsets.UTF_8));
+        response.flushBuffer();
+    }
+}
+
+```
+
+## 订单状态定时处理、来单提醒和客户催单
+
+### Spring Task
+
+Spring Task 是Spring框架提供的任务调度工具，可以按照约定的时间自动执行某个代码逻辑。
+
+作用：定时自动执行某段Java代码
+
+只要是需要定时处理的场景都可以使用Spring Task
+
+
+
+**cron表达式**
+
+cron表达式其实就是一个字符串，通过cron表达式可以定义任务触发的时间
+构成规则：分为6或7个域，由空格分隔开，每个域代表一个含义
+每个域的含义分别为：秒、分钟、小时、日、月、周、年(可选)   //日和周只能一个，另一个？
+
+![javaCreateSimple](/springtask.png)
+
+cron表达式在线生成器：https://cron.qqe2.com/
+
+
+
+Spring Task使用步骤：
+导入maven坐标 spring-context（已存在）
+**启动类添加注解 @EnableScheduling 开启任务调度**
+自定义定时任务类
+
+
+
+### 需求分析
+
+用户下单后可能存在的情况：
+下单后未支付，订单一直处于“待支付”状态
+用户收货后管理端未点击完成按钮，订单一直处于“派送中”状态
+
+对于上面两种情况需要通过定时任务来修改订单状态，具体逻辑为：
+通过定时任务每分钟检查一次是否存在支付超时订单（下单后超过15分钟仍未支付则判定为支付超时订单），如果存在则修改订单状态为“已取消”
+通过定时任务每天凌晨1点检查一次是否存在“派送中”的订单，如果存在则修改订单状态为“已完成”
+
+
+
+### OrderTask
+
+```java
+/**
+ * 定时任务类，定时处理订单状态
+ */
+@Component
+@Slf4j
+public class OrderTask {
+
+    @Autowired
+    private OrderMapper orderMapper;
+
+    /**
+     * 处理超时订单的方法
+     */
+    @Scheduled(cron = "0 * * * * ? ") //每分钟触发一次
+    public void processTimeoutOrder(){
+        log.info("定时处理超时订单：{}", LocalDateTime.now());
+
+        LocalDateTime time = LocalDateTime.now().plusMinutes(-15);
+
+        // select * from orders where status = ? and order_time < (当前时间 - 15分钟)
+        List<Orders> ordersList = orderMapper.getByStatusAndOrderTimeLT(Orders.PENDING_PAYMENT, time);
+
+        if(ordersList != null && ordersList.size() > 0){
+            for (Orders orders : ordersList) {
+                orders.setStatus(Orders.CANCELLED);
+                orders.setCancelReason("订单超时，自动取消");
+                orders.setCancelTime(LocalDateTime.now());
+                orderMapper.update(orders);
+            }
+        }
+    }
+
+    /**
+     * 处理一直处于派送中状态的订单
+     */
+    @Scheduled(cron = "0 0 1 * * ?") //每天凌晨1点触发一次
+    public void processDeliveryOrder(){
+        log.info("定时处理处于派送中的订单：{}",LocalDateTime.now());
+
+        LocalDateTime time = LocalDateTime.now().plusMinutes(-60);
+
+        List<Orders> ordersList = orderMapper.getByStatusAndOrderTimeLT(Orders.DELIVERY_IN_PROGRESS, time);
+
+        if(ordersList != null && ordersList.size() > 0){
+            for (Orders orders : ordersList) {
+                orders.setStatus(Orders.COMPLETED);
+                orderMapper.update(orders);
+            }
+        }
+    }
+}
+
+```
+
+### 在OrderMapper接口中扩展方法
+
+```java
+/**
+     * 根据订单状态和下单时间查询订单
+     * @param status
+     * @param orderTime
+     * @return
+     */
+    @Select("select * from orders where status = #{status} and order_time < #{orderTime}")
+    List<Orders> getByStatusAndOrderTimeLT(Integer status, LocalDateTime orderTime);
+
+```
+
+
+
+### WebSocket
+
+WebSocket 是基于 TCP 的一种新的网络协议。它实现了浏览器与服务器全双工通信——浏览器和服务器只需要完成一次握手，两者之间就可以创建持久性的连接， 并进行双向数据传输。
+
+HTTP协议和WebSocket协议对比：
+HTTP是短连接
+WebSocket是长连接
+HTTP通信是单向的，基于请求响应模式
+WebSocket支持双向通信
+HTTP和WebSocket底层都是TCP连接
+
+
+
+入门实现步骤：
+直接使用websocket.html页面作为WebSocket客户端
+导入WebSocket的maven坐标
+导入WebSocket服务端组件WebSocketServer，用于和客户端通信
+导入配置类WebSocketConfiguration，注册WebSocket的服务端组件
+导入定时任务类WebSocketTask，定时向客户端推送数据
+
+
+
+```
+<dependency>
+	<groupId>org.springframework.boot</groupId>
+	<artifactId>spring-boot-starter-websocket</artifactId>
+</dependency>
+```
+
+WebSocketServer
+
+```java
+/**
+ * WebSocket服务
+ */
+@Component
+@ServerEndpoint("/ws/{sid}")
+public class WebSocketServer {
+
+    //存放会话对象
+    private static Map<String, Session> sessionMap = new HashMap();
+
+    /**
+     * 连接建立成功调用的方法
+     */
+    @OnOpen
+    public void onOpen(Session session, @PathParam("sid") String sid) {
+        System.out.println("客户端：" + sid + "建立连接");
+        sessionMap.put(sid, session);
+    }
+
+    /**
+     * 收到客户端消息后调用的方法
+     *
+     * @param message 客户端发送过来的消息
+     */
+    @OnMessage
+    public void onMessage(String message, @PathParam("sid") String sid) {
+        System.out.println("收到来自客户端：" + sid + "的信息:" + message);
+    }
+
+    /**
+     * 连接关闭调用的方法
+     *
+     * @param sid
+     */
+    @OnClose
+    public void onClose(@PathParam("sid") String sid) {
+        System.out.println("连接断开:" + sid);
+        sessionMap.remove(sid);
+    }
+
+    /**
+     * 群发
+     *
+     * @param message
+     */
+    public void sendToAllClient(String message) {
+        Collection<Session> sessions = sessionMap.values();
+        for (Session session : sessions) {
+            try {
+                //服务器向客户端发送消息
+                session.getBasicRemote().sendText(message);
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+        }
+    }
+
+}
+```
+
+WebSocketConfiguration
+
+```java
+/**
+ * WebSocket配置类，用于注册WebSocket的Bean
+ */
+@Configuration
+public class WebSocketConfiguration {
+
+    @Bean
+    public ServerEndpointExporter serverEndpointExporter() {
+        return new ServerEndpointExporter();
+    }
+
+}
+```
+
+WebSocketTask
+
+```java
+@Component
+public class WebSocketTask {
+    @Autowired
+    private WebSocketServer webSocketServer;
+
+    /**
+     * 通过WebSocket每隔5秒向客户端发送消息
+     */
+    //@Scheduled(cron = "0/5 * * * * ?")
+    public void sendMessageToClient() {
+        webSocketServer.sendToAllClient("这是来自服务端的消息：" + DateTimeFormatter.ofPattern("HH:mm:ss").format(LocalDateTime.now()));
+    }
+}
+```
+
+
+
+### 来单提醒
+
+用户下单并且支付成功后，需要第一时间通知外卖商家
+
+设计：
+通过WebSocket实现管理端页面和服务端保持长连接状态
+当客户支付后，调用WebSocket的相关API实现服务端向客户端推送消息
+客户端浏览器解析服务端推送的消息，判断是来单提醒还是客户催单，进行相应的消息提示和语音播报
+约定服务端发送给客户端浏览器的数据格式为JSON，字段包括：type，orderId，content
+
+type 为消息类型，1为来单提醒 2为客户催单
+
+orderId 为订单id
+
+content 为消息内容
+
+
+
+OrderServiceImpl中注入WebSocketServer对象，修改paySuccess方法
+
+```java
+/**
+     * 支付成功，修改订单状态
+     *
+     * @param outTradeNo
+     */
+    public void paySuccess(String outTradeNo) {
+        // 当前登录用户id
+        Long userId = BaseContext.getCurrentId();
+
+        // 根据订单号查询当前用户的订单
+        Orders ordersDB = orderMapper.getByNumberAndUserId(outTradeNo, userId);
+
+        // 根据订单id更新订单的状态、支付方式、支付状态、结账时间
+        Orders orders = Orders.builder()
+                .id(ordersDB.getId())
+                .status(Orders.TO_BE_CONFIRMED)
+                .payStatus(Orders.PAID)
+                .checkoutTime(LocalDateTime.now())
+                .build();
+
+        orderMapper.update(orders);
+
+        //通过websocket向客户端浏览器推送消息 type orderId content
+        Map map = new HashMap();
+        map.put("type",1); // 1表示来单提醒 2表示客户催单
+        map.put("orderId",ordersDB.getId());
+        map.put("content","订单号：" + outTradeNo);
+
+        String json = JSON.toJSONString(map);
+        webSocketServer.sendToAllClient(json);
+    }
+```
+
+### 客户催单
+
+用户在小程序中点击催单按钮后，需要第一时间通知外卖商家。
+
+设计：
+通过WebSocket实现管理端页面和服务端保持长连接状态
+当用户点击催单按钮后，调用WebSocket的相关API实现服务端向客户端推送消息
+客户端浏览器解析服务端推送的消息，判断是来单提醒还是客户催单，进行相应的消息提示和语音播报
+约定服务端发送给客户端浏览器的数据格式为JSON，字段包括：type，orderId，content
+
+type 为消息类型，1为来单提醒 2为客户催单
+
+orderId 为订单id
+
+content 为消息内容
+
+根据用户催单的接口定义，在user/OrderController中创建催单方法：
+
+```java
+ /**
+     * 客户催单
+     * @param id
+     * @return
+     */
+    @GetMapping("/reminder/{id}")
+    @ApiOperation("客户催单")
+    public Result reminder(@PathVariable("id") Long id){
+        orderService.reminder(id);
+        return Result.success();
+    }
+```
+
+OrderService
+
+```java
+ /**
+     * 客户催单
+     * @param id
+     */
+    void reminder(Long id);
+```
+
+OrderServiceImpl
+
+```java
+ /**
+     * 客户催单
+     * @param id
+     */
+    public void reminder(Long id) {
+        // 根据id查询订单
+        Orders ordersDB = orderMapper.getById(id);
+
+        // 校验订单是否存在
+        if (ordersDB == null) {
+            throw new OrderBusinessException(MessageConstant.ORDER_STATUS_ERROR);
+        }
+
+        Map map = new HashMap();
+        map.put("type",2); //1表示来单提醒 2表示客户催单
+        map.put("orderId",id);
+        map.put("content","订单号：" + ordersDB.getNumber());
+
+        //通过websocket向客户端浏览器推送消息
+        webSocketServer.sendToAllClient(JSON.toJSONString(map));
+    }
+```
+
+## 数据统计–图形报表(后台)
+
+Apache ECharts
+
+### 营业额统计
+
+业务规则：
+营业额指订单状态为已完成的订单金额合计
+基于可视化报表的折线图展示营业额数据，X轴为日期，Y轴为营业额
+根据时间选择区间，展示每天的营业额数据
+
+![javaCreateSimple](/money.png)
+
+![javaCreateSimple](/money2.png)
+
+```java
+@Data
+@Builder
+@NoArgsConstructor
+@AllArgsConstructor
+public class TurnoverReportVO implements Serializable {
+
+    //日期，以逗号分隔，例如：2022-10-01,2022-10-02,2022-10-03
+    private String dateList;
+
+    //营业额，以逗号分隔，例如：406.0,1520.0,75.0
+    private String turnoverList;
+
+}
+```
+
+### ReportController
+
+```java
+/**
+ * 数据统计相关接口
+ */
+@RestController
+@RequestMapping("/admin/report")
+@Api(tags = "数据统计相关接口")
+@Slf4j
+public class ReportController {
+
+    @Autowired
+    private ReportService reportService;
+
+    /**
+     * 营业额统计
+     * @param begin
+     * @param end
+     * @return
+     */
+    @GetMapping("/turnoverStatistics")
+    @ApiOperation("营业额统计")
+    public Result<TurnoverReportVO> turnoverStatistics(
+            @DateTimeFormat(pattern = "yyyy-MM-dd")  LocalDate begin,
+            @DateTimeFormat(pattern = "yyyy-MM-dd") LocalDate end){
+        log.info("营业额数据统计：{},{}",begin,end);
+        return Result.success(reportService.getTurnoverStatistics(begin,end));
+    }
+
+    /**
+     * 用户统计
+     * @param begin
+     * @param end
+     * @return
+     */
+    @GetMapping("/userStatistics")
+    @ApiOperation("用户统计")
+    public Result<UserReportVO> userStatistics(
+            @DateTimeFormat(pattern = "yyyy-MM-dd")  LocalDate begin,
+            @DateTimeFormat(pattern = "yyyy-MM-dd") LocalDate end){
+        log.info("用户数据统计：{},{}",begin,end);
+        return Result.success(reportService.getUserStatistics(begin,end));
+    }
+
+    /**
+     * 订单统计
+     * @param begin
+     * @param end
+     * @return
+     */
+    @GetMapping("/ordersStatistics")
+    @ApiOperation("订单统计")
+    public Result<OrderReportVO> ordersStatistics(
+            @DateTimeFormat(pattern = "yyyy-MM-dd")  LocalDate begin,
+            @DateTimeFormat(pattern = "yyyy-MM-dd") LocalDate end){
+        log.info("订单数据统计：{},{}",begin,end);
+        return Result.success(reportService.getOrderStatistics(begin,end));
+    }
+
+    /**
+     * 销量排名top10
+     * @param begin
+     * @param end
+     * @return
+     */
+    @GetMapping("/top10")
+    @ApiOperation("销量排名top10")
+    public Result<SalesTop10ReportVO> top10(
+            @DateTimeFormat(pattern = "yyyy-MM-dd")  LocalDate begin,
+            @DateTimeFormat(pattern = "yyyy-MM-dd") LocalDate end){
+        log.info("销量排名top10：{},{}",begin,end);
+        return Result.success(reportService.getSalesTop10(begin,end));
+    }
+
+   
+}
+
+```
+
+### ReportService
+
+```java
+public interface ReportService {
+
+    /**
+     * 统计指定时间区间内的营业额数据
+     * @param begin
+     * @param end
+     * @return
+     */
+    TurnoverReportVO getTurnoverStatistics(LocalDate begin, LocalDate end);
+
+    /**
+     * 统计指定时间区间内的用户数据
+     * @param begin
+     * @param end
+     * @return
+     */
+    UserReportVO getUserStatistics(LocalDate begin, LocalDate end);
+
+    /**
+     * 统计指定时间区间内的订单数据
+     * @param begin
+     * @param end
+     * @return
+     */
+    OrderReportVO getOrderStatistics(LocalDate begin, LocalDate end);
+
+    /**
+     * 统计指定时间区间内的销量排名前10
+     * @param begin
+     * @param end
+     * @return
+     */
+    SalesTop10ReportVO getSalesTop10(LocalDate begin, LocalDate end);
+
+    
+}
+
+```
+
+### ReportServiceImpl
+
+```java
+@Service
+@Slf4j
+public class ReportServiceImpl implements ReportService {
+
+    @Autowired
+    private OrderMapper orderMapper;
+    @Autowired
+    private UserMapper userMapper;
+    @Autowired
+    private WorkspaceService workspaceService;
+
+    /**
+     * 统计指定时间区间内的营业额数据
+     *
+     * @param begin
+     * @param end
+     * @return
+     */
+    public TurnoverReportVO getTurnoverStatistics(LocalDate begin, LocalDate end) {
+        //当前集合用于存放从begin到end范围内的每天的日期
+        List<LocalDate> dateList = new ArrayList<>();
+
+        dateList.add(begin);
+
+        while (!begin.equals(end)) {
+            //日期计算，计算指定日期的后一天对应的日期
+            begin = begin.plusDays(1);
+            dateList.add(begin);
+        }
+
+        //存放每天的营业额
+        List<Double> turnoverList = new ArrayList<>();
+        for (LocalDate date : dateList) {
+            //查询date日期对应的营业额数据，营业额是指：状态为“已完成”的订单金额合计
+            LocalDateTime beginTime = LocalDateTime.of(date, LocalTime.MIN);
+            LocalDateTime endTime = LocalDateTime.of(date, LocalTime.MAX);
+
+            // select sum(amount) from orders where order_time > beginTime and order_time < endTime and status = 5
+            Map map = new HashMap();
+            map.put("begin", beginTime);
+            map.put("end", endTime);
+            map.put("status", Orders.COMPLETED);
+            Double turnover = orderMapper.sumByMap(map);
+            turnover = turnover == null ? 0.0 : turnover;
+            turnoverList.add(turnover);
+        }
+
+        //封装返回结果
+        return TurnoverReportVO
+                .builder()
+                .dateList(StringUtils.join(dateList, ","))
+                .turnoverList(StringUtils.join(turnoverList, ","))
+                .build();
+    }
+
+    /**
+     * 统计指定时间区间内的用户数据
+     *
+     * @param begin
+     * @param end
+     * @return
+     */
+    public UserReportVO getUserStatistics(LocalDate begin, LocalDate end) {
+        //存放从begin到end之间的每天对应的日期
+        List<LocalDate> dateList = new ArrayList<>();
+
+        dateList.add(begin);
+
+        while (!begin.equals(end)) {
+            begin = begin.plusDays(1);
+            dateList.add(begin);
+        }
+
+        //存放每天的新增用户数量 select count(id) from user where create_time < ? and create_time > ?
+        List<Integer> newUserList = new ArrayList<>();
+        //存放每天的总用户数量 select count(id) from user where create_time < ?
+        List<Integer> totalUserList = new ArrayList<>();
+
+        for (LocalDate date : dateList) {
+            LocalDateTime beginTime = LocalDateTime.of(date, LocalTime.MIN);
+            LocalDateTime endTime = LocalDateTime.of(date, LocalTime.MAX);
+
+            Map map = new HashMap();
+            map.put("end", endTime);
+
+            //总用户数量
+            Integer totalUser = userMapper.countByMap(map);
+
+            map.put("begin", beginTime);
+            //新增用户数量
+            Integer newUser = userMapper.countByMap(map);
+
+            totalUserList.add(totalUser);
+            newUserList.add(newUser);
+        }
+
+        //封装结果数据
+        return UserReportVO
+                .builder()
+                .dateList(StringUtils.join(dateList, ","))
+                .totalUserList(StringUtils.join(totalUserList, ","))
+                .newUserList(StringUtils.join(newUserList, ","))
+                .build();
+    }
+
+    /**
+     * 统计指定时间区间内的订单数据
+     * @param begin
+     * @param end
+     * @return
+     */
+    public OrderReportVO getOrderStatistics(LocalDate begin, LocalDate end) {
+        //存放从begin到end之间的每天对应的日期
+        List<LocalDate> dateList = new ArrayList<>();
+
+        dateList.add(begin);
+
+        while (!begin.equals(end)) {
+            begin = begin.plusDays(1);
+            dateList.add(begin);
+        }
+
+        //存放每天的订单总数
+        List<Integer> orderCountList = new ArrayList<>();
+        //存放每天的有效订单数
+        List<Integer> validOrderCountList = new ArrayList<>();
+
+        //遍历dateList集合，查询每天的有效订单数和订单总数
+        for (LocalDate date : dateList) {
+            //查询每天的订单总数 select count(id) from orders where order_time > ? and order_time < ?
+            LocalDateTime beginTime = LocalDateTime.of(date, LocalTime.MIN);
+            LocalDateTime endTime = LocalDateTime.of(date, LocalTime.MAX);
+            Integer orderCount = getOrderCount(beginTime, endTime, null);
+
+            //查询每天的有效订单数 select count(id) from orders where order_time > ? and order_time < ? and status = 5
+            Integer validOrderCount = getOrderCount(beginTime, endTime, Orders.COMPLETED);
+
+            orderCountList.add(orderCount);
+            validOrderCountList.add(validOrderCount);
+        }
+
+        //计算时间区间内的订单总数量
+        Integer totalOrderCount = orderCountList.stream().reduce(Integer::sum).get();
+
+        //计算时间区间内的有效订单数量
+        Integer validOrderCount = validOrderCountList.stream().reduce(Integer::sum).get();
+
+        Double orderCompletionRate = 0.0;
+        if(totalOrderCount != 0){
+            //计算订单完成率
+            orderCompletionRate = validOrderCount.doubleValue() / totalOrderCount;
+        }
+
+        return  OrderReportVO.builder()
+                .dateList(StringUtils.join(dateList,","))
+                .orderCountList(StringUtils.join(orderCountList,","))
+                .validOrderCountList(StringUtils.join(validOrderCountList,","))
+                .totalOrderCount(totalOrderCount)
+                .validOrderCount(validOrderCount)
+                .orderCompletionRate(orderCompletionRate)
+                .build();
+    }
+
+    /**
+     * 根据条件统计订单数量
+     * @param begin
+     * @param end
+     * @param status
+     * @return
+     */
+    private Integer getOrderCount(LocalDateTime begin, LocalDateTime end, Integer status){
+        Map map = new HashMap();
+        map.put("begin",begin);
+        map.put("end",end);
+        map.put("status",status);
+
+        return orderMapper.countByMap(map);
+    }
+
+    /**
+     * 统计指定时间区间内的销量排名前10
+     * @param begin
+     * @param end
+     * @return
+     */
+    public SalesTop10ReportVO getSalesTop10(LocalDate begin, LocalDate end) {
+        LocalDateTime beginTime = LocalDateTime.of(begin, LocalTime.MIN);
+        LocalDateTime endTime = LocalDateTime.of(end, LocalTime.MAX);
+
+        List<GoodsSalesDTO> salesTop10 = orderMapper.getSalesTop10(beginTime, endTime);
+        List<String> names = salesTop10.stream().map(GoodsSalesDTO::getName).collect(Collectors.toList());
+        String nameList = StringUtils.join(names, ",");
+
+        List<Integer> numbers = salesTop10.stream().map(GoodsSalesDTO::getNumber).collect(Collectors.toList());
+        String numberList = StringUtils.join(numbers, ",");
+
+        //封装返回结果数据
+        return SalesTop10ReportVO
+                .builder()
+                .nameList(nameList)
+                .numberList(numberList)
+                .build();
+    }
+
+   
+}
+
+```
+
+## 数据统计–Excel报表
+
+### 工作台
+
+工作台是系统运营的数据看板，并提供快捷操作入口，可以有效提高商家的工作效率。
+
+名词解释：
+营业额：已完成订单的总金额
+有效订单：已完成订单的数量
+订单完成率：有效订单数 / 总订单数 * 100%
+平均客单价：营业额 / 有效订单数
+新增用户：新增用户的数量
+
+(查询数量)
+
+
+
+### Apache POI
+
+https://www.w3schools.cn/apache_poi/index.html
+
+https://cloud.tencent.com/developer/article/2106493
+
+https://blog.csdn.net/qq_42025798/article/details/122361631
+
+Apache POI 是一个处理Miscrosoft Office各种文件格式的开源项目。简单来说就是，我们可以使用 POI 在 Java 程序中对Miscrosoft Office各种文件进行读写操作。
+一般情况下，POI 都是用于操作 Excel 文件。
+
+Apache POI 的应用场景：
+银行网银系统导出交易明细
+各种业务系统导出Excel报表
+批量导入业务数据
+
+
+
+Apache POI的maven坐标
+
+```
+<dependency>
+<groupId>org.apache.poi</groupId>
+<artifactId>poi</artifactId>
+<version>3.16</version>
+</dependency>
+<dependency>
+<groupId>org.apache.poi</groupId>
+<artifactId>poi-ooxml</artifactId>
+<version>3.16</version>
+</dependency>
+```
+
+入门案例
+
+将数据写入Excel文件：
+
+```
+//在内存中创建一个ExceL文件对象
+XSSFWorkbook excel new XSSFWorkbook();
+//创建Sheet.页
+XSSFSheet sheet excel.createsheet("itcast");
+//在Sheet.页中创建行，0表示第1行
+XSSFRow row1 sheet.createRow();
+//创建单元格并在单元格中设置值，单元格编号也是从0开始，1表示第2个单元格
+row1.createCel1(1).setCel1 Value("姓名")；
+row1.createCel1(2).setCel1 Value("城市")；
+XSSFRow row2 sheet.createRow(1);
+row2.createCel.1(1).setCel1 Value("张三")；
+row2.createCell(2).setCel1 Value("北京")；
+XSSFRow row3 sheet.createRow(2);
+row3.createCel1(1).setCel1 Value("李四")；
+row3.createCell(2).setCellValue("上海")；
+FileOutputstream out new FileOutputstream(new File("D:\\itcast.xlsx"));
+/通过撤出流将内存中xcL文件写入到磁盘上
+excel.write(out);
+//关闭资源
+out.flush();
+out.close();
+excel.close();
+```
+
+读取Excel文件中的数据：
+
+```
+FileInputstream in new FileInputstream(new File("D:\\itcast.xlsx"));
+/通过潮入流读取指定的xceL文件
+XSSFWorkbook excel new XSSFWorkbook(in);
+//获欧Excel.文件的第1个Sheet.页
+XSSFSheet sheet excel.getsheetAt(0);
+/获取Sheet.页中的最后一行的行号
+int lastRowNum sheet.getLastRowNum();
+for (int i=0;i<=lastRowNum;i++){
+//获取Sheet.页中的行
+XSSFRow titleRow sheet.getRow(i);
+/获取行的第2个单元格
+XSSFCell cell1 titleRow.getcell(1);
+/获取单元格中的文本内容
+String cellvalue1 cell1.getstringCellvalue();
+/获取行的第3个单元格
+XSSFCell cell2 titleRow.getcell(2);
+//获取单元格中的文本内容
+String cellValue2 cell2.getstringCellValue();
+System.out.println(cellValue1 +"+cellValue2);
+//关闭资源
+in.close();
+excel.close();
+```
+
+### 导出运营数据Excel报表
+
+![javaCreateSimple](/javaExcel.png)
+
+实现步骤：
+设计Excel模板文件
+查询近30天的运营数据
+将查询到的运营数据写入模板文件
+通过输出流将Excel文件下载到客户端浏览器
+
+
+
+ReportController
+
+```java
+ /**
+     * 导出运营数据报表
+     * @param response
+     */
+    @GetMapping("/export")
+    @ApiOperation("导出运营数据报表")
+    public void export(HttpServletResponse response){
+        reportService.exportBusinessData(response);
+    }
+```
+
+ReportService
+
+```java
+/**
+     * 导出运营数据报表
+     * @param response
+     */
+    void exportBusinessData(HttpServletResponse response);
+```
+
+ReportServiceImpl
+
+```java
+ /**
+     * 导出运营数据报表
+     * @param response
+     */
+    public void exportBusinessData(HttpServletResponse response) {
+        //1. 查询数据库，获取营业数据---查询最近30天的运营数据
+        LocalDate dateBegin = LocalDate.now().minusDays(30);
+        LocalDate dateEnd = LocalDate.now().minusDays(1);
+
+        //查询概览数据
+        BusinessDataVO businessDataVO = workspaceService.getBusinessData(LocalDateTime.of(dateBegin, LocalTime.MIN), LocalDateTime.of(dateEnd, LocalTime.MAX));
+
+        //2. 通过POI将数据写入到Excel模板文件中（放在resource/template下）
+        InputStream in = this.getClass().getClassLoader().getResourceAsStream("template/运营数据报表模板.xlsx");
+
+        try {
+            //基于模板文件创建一个新的Excel文件
+            XSSFWorkbook excel = new XSSFWorkbook(in);
+
+            //获取表格文件的Sheet页
+            XSSFSheet sheet = excel.getSheet("Sheet1");
+
+            //填充数据--时间
+            sheet.getRow(1).getCell(1).setCellValue("时间：" + dateBegin + "至" + dateEnd);
+
+            //获得第4行
+            XSSFRow row = sheet.getRow(3);
+            row.getCell(2).setCellValue(businessDataVO.getTurnover());
+            row.getCell(4).setCellValue(businessDataVO.getOrderCompletionRate());
+            row.getCell(6).setCellValue(businessDataVO.getNewUsers());
+
+            //获得第5行
+            row = sheet.getRow(4);
+            row.getCell(2).setCellValue(businessDataVO.getValidOrderCount());
+            row.getCell(4).setCellValue(businessDataVO.getUnitPrice());
+
+            //填充明细数据
+            for (int i = 0; i < 30; i++) {
+                LocalDate date = dateBegin.plusDays(i);
+                //查询某一天的营业数据
+                BusinessDataVO businessData = workspaceService.getBusinessData(LocalDateTime.of(date, LocalTime.MIN), LocalDateTime.of(date, LocalTime.MAX));
+
+                //获得某一行
+                row = sheet.getRow(7 + i);
+                row.getCell(1).setCellValue(date.toString());
+                row.getCell(2).setCellValue(businessData.getTurnover());
+                row.getCell(3).setCellValue(businessData.getValidOrderCount());
+                row.getCell(4).setCellValue(businessData.getOrderCompletionRate());
+                row.getCell(5).setCellValue(businessData.getUnitPrice());
+                row.getCell(6).setCellValue(businessData.getNewUsers());
+            }
+
+            //3. 通过输出流将Excel文件下载到客户端浏览器
+            ServletOutputStream out = response.getOutputStream();
+            excel.write(out);
+
+            //关闭资源
+            out.close();
+            excel.close();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+
+    }
+```
+
