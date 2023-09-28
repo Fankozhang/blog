@@ -14,6 +14,8 @@ tag:
 
 学习视频地址：https://www.bilibili.com/video/BV1QB4y1F722?p=1&vd_source=f25f5a8d75a3a60d5a288f726803ec11
 
+相关技术  electron-egg:  [介绍 | electron-egg (kaka996.com)](https://www.kaka996.com/pages/8ef798/) 
+
 ## 创建electron项目
 
 1 electron/electron-quick-start  官网示例
@@ -408,7 +410,7 @@ const { net } = require('electron');
     request.end()
 ```
 
-## electron-vue（打包报错，不推荐使用）
+## electron-vue（不维护，打包报错，不推荐使用了）
 
  [简介 · electron-vue (gitbooks.io)](https://simulatedgreg.gitbooks.io/electron-vue/content/cn/) 
 
@@ -499,7 +501,7 @@ routes: [{
 
 
 
-## 搭建vue+Electron应用
+## 搭建vue+Electron应用（推荐这种构建）
 
 **(搭建electron项目，简单快捷,推荐)**
 

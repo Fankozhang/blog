@@ -19,6 +19,8 @@ typora-root-url: ..\.vuepress\public
 
  [vsCode 代码片段 自动生成格式 (99cc.vip)](https://99cc.vip/public/tools/vscode_snippet/index.html) 
 
+ [snippet generator (snippet-generator.app)](https://snippet-generator.app/) 
+
 ### vscode  弹出扩展主机意外终止...次
 
 第一次遇到这种编辑器类似的问题，在网上找了挺多的解决方法，出现这种情况的原因大概是vscode的插件冲突，解决方法大体上就两种。
@@ -1524,3 +1526,34 @@ export default {
           </a-button>
 ```
 
+
+
+## 内网穿透
+
+我用的是natapp，下载地址：https://natapp.cn/
+
+下载软件，网站上配置隧道
+
+启动命令：natapp.exe -authtoken=你的authtoken
+
+这个authtoken是在natapp里面创建免费的隧道产生的。
+
+注意隧道的端口要配置成你的后台端口，例如9090
+
+直接在上面的命令后面加上就可以启动你的natapp，设置内网穿透了。
+
+内网穿透就是把本机的ip和端口暴露到外网，通过指定的url可以访问你本地的服务，当然，这存在一定的安全风险，请谨慎使用！
+
+使用命令开启natapp后，会生成一个外网的地址指向你本地的服务地址，当你访问 	http://nyqre4.natappfree.cc，跟你访问 127.0.0.1:9090 效果是一样的，只不过一个是对外的，一个是只能本地访问。
+
+ [内网穿透 vue 返回 invalid host header（304 Not Modified）-----gxy_勤读意现的博客-CSDN博客](https://blog.csdn.net/u013154103/article/details/102481846) 
+
+vue项目使用内网穿透要加配置
+
+```
+disableHostCheck:true
+```
+
+ [vue项目中无法实现内网穿透，因为localhost的限制_dakache11的博客-CSDN博客](https://blog.csdn.net/dakache11/article/details/83989296) 
+
+ [vue内网穿透_vue项目内网穿透 转圈_GG·bond的博客-CSDN博客](https://blog.csdn.net/GTbond/article/details/124375319) 

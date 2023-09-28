@@ -127,6 +127,8 @@ jobs:
 
  [Nginx expires 页面缓存时间配置 (w3schools.cn)](https://www.w3schools.cn/nginx/nginx_http_expires.asp) 
 
+nginx使用：https://juejin.cn/post/7112826654291918855#heading-1
+
 ### 安装虚拟机，linux, nginx
 
 装上centos7 linux。在Linux上安装 nginx 我参考了如下两篇文章
@@ -496,6 +498,16 @@ nginx+keepalived
 
 在前台往后台发送了一个请求，实现选取字段导出的功能，返回的一个文档流，由于数据量大，耗时长，选取某些字段时能返回正常的文档流，但选取某些字段时又返回404错误，于是我测试了很多的字段，发现并不是传值字段的问题。而后发现那些返回 404 的请求的,等待服务器响应的时间都是 1min,由此判断，可能是请求响应时长方面的问题，但我查看了前端代码,没找到设置1min时长过期的代码，在1min的基础上，我搜索了网页请求1min返回404是什么问题，最终确认是nginx的配置有问题，参考如下文章 [Nginx报错404，由于请求处理时间过长_](https://blog.csdn.net/weixin_43568226/article/details/122390109)      [nginx中的timeout超时设置，请求超时、响应等待超时等_](https://blog.csdn.net/HD243608836/article/details/111564684) 最终解决了问题。（nginx默认的超时时长为60s,而我的请求耗时1.4min，没有对超时时长做配置，所以返回了404，增加超时时长后，请求正常返回。）
 
+
+
+#### 服务器文件大，nginx代理后下载不了
+
+ [【Nginx】图片显示过慢，文件下载不完全，竟然是Nginx的锅！！ - 冰河团队 - 博客园 (cnblogs.com)](https://www.cnblogs.com/binghe001/p/13356662.html) 
+
+https://www.cnblogs.com/breezey/p/6740229.html
+
+https://blog.csdn.net/qq_29864051/article/details/129546567
+
 ## docker
 
   [视频地址 2022版  尚硅谷Docker实战教程_哔哩哔哩_bilibili](https://www.bilibili.com/video/BV1gr4y1U7CY/?spm_id_from=333.337.search-card.all.click&vd_source=f25f5a8d75a3a60d5a288f726803ec11) 
@@ -543,7 +555,7 @@ Step 4: 开启Docker服务
 查看下ps -ef | grep "docker" docker启动了
 
 配置下载docker镜像的仓库（下载docker镜像的仓库）
-搜索容器，找到容器与镜像服务，镜像工具，镜像加速器-》运行网站的命令
+阿里搜索容器，找到容器与镜像服务，镜像工具，镜像加速器-》运行网站的命令
 
 测试安装
 在Terminal中输入docker run hello-world。
@@ -1411,3 +1423,9 @@ docker run -d -p 8000:8000 -p 9000:9000 --name=portainer --restart=always -v /va
  [云原生Java架构师的第一课K8s+Docker+KubeSphere+DevOps_哔哩哔哩_bilibili](https://www.bilibili.com/video/BV13Q4y1C7hS/?spm_id_from=333.337.search-card.all.click&vd_source=f25f5a8d75a3a60d5a288f726803ec11) 
 
  [Kubernetes核心实战 (yuque.com)](https://www.yuque.com/leifengyang/oncloud/ctiwgo) 
+
+
+
+## jenkens
+
+ [使用 Docker 安装 Jenkins 并实现项目自动化部署-阿里云开发者社区 (aliyun.com)](https://developer.aliyun.com/article/892646) 

@@ -2,7 +2,7 @@
  * @Author: 东方凝洛 3180806542@qq.com
  * @Date: 2022-12-02 21:19:19
  * @LastEditors: 东方凝洛 3180806542@qq.com
- * @LastEditTime: 2023-06-08 09:56:19
+ * @LastEditTime: 2023-09-28 19:57:17
  * @FilePath: \blog\src\.vuepress\navbar\en.ts
  * @Description: 这是默认设置,请设置`customMade`, 打开koroFileHeader查看配置 进行设置: https://github.com/OBKoro1/koro1FileHeader/wiki/%E9%85%8D%E7%BD%AE
  */
@@ -28,7 +28,7 @@ export const enNavbar = navbar([
         ],
       },
       
-      { text: "vuePress", icon: "", link: "cherry" },
+      { text: "vuePress,nginx,docker", icon: "", link: "cherry" },
       { text: "uni-app", icon: "", link: "dragonfruit" },
       "tomato",
       "strawberry",
@@ -55,12 +55,20 @@ export const enNavbar = navbar([
                 text: "springBoot",
                 icon: "",
                 link:"spring-boot"
+              },{
+                text: "shiro",
+                icon: "",
+                link:"shiro"
               }
             ]
           },{
             text: "node",
             icon: "",
             link: "2",
+          },{
+            text: "spring关联技术",
+            icon: "",
+            link: "1",
           },{
             text: "实战项目",
             icon: "",

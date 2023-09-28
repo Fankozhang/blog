@@ -227,3 +227,69 @@ B站直达：https://www.bilibili.com/video/BV1AP411s7D7
 阿里云盘：https://www.aliyundrive.com/s/SGmyMwGpsZv（教程配套资料请从百度网盘下载）
 
 资料 ： [教案 · 东方凝洛/尚硅谷ssm-springboot-2023视频资料 - 码云 - 开源中国 (gitee.com)](https://gitee.com/fankozhang/ssm/tree/master/教案) 
+
+
+
+ [MyBatis 动态 SQL 最全教程，这样写 SQL 太爽了！ (qq.com)](https://mp.weixin.qq.com/s/jEGLpIA9HWOdN3WOq46K1g) 
+
+## mysql
+
+视频学习： [01-MySQL教程简介_哔哩哔哩_bilibili](https://www.bilibili.com/video/BV1iq4y1u7vj?p=1&vd_source=f25f5a8d75a3a60d5a288f726803ec11)     资料：   [/mysql/尚硅谷视频老师笔记 ](https://github.com/Fankozhang/mySource/tree/main/资料合计/mysql/尚硅谷视频老师笔记) 
+
+ [【狂神-MySQL】MySQL全部详细知识点整理（共10章）_狂神 mysql_-Blue.的博客-CSDN博客](https://blog.csdn.net/qq_47540091/article/details/121875715) 
+
+### 查询结构：
+
+```
+#方式1：
+SELECT ...,....,...
+FROM ...,...,....
+WHERE 多表的连接条件
+AND 不包含组函数的过滤条件
+GROUP BY ...,...
+HAVING 包含组函数的过滤条件
+ORDER BY ... ASC/DESC
+LIMIT ...,...
+
+#方式2：
+SELECT ...,....,...
+FROM ... JOIN ... 
+ON 多表的连接条件
+JOIN ...
+ON ...
+WHERE 不包含组函数的过滤条件
+AND/OR 不包含组函数的过滤条件
+GROUP BY ...,...
+HAVING 包含组函数的过滤条件
+ORDER BY ... ASC/DESC
+LIMIT ...,...
+
+#其中：
+#（1）from：从哪些表中筛选
+#（2）on：关联多表查询时，去除笛卡尔积
+#（3）where：从表中筛选的条件
+#（4）group by：分组依据
+#（5）having：在统计结果中再次筛选
+#（6）order by：排序
+#（7）limit：分页
+```
+
+### SELECT 查询时的执行顺序
+
+你需要记住 SELECT 查询时的两个顺序：
+
+**1. 关键字的顺序是不能颠倒的：**
+
+```
+SELECT ... FROM ... WHERE ... GROUP BY ... HAVING ... ORDER BY ... LIMIT...
+```
+
+**2.SELECT 语句的执行顺序**（在 MySQL 和 Oracle 中，SELECT 执行顺序基本相同）：
+
+```
+FROM -> WHERE -> GROUP BY -> HAVING -> SELECT 的字段 -> DISTINCT -> ORDER BY -> LIMIT
+```
+
+## 我的前后端分离测试项目
+
+ [README.md · 东方凝洛/我的测试仓库 - Gitee.com](https://gitee.com/fankozhang/my-testing-warehouse/blob/master/README.md) 

@@ -37,7 +37,7 @@ export const enSidebar = sidebar({
           ],
         },
         
-        { text: "vuePress", icon: "", link: "cherry" },
+        { text: "vuePress,nginx,docker", icon: "", link: "cherry" },
         { text: "uni-app", icon: "", link: "dragonfruit" },
         "tomato",
         "strawberry",
@@ -68,6 +68,10 @@ export const enSidebar = sidebar({
                 text: "springBoot",
                 icon: "",
                 link:"spring-boot"
+              },{
+                text: "shiro",
+                icon: "",
+                link:"shiro"
               }
             ]
           },
@@ -75,6 +79,10 @@ export const enSidebar = sidebar({
               text: "node",
               icon: "",
               link: "2",
+            },{
+              text: "spring关联技术",
+              icon: "",
+              link: "1",
             },{
               text: "实战项目",
               icon: "",

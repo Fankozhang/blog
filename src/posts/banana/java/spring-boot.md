@@ -2199,6 +2199,18 @@ Elasticsearch是一个分布式全文搜索引擎
 
 文档参考： [(217条消息) ElasticSearch使用教程、设计到实战_ForFuture Code的博客-CSDN博客](https://blog.csdn.net/ganquanzhong/article/details/108633025) 
 
+启动：bin/elasticsearch.bat
+
+warning: ignoring JAVA_HOME=C:\Program Files\Java\jdk1.8.0_74; using bundled JDK
+
+(jdk版本和elasticsearch版本不兼容，可以切换低版本的elasticsearch)
+
+Elasticsearch 8.0报错：received plaintext http traffic on an https channel, closing connection
+
+解决：  ES8默认开启了 SSL 认证。   **使用 https 发送请求，即：把 http 请求改成 https 即可。** 
+
+或者修改 config/elasticsearch.yml         xpack.security.enabled: false
+
 ## 整合第三方数据
 
 ### 缓存
