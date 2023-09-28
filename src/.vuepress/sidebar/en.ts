@@ -56,12 +56,12 @@ export const enSidebar = sidebar({
         //   prefix: "banana/",
         //   children: [
           {
-            text: "java",
+            text: "java相关技术",
             icon: "",
             prefix: "java/",
             children:[
               {
-                text: "java",
+                text: "java基础",
                 icon: "",
                 link:"basic"
               },{
@@ -72,6 +72,10 @@ export const enSidebar = sidebar({
                 text: "shiro",
                 icon: "",
                 link:"shiro"
+              },{
+                text: "spring cloud",
+                icon: "",
+                link: "1",
               }
             ]
           },
@@ -79,10 +83,6 @@ export const enSidebar = sidebar({
               text: "node",
               icon: "",
               link: "2",
-            },{
-              text: "spring关联技术",
-              icon: "",
-              link: "1",
             },{
               text: "实战项目",
               icon: "",
