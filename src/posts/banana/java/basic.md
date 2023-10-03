@@ -28,6 +28,10 @@ C:\ProgramData\Oracle\Java\javapath
 
 C:\Program Files (x86)\Common Files\Oracle\Java\javapath
 
+
+
+ [使用IDEA 创建 SpringBoot 多模块项目_idea 建springboot module-CSDN博客](https://blog.csdn.net/tangthh123/article/details/106837999) 
+
 ## **idea创建java项目（maven）** 
 
 ### **1 创建普通Java项目（quickstart）** 

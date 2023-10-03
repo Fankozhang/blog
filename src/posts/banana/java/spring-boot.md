@@ -2794,6 +2794,86 @@ RabbitMQ一共四种交换机，如下所示：
 3. Topic Exchange：主题交换机，对路由键进行模式匹配后进行投递，符号#表示一个或多个词，*表示一个词。
 4. Header Exchange：头交换机，不处理路由键。而是根据发送的消息内容中的headers属性进行匹配。
 
+
+
+
+
+
+
+## 模板引擎（thymeleaf）
+
+ [Thymeleaf基本使用_thymeleaf ui-CSDN博客](https://blog.csdn.net/Lzy410992/article/details/115371017) 
+
+[Thymeleaf 教程 | 範宗雲 (fanlychie.github.io)](https://fanlychie.github.io/post/thymeleaf.html) 
+
+依赖
+
+```
+<dependency>
+			<groupId>org.springframework.boot</groupId>
+			<artifactId>spring-boot-starter-thymeleaf</artifactId>
+		</dependency>
+```
+
+### 实践：
+
+resources/template/index.html  (资源里面新建 index.html 文件)    th:text="${msg}"的$msg 是thymeleaf占位符语法
+
+```html
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Index Page</title>
+</head>
+<body>
+    <p th:text="${msg}" style="color:red">Welcome to BeiJing!</p>
+    <p th:text="${msgg}"></p>
+    <!--下面这个可以用 |  | 拼接字符串-->
+    <p th:text="|${msgg} this is thymeleaf 教程|"></p>
+    <p th:text="${msgg}+'this is thymeleaf 教程'"></p>
+    <p th:text="${user.name}+${user.age} + 'this is thymeleaf 教程'"></p>
+</body>
+</html>
+```
+
+controllser
+
+```java
+@Controller
+@Slf4j
+@Api(tags = "thymeleaf相关")
+public class thymeController {
+    @Autowired
+    private UserService userService;
+
+    @GetMapping("/index/{id}")
+    @ApiOperation("thymeleafTest")
+    public String index(Model model,@PathVariable Integer id){
+        User user=userService.getById(id);
+        //model.addAttribute("msg", "欢迎使用 thymeleaf");
+        model.addAttribute("msg", "欢迎使用thymeleaf");
+        model.addAttribute("msgg", user.getName());
+        model.addAttribute("user", user);
+        return "index";
+    }
+}
+```
+
+输入网页地址，可以看到    msg 为 欢迎使用 thymeleaf 展示在 html 中
+
+### 整合thymeleaf 实现模板文件转word打印
+
+ [整合thymeleaf 实现模板文件转word打印_springboot导出word纸张大小-CSDN博客](https://blog.csdn.net/HXNLYW/article/details/106330927) 
+
+### 整合FlyingSaucer + thymeleaf 实现模板文件转pdf打印
+
+ [《SpringBoot2.0 实战》系列-整合FlyingSaucer + thymeleaf 实现模板文件转pdf打印-CSDN博客](https://blog.csdn.net/HXNLYW/article/details/104478142) 
+
+字体文件放在  resources/static/font/simsun.ttf  位置 ，不加入字体文件导出pdf时会格式错误
+
+ https://wwmj.lanzoue.com/iYBOx1a6cbab    密码:guv2 
+
 ## 文章收藏
 
  [告别繁琐：SpringBoot 拦截器与统一功能处理 (qq.com)](https://mp.weixin.qq.com/s/evA1d1vY9Nqt72zFNQvgeA) 
