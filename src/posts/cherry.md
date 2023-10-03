@@ -117,7 +117,15 @@ jobs:
 
 当真正想搞一个vuepree文档网站的时候，不一定从头搭建，可以使用适应的主题，使用主题可以实现快速搭建项目，主题可以自己搜索，我使用的主题是    [vuepress-theme-hope ](https://theme-hope.vuejs.press/zh/) 
 
+## 利用Gitee搭建免费图床
 
+ [利用Gitee搭建免费图床（详细教程）_gitee图床-CSDN博客](https://blog.csdn.net/hannah2233/article/details/117025387) 
+
+下载 picGo     [PicGo (molunerfinn.com)](https://molunerfinn.com/PicGo/) 
+
+gitee创建仓库，生成个人 token,在picGo上配置好 gitee 仓库信息和  个人 token
+
+![image-20231003160627704](/image-20231003160627704.png)
 
 ## nginx
 
