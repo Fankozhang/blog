@@ -123,9 +123,11 @@ jobs:
 
 下载 picGo     [PicGo (molunerfinn.com)](https://molunerfinn.com/PicGo/) 
 
-gitee创建仓库，生成个人 token,在picGo上配置好 gitee 仓库信息和  个人 token
+gitee创建仓库，生成个人 token,在picGo上配置好 gitee 仓库信息和  个人 token,   typora上配置图像上传的 PicGo 安装位置
 
 ![image-20231003160627704](/image-20231003160627704.png)
+
+![image-20231003161322243](/image-20231003161322243.png)
 
 ## nginx
 
