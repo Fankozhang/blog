@@ -69,7 +69,7 @@ scss复制代码/* uni.scss */
 main.js里面设置根地址
 
 ```javascript
-Vue.prototype.websiteUrl = ’http://127.0.0.1:8080‘; 
+Vue.prototype.websiteUrl = 'http://127.0.0.1:8080'; 
 // 这里的websiteUrl是请求根地址，根据后台地址切换
 ```
 
@@ -87,7 +87,7 @@ uni.request({
     },
     fail:(error)=> {     //请求失败
         reject(error)
-    }，
+    },
     complete: ()=> {}
 })
 ```

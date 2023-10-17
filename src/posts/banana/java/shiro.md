@@ -1218,3 +1218,4 @@ public class MySessionManager extends DefaultWebSessionManager {
         </dependency>
 ```
 
+[手把手教你Shiro整合JWT实现登录认证！ - 掘金 (juejin.cn)](https://juejin.cn/post/7158077107958972424)
