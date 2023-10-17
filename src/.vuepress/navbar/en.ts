@@ -56,11 +56,11 @@ export const enNavbar = navbar([
                 icon: "",
                 link:"spring-boot"
               },
-              {
-                text: "shiro",
-                icon: "",
-                link:"shiro"
-              },
+              // {
+              //   text: "shiro",
+              //   icon: "",
+              //   link:"shiro"
+              // },
               {
                 text: "spring cloud",
                 icon: "",
