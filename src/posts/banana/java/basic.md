@@ -1,11 +1,8 @@
 ---
+icon: edit
 date: 2022-01-05
-category:
-  - java
 tag:
   - java
-  - ssm
-  - spring-boot
 typora-root-url: ..\..\..\.vuepress\public
 ---
 
