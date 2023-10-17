@@ -68,11 +68,13 @@ export const enSidebar = sidebar({
                 text: "springBoot",
                 icon: "",
                 link:"spring-boot"
-              },{
-                text: "shiro",
-                icon: "",
-                link:"shiro"
-              },{
+              },
+              // {
+              //   text: "shiro",
+              //   icon: "",
+              //   link:"shiro"
+              // },
+              {
                 text: "spring cloud",
                 icon: "",
                 link: "1",
