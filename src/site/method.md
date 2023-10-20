@@ -65,6 +65,20 @@ cd 到需要清空的文件夹父目录 ，控制台输入    `rimraf  ‘要删
 rimraf node_modules
 ```
 
+## 利用Gitee搭建免费图床
+
+ [利用Gitee搭建免费图床（详细教程）_gitee图床-CSDN博客](https://blog.csdn.net/hannah2233/article/details/117025387) 
+
+下载 picGo     [PicGo (molunerfinn.com)](https://molunerfinn.com/PicGo/) 
+
+gitee创建仓库，生成个人 token,在picGo上配置好 gitee 仓库信息和  个人 token,   typora上配置图像上传的 PicGo 安装位置
+
+![image-20231003160627704](/../../site/image-20231003160627704.png)
+
+![image-20231003161322243](/../../site/image-20231003161322243.png)
+
+## 
+
 ## 下载（url）
 
 ### 后端返回文件流(文档流)如何下载
@@ -1198,9 +1212,27 @@ loadGeoJson("/map/city","123").then(res=>{
 
 
 
-## 百度地图根据地址解析坐标系
+## 百度地图根据地址解析坐标系（根据地址展示地图位置）
 
 [逆地理编码 gc | 百度地图API SDK (baidu.com)](https://lbs.baidu.com/index.php?title=webapi/guide/webservice-geocoding)
+
+https://dafrok.github.io/vue-baidu-map/#/zh/index
+
+VUE BAIDU MAP
+
+```
+npm install vue-baidu-map --save
+
+main.js
+
+import Vue from 'vue'
+import BaiduMap from 'vue-baidu-map'
+
+Vue.use(BaiduMap, {
+  // ak 是在百度地图开发者平台申请的密钥 详见 http://lbsyun.baidu.com/apiconsole/key */
+  ak: 'YOUR_APP_KEY'
+})
+```
 
 ```
 npm install --save vue-jsonp
@@ -1221,6 +1253,13 @@ Vue.use(VueJsonp)
 </baidu-map>
 
 // bm-marker  显示地址的红点
+
+<style>
+.bm-view {
+  width: 100%;
+  height: 300px;
+}
+</style>
 ```
 
 组件内使用     address:'要解析的地址名'  ak:'百度网站上申请的ak,个人标识'   output: 'json',callback: 'showLocation'固定
@@ -1231,9 +1270,9 @@ Vue.use(VueJsonp)
 //mapCenter: "",
 //mapCenterAddress: { lat: "123", lng: "123" },
 
-// 百度地图地址解析
+// 百度地图地址解析(mapCenter是地址)
     TypeMap () {
-      this.mapCenter = "中国（山东）自由贸易试验区济南片区新泺大街1166号奥盛大厦1号楼2333-2室"
+      // this.mapCenter = "中国（山东）自由贸易试验区济南片区新泺大街1166号奥盛大厦1号楼2333-2室"
       this.$jsonp('http://api.map.baidu.com/geocoding/v3/', {
         address: this.mapCenter,
         output: 'json',
@@ -1248,6 +1287,12 @@ Vue.use(VueJsonp)
         console.log(err)
       })
     },
+    
+    
+   mounted(){
+   		this.mapCenter = '山东省济南市天桥区1123号'
+        this.typeMap()
+   }
 ```
 
 ## vue的v-html解析富文本传来的表格不显示边线
