@@ -564,6 +564,77 @@ pages代表分包的页面文件路径（注意，有几个页面，就有几个
 </style>
 ```
 
+## 微信登录
+
+```
+<button
+	class="wx-login-button"
+	open-type="getPhoneNumber"
+	@getphonenumber="getPhoneNumber"
+>
+	微信登录
+</button>
+
+```
+
+```
+// 获取手机号
+			getPhoneNumber(e) {
+				if (e.detail.errMsg == "getPhoneNumber:ok") {
+					uni.login({
+						provider: "weixin",
+						success: (res) => {
+							uni.showLoading({
+								title: '正在登录...',
+								icon: 'loading'
+							})
+							this.$store
+								// 获取微信登录的授权码
+								.dispatch("WXLogin", {
+									xcxCode: e.detail.code
+								})
+								.then(() => {
+									this.loginSuccess();
+								})
+								.catch((e) => {
+								console.log(e)
+									//if (this.captchaEnabled) {
+									//	this.getCode();
+									//}
+									//uni.hideLoading()
+								});
+						},
+					});
+				}
+			}，
+			
+			loginSuccess (res) {
+				this.GetInfo() //获取用户信息
+				uni.hideLoading() 
+				//跳转页面
+				uni.navigateTo({
+					url:"/pages/index/index"
+				})
+			},
+```
+
+```
+// 微信登录（store）
+	  WXLogin({ commit }, userInfo) {
+		return new Promise((resolve, reject) => {
+		    //  wechatLogin 是自定义的登录的接口
+			wechatLogin(userInfo).then(res => {
+			// 存储接口返回的token信息
+			setToken(res.data.token)
+			commit('SET_TOKEN', res.data.token)
+			resolve()
+		  }).catch(error => {
+			reject(error)
+		  })
+		})
+	  },
+```
+
 
 
 ## uni-cloud开发
