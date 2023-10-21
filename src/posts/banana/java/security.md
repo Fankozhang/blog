@@ -4,7 +4,8 @@ date: 2022-01-05
 tag:
   - java
   - security
-
+typora-copy-images-to: upload
+typora-root-url: ..\..\..\.vuepress\public
 ---
 
 # Spring Security
@@ -29,6 +30,7 @@ tag:
 
 ## 登录验证流程
 
-https://gitee.com/fankozhang/gitee-chart-bed/raw/master/202310220042786.png
+![](/202310220123889.png)
 
-![](https://gitee.com/fankozhang/gitee-chart-bed/raw/master/202310220042786.png)
+<img src="https://gitee.com/fankozhang/gitee-chart-bed/raw/master/202310220042786.png"/>
+

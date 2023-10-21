@@ -71,13 +71,13 @@ rimraf node_modules
 
 下载 picGo     [PicGo (molunerfinn.com)](https://molunerfinn.com/PicGo/) 
 
-![vscodeTwoSearch](/../../site/image-20231003160627704.png)
+![vscodeTwoSearch](/image-20231003160627704.png)
 
 
 
 gitee创建仓库，生成个人 token,在picGo上配置好 gitee 仓库信息和  个人 token,   typora上配置图像上传的 PicGo 安装位置
 
-![vscodeTwoSearch](/../../site/image-20231003161322243.png)
+![vscodeTwoSearch](/image-20231003161322243.png)
 
 
 

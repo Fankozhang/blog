@@ -60,6 +60,10 @@ export const enNavbar = navbar([
                 text: "shiro",
                 icon: "",
                 link:"shiro"
+              },{
+                text: "security",
+                icon: "",
+                link:"security"
               },
               {
                 text: "spring cloud",

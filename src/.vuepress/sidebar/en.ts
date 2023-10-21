@@ -73,6 +73,10 @@ export const enSidebar = sidebar({
                 text: "shiro",
                 icon: "",
                 link:"shiro"
+              },{
+                text: "security",
+                icon: "",
+                link:"security"
               },
               {
                 text: "spring cloud",
