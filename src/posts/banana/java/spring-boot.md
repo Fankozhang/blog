@@ -69,7 +69,7 @@ class DemoApplicationTests {
 1,测试类如果存在于引导类所在包或子包中无需指定引导类
 2.测试类如果不存在于引导类所在的包或子包中需要通过@SpringBootTest(c1asses= ***.class)属性指定引导类
 
-## 整合myBatis （数据库配置）
+## 整合myBatis ，mysql（数据库配置）
 
 该心配置：数据库连接相关信息（连什么？连谁？什么权限)
 映射配置：SQL映射（ML/注解)
@@ -1800,9 +1800,17 @@ class ConfigurationApplicationTests {
 
 ```
 
+
+
+
+
 ##### RedisTemplate自定义配置及序列化
 
 增加RedisConfig的配置类（ [ redistemplate使用前需要配置一下connectionfactory和序列化方式_](https://blog.csdn.net/Good_omen/article/details/123993468) ）
+
+[redis配置序列化_redis序列化-CSDN博客](https://blog.csdn.net/qq_58772217/article/details/128799831)
+
+[【精选】最详细 | redis实战:JackSon/FastJson方式序列化深度解析_redis使用fastjson序列化_阿千弟的博客-CSDN博客](https://blog.csdn.net/qq_51033936/article/details/127022985)
 
 ```java
 @Configuration
@@ -1877,6 +1885,189 @@ public long expire(String key) {
 	return redisTemplate.opsForValue().getOperations().getExpire(key);
 }
 ```
+
+##### RedisCache工具类封装
+
+[RedisCache redis工具类_rediscache.setcacheobject-CSDN博客](https://blog.csdn.net/xiguasweet/article/details/105135242)
+
+```java
+public class RedisCache {
+
+    @Autowired
+    public RedisTemplate redisTemplate;
+
+    /**
+     * 缓存的基本对象。Integer String 实体类
+     *
+     * @param key  缓存的键值
+     * @param value 缓存的值
+     * @param <T>
+     * @return    缓存的对象
+     */
+    public <T> ValueOperations<String, T> setCacheObject(String key, T value){
+        ValueOperations<String, T> operations = redisTemplate.opsForValue();
+        operations.set(key, value);
+        return operations;
+    }
+
+    /**
+     *
+     * @param key  缓存的键值
+     * @param value  缓存的值
+     * @param timeout  时间
+     * @param timeUnit  时间颗粒度
+     * @param <T>
+     * @return   缓存的对象
+     */
+    public <T> ValueOperations<String, T> setCacheObject(String key, T value, Integer timeout, TimeUnit timeUnit){
+        ValueOperations<String, T> operations = redisTemplate.opsForValue();
+        operations.set(key, value, timeout, timeUnit);
+        return operations;
+    }
+
+    /**
+     * 获得缓存的基本对象
+     *
+     * @param key   缓存键值
+     * @param <T>
+     * @return   缓存键值对应的数据
+     */
+    public <T> T getCacheObject(String key){
+        ValueOperations<String, T> operations = redisTemplate.opsForValue();
+        return operations.get(key);
+    }
+
+    /**
+     * 删除单个对象
+     *
+     * @param key
+     */
+    public void deleteObject(String  key){
+        redisTemplate.delete(key);
+    }
+
+
+    /**
+     * 删除集合对象
+     *
+     * @param collection
+     */
+    public void deleteObject(Collection collection){
+        redisTemplate.delete(collection);
+    }
+
+
+    /**
+     * 缓存list数据
+     *
+     * @param key    缓存的键值
+     * @param dataList    带缓存的list数据
+     * @param <T>
+     * @return    缓存的对象
+     */
+    public <T> ListOperations<String, T> setCacheList(String key, List<T> dataList){
+        ListOperations<String, T> listOperations = redisTemplate.opsForList();
+        if (dataList != null) {
+            int size = dataList.size();
+            for (int i = 0; i < size; i++) {
+                listOperations.leftPush(key, dataList.get(i));
+            }
+        }
+        return listOperations;
+    }
+
+
+    /**
+     *  获得缓存的list对象
+     *
+     * @param key  缓存的键值
+     * @param <T>
+     * @return   缓存键值对应的集合数据
+     */
+    public  <T> List<T> getCacheList(String key){
+        List<T> list = new ArrayList<>();
+        ListOperations<String, T> listOperations = redisTemplate.opsForList();
+        Long size = listOperations.size(key);
+
+        for (int i = 0; i < size; i++) {
+            list.add(listOperations.index(key, i));
+        }
+        return list;
+    }
+
+    /**
+     * 缓存Set
+     *
+     * @param key 缓存键值
+     * @param dataSet 缓存的数据
+     * @return 缓存数据的对象
+     */
+    public <T> BoundSetOperations<String, T> setCacheSet(String key, Set<T> dataSet) {
+        BoundSetOperations<String, T> setOperation = redisTemplate.boundSetOps(key);
+        Iterator<T> it = dataSet.iterator();
+        while (it.hasNext())
+        {
+            setOperation.add(it.next());
+        }
+        return setOperation;
+    }
+
+    /**
+     * 获得缓存的set
+     *
+     * @param key
+     * @return
+     */
+    public <T> Set<T> getCacheSet(String key) {
+        Set<T> dataSet = new HashSet<T>();
+        BoundSetOperations<String, T> operation = redisTemplate.boundSetOps(key);
+        dataSet = operation.members();
+        return dataSet;
+    }
+
+    /**
+     * 缓存Map
+     *
+     * @param key
+     * @param dataMap
+     * @return
+     */
+    public <T> HashOperations<String, String, T> setCacheMap(String key, Map<String, T> dataMap) {
+        HashOperations hashOperations = redisTemplate.opsForHash();
+        if (null != dataMap)
+        {
+            for (Map.Entry<String, T> entry : dataMap.entrySet())
+            {
+                hashOperations.put(key, entry.getKey(), entry.getValue());
+            }
+        }
+        return hashOperations;
+    }
+
+    /**
+     * 获得缓存的Map
+     *
+     * @param key
+     * @return
+     */
+    public <T> Map<String, T> getCacheMap(String key) {
+        Map<String, T> map = redisTemplate.opsForHash().entries(key);
+        return map;
+    }
+
+    /**
+     *获得缓存的基本对象列表
+     * @param pattern  字符串前缀
+     * @return
+     */
+    public Collection<String> keys(String pattern){
+        return redisTemplate.keys(pattern);
+    }
+}
+
+```
+
+
 
 #####  RedisTemplate常用方法
 
@@ -2546,7 +2737,9 @@ class DemoApplicationTests {
 
 ## 登录
 
-**工具类**
+### **工具类** JwtUtil
+
+[JWT工具类（拿来直接用就完了，注释解释的很详细）_/** * jwt 工具类 * * @author json * @date 2021/11/15 -CSDN博客](https://blog.csdn.net/qq_51553982/article/details/122778454)
 
 ```java
 //  工具类

@@ -1220,6 +1220,8 @@ loadGeoJson("/map/city","123").then(res=>{
 
 https://dafrok.github.io/vue-baidu-map/#/zh/index
 
+https://www.cnblogs.com/spaortMan/p/13932126.html
+
 VUE BAIDU MAP
 
 ```
@@ -1246,7 +1248,7 @@ Vue.use(VueJsonp)
 ```
 
 ```
-<baidu-map class="bm-view" ref="map" :center="mapCenter" :zoom="17">
+<baidu-map :scroll-wheel-zoom="true" class="bm-view" ref="map" :center="mapCenter" :zoom="17">
    <bm-marker
        :position="mapCenterAddress"
        :dragging="false"
@@ -1255,6 +1257,8 @@ Vue.use(VueJsonp)
 </baidu-map>
 
 // bm-marker  显示地址的红点
+// mapCenter 地址的具体中文位置（详细）
+// scroll-wheel-zoom  缩放
 
 <style>
 .bm-view {

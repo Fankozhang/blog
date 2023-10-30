@@ -74,7 +74,7 @@ tag:
 
 
 
-## css样式调试网站
+## css样式风格调试网站
 
 -  [毛玻璃效果 - Glass CSS](https://css.glass/)     
 -  [div样式调试  Soft UI CSS shadow generator](https://neumorphism.io/#d8d4d4)     
@@ -86,6 +86,8 @@ tag:
 -  [CSS Grid 布局)](https://cssgrid-generator.netlify.app/)   
 -  [盒子div阴影调试  Smooth Shadow (brumm.af)](https://shadows.brumm.af/)   
 -   [加载的动画效果   SpinKit | Simple CSS Spinners (tobiasahlin.com)](https://tobiasahlin.com/spinkit/)   
+-   [Illustrations | unDraw](https://undraw.co/illustrations)  矢量图
+-   [cssinspirationguide - csc inspiration guide online (chokcoco.github.io)](https://chokcoco.github.io/CSS-Inspiration/#/)
 
 ## 工具
 
@@ -156,3 +158,8 @@ tag:
 
  [写给5年前端妹子的三万字脚手架教程 - 掘金 (juejin.cn)](https://juejin.cn/post/7260144602471776311) 
 
+[前端传参如果参数过多你还会拼接在URL上嘛？ - 掘金 (juejin.cn)](https://juejin.cn/post/7291468863395954749)
+
+## 开源项目收藏
+
+smartadmin：开源SpringBoot和Vue的企业级项目，代码很规范   https://smartadmin.vip/  **https://gitee.com/lab1024/smart-admin**
