@@ -79,7 +79,13 @@ gitee创建仓库，生成个人 token,在picGo上配置好 gitee 仓库信息�
 
 ![vscodeTwoSearch](/image-20231003161322243.png)
 
+## 前端权限菜单实现
 
+https://mp.weixin.qq.com/s/6SuNY3Y27RGXPx89zCJnEg
+
+## 前端实现上传文件（input实现）
+
+[关于前端实现上传文件这个功能，我只能说so easy！ - 掘金 (juejin.cn)](https://juejin.cn/post/7224402365452238906)
 
 ## 下载（url）
 
@@ -943,11 +949,9 @@ export default {
 </style>
 ```
 
+### Element-ui中 选择器（Select 数据量大
 
-
-
-
-
+[解决 Element-ui中 选择器（Select）因options 数据量大导致渲染慢、页面卡顿的问题-阿里云开发者社区 (aliyun.com)](https://developer.aliyun.com/article/1086565)
 
 ## 数据格式转化
 
@@ -1011,9 +1015,11 @@ export function handleTree(data, id, parentId, children) {
 
 
 
+## bug类
 
 
-## vue项目使用scss时，版本冲突
+
+### vue项目使用scss时，版本冲突
 
 下载scss后，启动项目报错，这个错误发生的原因是node和scss的版本不兼容，出现这种问题需要去网上查找兼容的scss版本，在重新安装。（找这个还挺麻烦的，来回卸载重下（试错）还是很费时的。版本冲突很麻烦，推荐使用less）
 
@@ -1033,11 +1039,37 @@ npm install sass-loader@10.2.0 --save-dev
 
 
 
-## Vue开发中出现Loading Chunk Failed 踩坑纪实
+### Vue开发中出现Loading Chunk Failed 踩坑纪实
 
 （出现这个错误会页面空白）
 
  [Vue开发中出现Loading Chunk Failed 踩坑纪实 - 掘金 (juejin.cn)](https://juejin.cn/post/7080189425975558181)    
+
+### vue的v-html解析富文本传来的表格不显示边线
+
+ [(210条消息) 更改v-html的样式_v-html 样式修改_oduoke~~的博客-CSDN博客](https://blog.csdn.net/xh1506101064/article/details/106675796) 
+
+```
+<div class="content-table" v-html="abc"></div>
+
+
+css  注意：/deep/  不能缺少
+.content-table{
+  /deep/table {
+        border-collapse: collapse !important;
+        td,th {
+          text-align: center;
+        border: 1px solid #ccc !important;
+        min-width: 50px !important;
+        height: 20px !important;
+    }
+    th {
+        background-color: #f1f1f1 !important;
+    }
+    }
+
+}
+```
 
 
 
@@ -1299,32 +1331,6 @@ Vue.use(VueJsonp)
    		this.mapCenter = '山东省济南市天桥区1123号'
         this.typeMap()
    }
-```
-
-## vue的v-html解析富文本传来的表格不显示边线
-
- [(210条消息) 更改v-html的样式_v-html 样式修改_oduoke~~的博客-CSDN博客](https://blog.csdn.net/xh1506101064/article/details/106675796) 
-
-```
-<div class="content-table" v-html="abc"></div>
-
-
-css  注意：/deep/  不能缺少
-.content-table{
-  /deep/table {
-        border-collapse: collapse !important;
-        td,th {
-          text-align: center;
-        border: 1px solid #ccc !important;
-        min-width: 50px !important;
-        height: 20px !important;
-    }
-    th {
-        background-color: #f1f1f1 !important;
-    }
-    }
-
-}
 ```
 
 
@@ -1608,3 +1614,290 @@ disableHostCheck:true
  [vue项目中无法实现内网穿透，因为localhost的限制_dakache11的博客-CSDN博客](https://blog.csdn.net/dakache11/article/details/83989296) 
 
  [vue内网穿透_vue项目内网穿透 转圈_GG·bond的博客-CSDN博客](https://blog.csdn.net/GTbond/article/details/124375319) 
+
+
+
+另一个内网穿透工具   cpolar  下载windows客户端使用
+
+https://www.cpolar.com/
+
+
+
+NeutrinoProxy：内网穿透神器
+
+https://mp.weixin.qq.com/s/4hyQsTICIUf9EvAVrC6wEg
+
+## 前端dom生成文件下载
+
+### vue截取网页的dom，生成pdf并下载
+
+npm install html2canvas         npm install  jspdf
+
+```vue
+<template>
+  <div id="about" ref="about"  @click="exportPDF">
+    <h1>This is an about page</h1>
+    <div  class="box">
+      welcom to about </div>
+  </div>
+</template>
+<script>
+import html2canvas from 'html2canvas';
+import { jsPDF } from "jspdf";
+export default {
+  data() {
+  },
+  methods: {
+    exportPDF() {
+      // 导出pdf
+      this.scale = 1;
+      this.$nextTick(() => {
+        // let shareContent = document.body,//需要截图的包裹的（原生的）DOM 对象
+        const shareContent = document.getElementById("about");
+          // shareContent.style.transform = "rotate(90deg)"  dom旋转角度
+        // width = shareContent.clientWidth, //获取dom 宽度
+        // height = shareContent.clientHeight, //获取dom 高度
+        const width = shareContent.offsetWidth; // 获取dom 宽度
+        const height = shareContent.offsetHeight; // 获取dom 高度
+        const canvas = document.createElement("canvas"); // 创建一个canvas节点
+        const scale = 1 / this.scale; // 定义任意放大倍数 支持小数
+        canvas.width = width * scale; // 定义canvas 宽度 * 缩放
+        canvas.height = height * scale; // 定义canvas高度 *缩放
+        canvas.style.width = shareContent.clientWidth * scale + "px";
+        canvas.style.height = shareContent.clientHeight * scale + "px";
+        canvas.getContext("2d").scale(scale, scale); // 获取context,设置scale
+        const opts = {
+          scale: scale, // 添加的scale 参数
+          canvas: canvas, // 自定义 canvas
+          logging: false, // 日志开关，便于查看html2canvas的内部执行流程
+          width: width, // dom 原始宽度
+          height: height,
+          useCORS: true, // 【重要】开启跨域配置
+        };
+        html2canvas(shareContent, opts).then(() => {
+          var contentWidth = canvas.width;
+          var contentHeight = canvas.height;
+          // 一页pdf显示html页面生成的canvas高度;
+          // var pageHeight = (contentWidth / 592.28) * 841.89;
+          var pageHeight = (contentWidth / 592.28) * 841.89;
+          // 未生成pdf的html页面高度
+          var leftHeight = contentHeight;
+          // 页面偏移
+          var position = 0;
+          // a4纸的尺寸[595.28,841.89]，html页面生成的canvas在pdf中图片的宽高
+          var imgWidth = 595.28;
+          var imgHeight = (592.28 / contentWidth) * contentHeight;
+          var pageData = canvas.toDataURL("image/jpeg", 1.0);
+          var PDF = new jsPDF("", "pt", "a4");
+          if (leftHeight < pageHeight) {
+            PDF.addImage(pageData, "JPEG", 0, 0, imgWidth, imgHeight);
+          } else {
+            while (leftHeight > 0) {
+              PDF.addImage(pageData, "JPEG", 0, position, imgWidth, imgHeight);
+              leftHeight -= pageHeight;
+              position -= 841.89;
+              if (leftHeight > 0) {
+                PDF.addPage();
+              }
+            }
+          }
+          // name = this.basicInfo.name;
+          PDF.save('导出的pdf文件名' + ".pdf"); // 这里是导出的文件名
+          this.scale = window.innerHeight / 1200;
+        });
+      });
+    },
+
+  },
+  created() {
+
+  },
+}
+</script>
+<style scoped>
+#about{
+  width:50%;
+  margin:auto;
+}
+.box{
+  width:200px;height:30px;font-size:20px;font-weight:bold;
+  background:linear-gradient(to right,#289a47,#e74032);
+}
+</style>
+```
+
+
+
+### Dom生成图片可以使用  html2canvas
+
+```
+npm i html2canvas
+```
+
+```vue
+<template>
+    
+   <div ref="pic" id="pic" class="pic">
+      <ul>
+         <li>仅测试使用</li>
+         <li>仅测试使用</li>
+         <li>仅测试使用</li>
+         <li>仅测试使用</li>
+      </ul>
+   </div>
+   <div ref="content" id="content" class="content">
+      
+   </div>
+   <div>
+      <el-button @click="getImg">
+         生成图片并下载
+      </el-button>
+   </div>
+  </template>
+  
+  <script setup>
+  import html2canvas from 'html2canvas'
+  const getImg= () =>{
+   // 获取下载成图片的dom
+  	html2canvas(document.querySelector('.pic')).then(canvas => {
+	  const imgUrl = canvas.toDataURL('image/jpeg')
+	  const image = document.createElement('img')
+	  image.src = imgUrl
+	  // 将生成的图片放到 类名为 content 的元素中(不用展示可以删除)
+	  // document.querySelector('.content').appendChild(image)
+	  const a = document.createElement('a')
+	  a.href = imgUrl
+	  // a.download 后面的内容为自定义图片的名称
+	  a.download = 'study_download'
+	  a.click()
+	 })
+  }
+  </script>
+  <style scoped lang='less'>
+    .pic{
+      font-size:20px;font-weight:bold;
+      width:200px;
+      padding:20px 0;
+    }
+    .content{
+    }
+  </style>
+```
+
+## 前端调取摄像头
+
+### 拍照
+
+[前端调取摄像头并实现拍照功能 - 掘金 (juejin.cn)](https://juejin.cn/post/7289662055183597603)
+
+### 录屏
+
+vue实现可以参考 electron 部分的调用摄像头(以下是原生js实现代码)
+
+```html
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <style>
+        button{
+            width:100px;height:30px;color:aqua;background:#021a3f;border-radius: 5px;
+        }
+    </style>
+</head>
+<body>
+    <div>
+        <div>
+            <button onClick="init()" >打开摄像头</button>
+            <button onClick="screenInit()" >获取屏幕信息</button>
+            <div style="margin-top:10px;">
+                <button c1ass="btn" onClick="startRecord()">升始录制</button>
+            <button class="stop" onClick="stop()">停止录制</button>
+            <button class="play" onClick="play()">播放</button>
+            </div>
+            
+        </div>
+        <div style="display:flex;margin-top:10px;">
+            <div >
+            <video style="width:400px;height:300px;" id="video"  muted autoplay controls></video>
+                <div style="text-align: center;">录制内容</div>
+            </div>
+            <div style="margin-left:10px;">
+                <video  style="width:400px;height:300px;" id="playVideo" autoplay controls></video>
+                <div style="text-align: center;">播放内容</div>
+            </div>  
+        </div>
+        
+    </div>
+    
+    
+    
+<script>
+    var myVideo=document.getElementById("video")
+    var playVideo=document.getElementById("playVideo")
+    let stream=null
+    let recordInstance=null
+    let  blobSlice=[]
+    const init=async ()=>{
+        
+        this.stream= await navigator.mediaDevices.getUserMedia({
+            audio: true,
+          video:{
+            width:1000,
+            height:600
+          },
+          
+         })
+        
+          myVideo.srcObject=this.stream
+          myVideo.play()
+          
+        
+      }
+      const screenInit=async ()=>{
+        
+        this.stream= await await navigator.mediaDevices.getDisplayMedia({audio: true,video:true})
+        
+          myVideo.srcObject=this.stream
+          myVideo.play()
+          
+        
+      }
+    const startRecord=()=>{
+        this.recordInstance=null
+        this.recordInstance =new MediaRecorder(myVideo.srcObject,{mimeType:'video/webm'})
+          console.log('this.recordInstance ',this.recordInstance )
+          if(this.recordInstance){
+                this.recordInstance.start()
+                this.recordInstance.ondataavailable=(e)=>{
+                    blobSlice=[]
+                    blobSlice.push(e.data)
+                }
+    
+            this.recordInstance.onstop=(e)=>{
+                console.log(blobSlice,'123')
+            }
+          }
+
+    }
+    const stop=()=>{
+        if( this.recordInstance){
+             this.recordInstance.stop()
+        }
+       
+    }
+    const play=()=>{
+        const blob =new Blob(blobSlice,{type:'video/mp4'})
+        const videoUrl =URL.createObjectURL(blob)
+        console.log(videoUrl)
+        playVideo.src=videoUrl
+        playVideo.play()
+    }
+</script>
+</body>
+</html>
+```
+

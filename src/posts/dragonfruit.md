@@ -155,6 +155,28 @@ async getUserBaseInfo() {
 },
 ```
 
+## uniapp 高度铺满全屏的小技巧
+
+在uniapp中，高度使用heiht:100vh,h5的屏幕会多出一些高度，导致可以上下滑动
+
+解决方式如下
+
+在app.vue中设置一个公共样式
+
+```css
+uni-page-body,html,body{  
+     height: 100%;  
+}
+```
+
+在需要高度铺满全屏的页面的最外层的view绑定类名page，样式为
+
+```css
+.page {
+     height: 100%;
+}
+```
+
 ## uniapp内打开一个url
 
 在pc浏览器我一般是通过window,open()打开一个url地址的，在小程序，是会报错的，所以就得另找一个解决方法。以下是实现方法。
@@ -259,7 +281,7 @@ pages代表分包的页面文件路径（注意，有几个页面，就有几个
 
 ![PackageAuniWechat](/PackageAuniWechat.png)
 
-
+[【已解决】uniapp小程序体积过大、隐私协议的问题 - 掘金 (juejin.cn)](https://juejin.cn/post/7296025902911897627)
 
 ## pages.json
 
@@ -564,6 +586,10 @@ pages代表分包的页面文件路径（注意，有几个页面，就有几个
 </style>
 ```
 
+## 手机号验证码功能
+
+https://juejin.cn/post/7087789961490989070
+
 ## 微信登录
 
 ```
@@ -637,7 +663,7 @@ pages代表分包的页面文件路径（注意，有几个页面，就有几个
 
 
 
-## uni-cloud开发
+## uni-cloud云开发
 
  [uniCloud云开发视频教程-从基础入门到项目开发实战-uniapp进阶课文章管理系统（云函数/云数据库/云存储](https://www.bilibili.com/video/BV1PP411E7qG/?spm_id_from=333.337.search-card.all.click&vd_source=f25f5a8d75a3a60d5a288f726803ec11) 
 

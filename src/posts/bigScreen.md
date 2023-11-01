@@ -436,11 +436,9 @@ dataZoom: [
         ]
 ```
 
-## 手机号验证码
 
-https://juejin.cn/post/7087789961490989070
 
-# Three.js
+## Three.js
 
 学习视频：https://www.bilibili.com/video/BV14r4y1G7h4?p=1
 

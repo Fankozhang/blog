@@ -127,6 +127,8 @@ jobs:
 
 nginx使用：https://juejin.cn/post/7112826654291918855#heading-1
 
+[写给高级前端的 Nginx 知识，一网打尽！！ (qq.com)](https://mp.weixin.qq.com/s/QGs1PJ9i7KXS7AF23bOCbA)
+
 ### 安装虚拟机，linux, nginx
 
 装上centos7 linux。在Linux上安装 nginx 我参考了如下两篇文章
