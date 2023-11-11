@@ -102,6 +102,10 @@ export const enNavbar = navbar([
         text: "python",
         icon: "edit",
         link: "python",
+      },{
+        text: "部署",
+        icon: "edit",
+        link: "bushu"
       }
     ]
   },

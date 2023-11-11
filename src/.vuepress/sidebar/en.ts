@@ -118,6 +118,10 @@ export const enSidebar = sidebar({
           text: "python",
           icon: "",
           link: "python",
+        },{
+          text: "部署",
+          icon: "edit",
+          link: "bushu"
         }
       ]
     },

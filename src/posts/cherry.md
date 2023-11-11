@@ -117,11 +117,17 @@ jobs:
 
 当真正想搞一个vuepree文档网站的时候，不一定从头搭建，可以使用适应的主题，使用主题可以实现快速搭建项目，主题可以自己搜索，我使用的主题是    [vuepress-theme-hope ](https://theme-hope.vuejs.press/zh/) 
 
+## 建个人博客、文档网站
+
+[10分钟快速搭建个人博客、文档网站！ (qq.com)](https://mp.weixin.qq.com/s/4wJG837mG_gUXmqXQwLO4Q)
+
 ## nginx
 
  [参考视频  nginx_哔哩哔哩_bilibili](https://www.bilibili.com/video/BV1ZU4y1m7GL?p=1&vd_source=f25f5a8d75a3a60d5a288f726803ec11) 
 
- [参考博客专栏](https://blog.csdn.net/qq_44299529/category_11626217.html) 
+https://www.bilibili.com/video/BV1Z84y1D7RM/?spm_id_from=333.1007.tianma.7-1-23.click 
+
+[参考博客专栏](https://blog.csdn.net/qq_44299529/category_11626217.html) 
 
  [Nginx expires 页面缓存时间配置 (w3schools.cn)](https://www.w3schools.cn/nginx/nginx_http_expires.asp) 
 
@@ -151,6 +157,26 @@ nginx使用：https://juejin.cn/post/7112826654291918855#heading-1
 
 使用阿里服务器安装的时候要设置安全组 ，入口 和 出口 都要设置80端口的，否则网页打不开。
 
+
+
+### ubuntu安装nginx
+
+[如何在 Ubuntu 20.04 上安装 Nginx-阿里云开发者社区 (aliyun.com)](https://developer.aliyun.com/article/759280)
+
+当出现 status inactive时查看如下解决办法：
+
+[如何在 Ubuntu 20.04 上使用 UFW 来设置防火墙 - 知乎 (zhihu.com)](https://zhuanlan.zhihu.com/p/139381645)
+
+在Ubuntu中，使用sudo ufw status命令查看当前防火墙状态。        不活动，是关闭状态。
+
+在Ubuntu中，使用sudo ufw enable命令来开启防火墙。
+
+在Ubuntu中，使用sudo ufw disable命令来关闭防火墙。
+
+**如上安装nginx所在路径为   /etc/nginx**
+
+[Ubuntu上使用nginx完成一个简单web网站_ubuntu在nginx搭建简单网页-CSDN博客](https://blog.csdn.net/qq_43279579/article/details/110354816)
+
 ### 基本命令
 
 管理员权限 su root
@@ -171,7 +197,7 @@ start nginx.exe  // 部署nginx文件后，启动nginx服务
 
  4、./nginx -s quit               *//安全退出*（比stop友好）
 
- 5、./nginx -s reload             *//重载配置文件（修改了配置文件需要执行此命令 比较常用）*
+ 5、./nginx -s reload             *//重载配置文件（修改了配置文件需要执行此命令 比较常用  重启）*
 
  6、ps aux|grep nginx             *//查看ngnix进程* 
 
@@ -526,7 +552,7 @@ Github Docker 源码：https://github.com/docker/docker-ce
 
  [Docker 入门终极指南，详细版！别再说不会用 Docker 了！ (qq.com)](https://mp.weixin.qq.com/s/MwDXbeVVXMPsCHP0ixqxFg) 
 
-
+[前端也可以学习的Docker - 掘金 (juejin.cn)](https://juejin.cn/post/7287510147257679935)
 
 
 

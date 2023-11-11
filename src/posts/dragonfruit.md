@@ -24,7 +24,13 @@ typora-root-url: ..\.vuepress\public
 
  [DCloud 插件市场](https://ext.dcloud.net.cn/) 
 
+[uniapp模板：新建一个uniapp项目，并加入基础化建设，uniapp开发全流程 - 掘金 (juejin.cn)](https://juejin.cn/post/7226731366535905317#heading-7)
 
+## 相关文章
+
+[简记账app--使用uni-app开发完整功能app - 掘金 (juejin.cn)](https://juejin.cn/post/7236354905492668473?searchId=20231107134553740B3EDD7BEDDC8856C0#heading-0)
+
+[【uniapp】十分钟带你封装uniapp的api请求 - 掘金 (juejin.cn)](https://juejin.cn/post/7249228528573694013?searchId=20231107134553740B3EDD7BEDDC8856C0#heading-14)
 
 ## 引入uview2.0
 

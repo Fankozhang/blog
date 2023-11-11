@@ -70,9 +70,15 @@ tag:
 
 -  [web前端面试 - 面试官系列 (vue3js.cn)](https://vue3js.cn/interview/) 
 
--      [W3Schools 在线教程(内容挺多，也详细)](https://www.w3schools.cn/) 
+- [W3Schools 在线教程(内容挺多，也详细)](https://www.w3schools.cn/) 
+
+-      [基础教程(nhooo.com) - 学好基础,才能走的更远！](https://www.nhooo.com/)
 
 
+
+## 软件聚合类网站
+
+[软件目录【23年11月最新】 (qq.com)](https://mp.weixin.qq.com/s/dE8Q4nk411zX6ulp1V6hyA)
 
 ## css样式风格调试网站
 
@@ -88,6 +94,8 @@ tag:
 -   [加载的动画效果   SpinKit | Simple CSS Spinners (tobiasahlin.com)](https://tobiasahlin.com/spinkit/)   
 -   [Illustrations | unDraw](https://undraw.co/illustrations)  矢量图
 -   [cssinspirationguide - csc inspiration guide online (chokcoco.github.io)](https://chokcoco.github.io/CSS-Inspiration/#/)
+-   [磨砂风格背景生成   Claymorphism CSS Generator | SquarePlanet (hype4.academy)](https://hype4.academy/tools/claymorphism-generator)
+-   [磨砂风格背景生成  Glassmorphism CSS Generator | SquarePlanet | SquarePlanet (hype4.academy)](https://hype4.academy/tools/glassmorphism-generator)
 
 ## 工具
 
@@ -150,11 +158,20 @@ tag:
 开源
 
 - https://github.com/501351981/vue-office    支持多种文件(**docx、excel、pdf**)预览的vue组件库，支持vue2/3。 
-- 
+
+
+
+低代码：
+
+[guiplan低代码开发平台](http://www.guiplan.com/)
 
 
 
 ## 文章收藏
+
+vue和react对比学习（详细的）：  [React - 苏苏同学的专栏 - 掘金 (juejin.cn)](https://juejin.cn/column/7052614061607321631)
+
+git命令行操作：   [Git 常用基本命令使用详细大全_git 命令-CSDN博客](https://blog.csdn.net/qtiao/article/details/97783243)
 
 [前端常用网站汇总，一定有你想要的🔥🔥🔥 - 掘金 (juejin.cn)](https://juejin.cn/post/7023188150629433357)
 
@@ -170,9 +187,68 @@ tag:
 
 [常见文件下载与上传方式整理 - 掘金 (juejin.cn)](https://juejin.cn/post/7296089060833017871)
 
+[Vue3，Vuex，ES6，json-serve，pinia - 掘金 (juejin.cn)](https://juejin.cn/post/7296017207099588671#heading-59)
+
+[ElectronEgg 快速开发一个桌面应用 - 掘金 (juejin.cn)](https://juejin.cn/post/7292961931509186595)
+
+[大文件切片上传续传秒传 ](https://mp.weixin.qq.com/s/uFTHhIjHZdbPd9V-DyI6lg)
+
+[[Github实战\]双重认证2FA 如何 设置/更改[手把手][2022] - 掘金 (juejin.cn)](https://juejin.cn/post/7154286738280546317#1_2)
+
+[这些天，我们前端组一起处理的项目优化点 (qq.com)](https://mp.weixin.qq.com/s/p4sxLSQt77qeyefPJslI-g)
+
+[🚀 10 个 GitHub 存储库，助你成为前端巨匠✨ - 掘金 (juejin.cn)](https://juejin.cn/post/7287913225168617487)
+
+[一键生成前端UI，公司90%项目UI都靠它搞定！react后台管理代码生成 (qq.com)](https://mp.weixin.qq.com/s/4db4fn8yu98_H2N156R25g)
+
+[细说 Vue 响应式原理的 10 个细节！ (qq.com)](https://mp.weixin.qq.com/s/U9d_mD58B8TzFwG5pQTeHA)
+
+[打造我的 Windows 开发环境 - 掘金 (juejin.cn)](https://juejin.cn/post/7245567988248821797#heading-0)
+
+[android studio如何连接夜神模拟器_android连接夜神模拟器-CSDN博客](https://blog.csdn.net/My_Deng_Peng/article/details/82153940)
+
+[android studio使用雷电模拟器详细过程（或其他）_雷电打开androidstudio-CSDN博客](https://blog.csdn.net/weixin_43157543/article/details/104589328)
+
+[超详细 React Native 完全使用指南，学不会你打我 - 掘金 (juejin.cn)](https://juejin.cn/post/7041840421806932005?searchId=20231107151622B3793719C5CA6B024121#heading-12)
+
+[React Native 练习时长 2 月半，踩坑总结 - 掘金 (juejin.cn)](https://juejin.cn/post/7234407587118530597)
+
+[多账号统一登录方案就该这么设计（万能通用），稳的一批！ (qq.com)](https://mp.weixin.qq.com/s/GbQvrMVYlDk3kj3dMG-HMQ)
+
+[css 实现边框](https://juejin.cn/post/7240458275269984314)
+
+[你知道前端水印功能是怎么实现的吗？ (qq.com)](https://mp.weixin.qq.com/s/sGvnqM1ynec7fvcQijfOzA)
+
+[spring Boot 项目部署方案！打包 + Shell 微信公众平台 (qq.com)](https://mp.weixin.qq.com/s/4oVFhyoGC32cGSn3iio4sA)
+
+[你管这破玩意儿叫 Token? (qq.com)](https://mp.weixin.qq.com/s/e9UmJJMHPNRNDiTSZN1z4w)
+
+[写一手好SQL很有必要 (qq.com)](https://mp.weixin.qq.com/s/dy9YHmudoQDojsJLOVrprA)
+
+[自从项目用上了这款监控系统，睡觉真香！ (qq.com)](https://mp.weixin.qq.com/s/-GQo9vlmU-LacNTx1ApeRQ)
+
+[为什么我只使用DTO，不管其他“O”？](https://mp.weixin.qq.com/s/mhl6SVHZvNp6BeqfeupCQw)
+
+[常用正则表达式最强整理 (qq.com)](https://mp.weixin.qq.com/s/ixGlgxQLz59UHxC7CHQRCw)
+
+[真的绝了，通过注释来埋点好简单！！ (qq.com)](https://mp.weixin.qq.com/s/SqHTWwbepjjZ42jNi1-uGw)
+
 ## 开源项目收藏（源码收藏）
 
+我的测试项目：[东方凝洛/我的测试仓库 - 码云 - 开源中国 (gitee.com)](https://gitee.com/fankozhang/my-testing-warehouse/tree/master)
+
 smartadmin：开源SpringBoot和Vue的企业级项目，代码很规范   https://smartadmin.vip/  **https://gitee.com/lab1024/smart-admin**
+
+
+
+若依 ：    https://www.bilibili.com/video/BV1684y1X7tK?p=1  资料：[阿里云盘 (aliyundrive.com)](https://www.aliyundrive.com/drive/file/backup/654313898bd10ccec4d34eaf918c075038adbd51)
+
+[基于SpringCloud Alibaba技术栈，若依微服务版(RuoYi-Cloud)脚手架入门精解，保证上手那种~_哔哩哔哩_bilibili](https://www.bilibili.com/video/BV14g4y1N7tD/?spm_id_from=autoNext&vd_source=f25f5a8d75a3a60d5a288f726803ec11)
+
+【链接：https://pan.baidu.com/s/1ako2ZmIYTJZXOKTP3oesRg?pwd=8888
+提取码：8888】
+
+
 
 
 
@@ -183,7 +259,7 @@ smartadmin：开源SpringBoot和Vue的企业级项目，代码很规范   https:
 网盘链接：https://pan.baidu.com/s/1w9nn_IRGcqYm1npllasjoQ?pwd=9988
 提取码：9988
 
-
+[1560分钟一节课VUE项目从入门到精通！ (qq.com)](https://mp.weixin.qq.com/s/LcLL-vnXLrRH_f8lRyyumA)
 
 
 
@@ -196,3 +272,8 @@ smartadmin：开源SpringBoot和Vue的企业级项目，代码很规范   https:
 
 spring全家桶课程资料链接：https://pan.baidu.com/s/1AVRWD-0ukDee9QxxhBhwvA 
 提取码：gosq 
+
+
+
+
+

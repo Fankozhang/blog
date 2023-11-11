@@ -365,9 +365,13 @@ delForm(item, index){
 }
 ```
 
+### 正则表达式
 
+[邮箱、手机号、url等常用正则表达式-腾讯云开发者社区-腾讯云 (tencent.com)](https://cloud.tencent.com/developer/article/1751120)
 
 ### this.$refs[formName].validat验证（自定义校验）
+
+
 
 验证不生效可参考文章  https://www.jianshu.com/p/5ebd1bd9ecaf
 
@@ -1071,6 +1075,25 @@ css  注意：/deep/  不能缺少
 }
 ```
 
+## vue里cdn引入改为本地js文件引用
+
+[vue里cdn引入改为本地js文件引用](https://www.cnblogs.com/qingjiawen/p/17292707.html)
+
+下载需要引入的 js文件 到public文件夹下
+
+在index.html引入
+
+```js
+<% if(process.env.NODE_ENV === 'production' && process.env.VUE_APP_PREVIEW!='true'){
+                %>
+                <script src="/static/vue.main.js"></script>
+                <script src="/static/vue-router.min.js"></script>
+                <script src="/static/vuex.min.js"></script>
+                <script src="/static/axios.min.js"></script>
+                <%
+            } %>
+```
+
 
 
 ## vue实现全屏滚动效果
@@ -1333,7 +1356,66 @@ Vue.use(VueJsonp)
    }
 ```
 
+## Vue实现微信扫码登录
 
+[vue-wxlogin - npm (npmjs.com)](https://www.npmjs.com/package/vue-wxlogin)
+
+[【精选】微信扫码登录详细操作流程（微信公众平台开发）_微信公众号扫码登录-CSDN博客](https://blog.csdn.net/weixin_43890049/article/details/119463862)
+
+组件 wxlogin.vue
+
+```vue
+<template>
+  <div class="main_wx">
+    <wxlogin
+      v-if="appid && redirect_uri"
+      :appid="appid"
+      scope="snsapi_login"
+      :redirect_uri="redirect_uri"
+      :href="href"
+      :state="state"
+    ></wxlogin>
+  </div>
+</template>
+
+<script>
+import wxlogin from "vue-wxlogin"
+export default {
+  name: "WxLogin",
+  components: { wxlogin },
+  data () {
+    return {
+      appid: "wx1234567890",
+      // 重定向地址，需要进行UrlEncode
+      redirect_uri: "www.baidu.com/loginByWx",
+      state: "1",
+      href: "", // 自定义样式链接
+      wxVisible: true
+    }
+  },
+
+  mounted () {},
+  methods: {
+    // 获取微信appid和回调地址redirect_uri，指定内嵌的路由地址weChatLogin
+    // getWeChatUrl () {
+    //   if (res && res.code === "0000") {
+    //     const data = res.data
+    //     this.appid = "wx1234567890"
+    //     this.redirect_uri = +"weChatLogin"
+    //   }
+    //   // });
+    // }
+  }
+}
+</script>
+<style scoped>
+.main_wx {
+  display: flex;
+  justify-content: center;
+}
+</style>
+
+```
 
 
 
@@ -1621,11 +1703,27 @@ disableHostCheck:true
 
 https://www.cpolar.com/
 
+[登录失败，用户不一致 - cpolar 极点云](https://www.cpolar.com/blog/inconsistent-users#:~:text=找到cpolar配置文件%3Ac%3AUsers用户名.cpolarcpolar.yml。 选中cpolar.yml文件，右键点击"打开方式"——"记事本"，选择使用记事本打开配置文件。 在配置文件，删除authtoken一行和email一行。 保存cpolar.yml配置文件。,在控制面板—管理工具—服务—cpolar service，重启服务。 重新登录cpolar web UI管理界面即可。)
+
 
 
 NeutrinoProxy：内网穿透神器
 
 https://mp.weixin.qq.com/s/4hyQsTICIUf9EvAVrC6wEg
+
+
+
+## Port 8088 was already in use.
+
+https://blog.csdn.net/weixin_43845597/article/details/115000670
+
+1.打开[cmd](https://so.csdn.net/so/search?q=cmd&spm=1001.2101.3001.7020)运行界面，输入命令netstat -ano，查看端口进程的 ID
+
+2.找到8088端口已经占用的进程，并且进程ID为1234
+
+3.将此进程ID对应的服务杀掉，命令：taskkill /F /pid 1234
+
+4.再次重启springboot项目，确认是否可以正常启动
 
 ## 前端dom生成文件下载
 

@@ -14,6 +14,8 @@ typora-root-url: ..\..\.vuepress\public
 
 # springboot
 
+纯净的springBoot示例项目：[刘潇/springboot-pure - 码云 - 开源中国 (gitee.com)](https://gitee.com/click33/springboot-pure)
+
 ### 学前拓展：mybatis    [B站视频资料](https://www.aliyundrive.com/drive/folder/64b62f7c7f489a9922244688af39ca6ae035ebb2) 
 
 
@@ -856,6 +858,8 @@ public class ProjectExceptionAdvice {
 
 命令行  java -jar  jar包文件名    运行
 
+nohup   java -jar  jar包文件名
+
 指定端口号   java -jar  jar包文件名   **--server.port=8085** 
 
  [(227条消息) jar包在linux上持续运行及终止运行的命令_linux 停止持久运行_羊糕的博客-CSDN博客](https://blog.csdn.net/qq_44142640/article/details/111687863) 
@@ -1002,10 +1006,6 @@ ALTER USER 'root'@'localhost' IDENTIFIED WITH mysql_native_password BY '123456';
 2）修改mysql库中host值，使用update user set host='%' where user='root' limit 1;命令。
 
 3）刷新mysql权限，使用flush privileges;命令。
-
-
-
-
 
 
 

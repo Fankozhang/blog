@@ -445,3 +445,5 @@ dataZoom: [
 学习视频线上文档： [Three.js中文网 (webgl3d.cn)](http://www.webgl3d.cn/) 
 
 官方文档： [创建一个场景 – three.js docs (threejs.org)](https://threejs.org/docs/index.html#manual/zh/introduction/Creating-a-scene) 
+
+[threejs-park: 基于vue3，threeJS智慧园区 (gitee.com)](https://gitee.com/303711888/threejs-park)
