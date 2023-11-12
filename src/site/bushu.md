@@ -11,6 +11,10 @@ typora-root-url: ..\.vuepress\publixi
 
 # 项目部署相关
 
+## 相关文章：
+
+[Springboot+Vue在开发和部署相关问题解决 (qq.com)](https://mp.weixin.qq.com/s/TEk9PnWBceh35g1Px5XcLQ)
+
 ## 参考案例(若依部署)
 
 [RuoYi-Vue 部署 Linux环境 若依前后端分离项目（jar包+nginx 单机版本）_ruoyi-vue 部署 linux环境 若依前后端分离项目(jar包+nginx 单机版本) 原创-CSDN博客](https://blog.csdn.net/weixin_40816738/article/details/105374594)

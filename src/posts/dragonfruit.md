@@ -70,6 +70,8 @@ scss复制代码/* uni.scss */
 
 ## uni-app发起网络请求
 
+[uni-app网络请求封装 (qq.com)](https://mp.weixin.qq.com/s/_HVuKltElr07_iIc6CTCGQ)
+
 ### 原生的uni.request发起请求
 
 main.js里面设置根地址

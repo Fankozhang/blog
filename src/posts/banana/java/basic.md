@@ -229,9 +229,17 @@ B站直达：https://www.bilibili.com/video/BV1AP411s7D7
 
 资料 ： [教案 · 东方凝洛/尚硅谷ssm-springboot-2023视频资料 - 码云 - 开源中国 (gitee.com)](https://gitee.com/fankozhang/ssm/tree/master/教案) 
 
-
+### myBatis
 
  [MyBatis 动态 SQL 最全教程，这样写 SQL 太爽了！ (qq.com)](https://mp.weixin.qq.com/s/jEGLpIA9HWOdN3WOq46K1g) 
+
+### MyBatis-plus
+
+[MyBatis-plus最详细的入门使用教程来了 (qq.com)](https://mp.weixin.qq.com/s/kKH0c2GTtd_c2Ptqh-zJbA)
+
+黑马视频：[day01-MybatisPlus - 飞书云文档 (feishu.cn)](https://b11et3un53m.feishu.cn/wiki/PsyawI04ei2FQykqfcPcmd7Dnsc)
+
+
 
 ## mysql
 

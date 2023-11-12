@@ -233,6 +233,12 @@ git命令行操作：   [Git 常用基本命令使用详细大全_git 命令-CSD
 
 [真的绝了，通过注释来埋点好简单！！ (qq.com)](https://mp.weixin.qq.com/s/SqHTWwbepjjZ42jNi1-uGw)
 
+[Nginx 同一端口下部署多个 Vue3 项目 (qq.com)](https://mp.weixin.qq.com/s/HwGoXJxOjVDaALTpOgRG1w)
+
+[一文揭秘Vue3组件库的优雅打包与细节 (qq.com)](https://mp.weixin.qq.com/s/cgBd1M5wcANOb24w4efArQ)
+
+[接私活神器！一个Spring Boot + MyBatis-Plus版微信支付项目开源了 (qq.com)](https://mp.weixin.qq.com/s/gqVyrG6yZCIIWzUlx86nMg)
+
 ## 开源项目收藏（源码收藏）
 
 我的测试项目：[东方凝洛/我的测试仓库 - 码云 - 开源中国 (gitee.com)](https://gitee.com/fankozhang/my-testing-warehouse/tree/master)
@@ -260,6 +266,8 @@ smartadmin：开源SpringBoot和Vue的企业级项目，代码很规范   https:
 提取码：9988
 
 [1560分钟一节课VUE项目从入门到精通！ (qq.com)](https://mp.weixin.qq.com/s/LcLL-vnXLrRH_f8lRyyumA)
+
+黑马视频：[MybatisPlus   文档，里面有视频地址](https://b11et3un53m.feishu.cn/wiki/PsyawI04ei2FQykqfcPcmd7Dnsc)
 
 
 
