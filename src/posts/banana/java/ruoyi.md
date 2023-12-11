@@ -161,8 +161,55 @@ form: {
 
 
 
+## **[ruoyi_vue3_ts](https://gitee.com/lyforvue/ruoyi_vue3_ts)**  
+
+[ruoyi_vue3_ts: 来自若依vue3的js版本，改写为ts版本 (gitee.com)](https://gitee.com/lyforvue/ruoyi_vue3_ts)
+
+
+
 ## RuoYi-Vue-Plus
 
 [框架介绍 (dromara.org)](https://plus-doc.dromara.org/#/README)
 
 作者：[May (sgs98) - Gitee.com](https://gitee.com/sgs98)
+
+相关视频教程可参考 [抓蛙师的个人空间-抓蛙师个人主页-哔哩哔哩视频 (bilibili.com)](https://space.bilibili.com/520725002/channel/seriesdetail?sid=2498849)
+
+## 运行
+
+### 后端启动
+
+sql文件路径   RuoYi-Vue-Plus\script\sql
+
+数据库中新建 ry-vue-plus 数据库，依次运行 上面 sql 路径里面的三个sql文件，如果需要版本升级，需要运行 update 文件夹里面的sql文件
+
+
+
+application-dev.yml  里面修改数据库连接的配置信息
+
+application-dev.yml  增加redis前缀
+
+```
+redisson:
+  # redis key前缀
+  keyPrefix: ruoYiPlus
+```
+
+开启 redis server
+
+maven下载依赖，如果运行出错，可以clean 和 install 之后再重新启动后台项目
+
+
+
+### 前端启动
+
+npm install --registry=https://registry.npmmirror.com
+
+npm run dev
+
+
+
+## 接口文档
+
+官网推荐使用apifox ,   如何将接口导入apifox看官网：[接口文档 (dromara.org)](https://plus-doc.dromara.org/#/ruoyi-vue-plus/framework/association/doc)
+

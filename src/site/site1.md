@@ -72,7 +72,11 @@ tag:
 
 - [W3Schools 在线教程(内容挺多，也详细)](https://www.w3schools.cn/) 
 
--      [基础教程(nhooo.com) - 学好基础,才能走的更远！](https://www.nhooo.com/)
+- [基础教程(nhooo.com) - 学好基础,才能走的更远！](https://www.nhooo.com/)
+
+- [第二版序 | 《Flutter实战·第二版》 (flutterchina.club)](https://book.flutterchina.club/#第二版变化)
+
+-      [2023最全高质量前端资源分享 - 掘金 (juejin.cn)](https://juejin.cn/post/7304932252827287604#heading-48)
 
 
 
@@ -155,13 +159,14 @@ tag:
 
   
 
-开源
+## 开源项目
 
-- https://github.com/501351981/vue-office    支持多种文件(**docx、excel、pdf**)预览的vue组件库，支持vue2/3。 
+- 支持多种文件(**docx、excel、pdf**)预览的vue组件库，支持vue2/3。   https://github.com/501351981/vue-office    
+- 拖拽  [vue-draggable-plus | vue-draggable-plus (alfred-skyblue.github.io)](https://alfred-skyblue.github.io/vue-draggable-plus/guide/)
 
 
 
-低代码：
+## 低代码
 
 [guiplan低代码开发平台](http://www.guiplan.com/)
 
@@ -169,41 +174,65 @@ tag:
 
 ## 文章收藏
 
-vue和react对比学习（详细的）：  [React - 苏苏同学的专栏 - 掘金 (juejin.cn)](https://juejin.cn/column/7052614061607321631)
-
-git命令行操作：   [Git 常用基本命令使用详细大全_git 命令-CSDN博客](https://blog.csdn.net/qtiao/article/details/97783243)
-
-[前端常用网站汇总，一定有你想要的🔥🔥🔥 - 掘金 (juejin.cn)](https://juejin.cn/post/7023188150629433357)
+### 前端相关
 
  [写给5年前端妹子的三万字脚手架教程 - 掘金 (juejin.cn)](https://juejin.cn/post/7260144602471776311) 
 
 [前端传参如果参数过多你还会拼接在URL上嘛？ - 掘金 (juejin.cn)](https://juejin.cn/post/7291468863395954749)
 
-[一次性弄清前端上线和生产环境地址 - 掘金-nginx代理配置 (juejin.cn)](https://juejin.cn/post/7291952951048060940)
-
-[开箱即用的 Uniapp 最佳实践集成模板 - 掘金 (juejin.cn)](https://juejin.cn/post/7275932720633888829)
-
 [[小白知识点学习+实战\]大厂布局！-瀑布流+实战案例 - 掘金 (juejin.cn)](https://juejin.cn/post/7296062929098981402)
 
 [常见文件下载与上传方式整理 - 掘金 (juejin.cn)](https://juejin.cn/post/7296089060833017871)
 
-[Vue3，Vuex，ES6，json-serve，pinia - 掘金 (juejin.cn)](https://juejin.cn/post/7296017207099588671#heading-59)
-
-[ElectronEgg 快速开发一个桌面应用 - 掘金 (juejin.cn)](https://juejin.cn/post/7292961931509186595)
-
 [大文件切片上传续传秒传 ](https://mp.weixin.qq.com/s/uFTHhIjHZdbPd9V-DyI6lg)
-
-[[Github实战\]双重认证2FA 如何 设置/更改[手把手][2022] - 掘金 (juejin.cn)](https://juejin.cn/post/7154286738280546317#1_2)
 
 [这些天，我们前端组一起处理的项目优化点 (qq.com)](https://mp.weixin.qq.com/s/p4sxLSQt77qeyefPJslI-g)
 
-[🚀 10 个 GitHub 存储库，助你成为前端巨匠✨ - 掘金 (juejin.cn)](https://juejin.cn/post/7287913225168617487)
+[打造我的 Windows 开发环境 - 掘金 (juejin.cn)](https://juejin.cn/post/7245567988248821797#heading-0)
 
-[一键生成前端UI，公司90%项目UI都靠它搞定！react后台管理代码生成 (qq.com)](https://mp.weixin.qq.com/s/4db4fn8yu98_H2N156R25g)
+[多账号统一登录方案就该这么设计（万能通用），稳的一批！ (qq.com)](https://mp.weixin.qq.com/s/GbQvrMVYlDk3kj3dMG-HMQ)
+
+[你知道前端水印功能是怎么实现的吗？ (qq.com)](https://mp.weixin.qq.com/s/sGvnqM1ynec7fvcQijfOzA)
+
+[面试官：生产环境构建时为什么要提取css文件？ - 掘金 (juejin.cn)](https://juejin.cn/post/7241364419359801405)
+
+[真的绝了，通过注释来埋点好简单！！ (qq.com)](https://mp.weixin.qq.com/s/SqHTWwbepjjZ42jNi1-uGw)
+
+[前端知识tips](https://mp.weixin.qq.com/s/SO_ICq2k9CeerFJU2aybXQ)
+
+### css
+
+[css 实现边框](https://juejin.cn/post/7240458275269984314)
+
+### vue
+
+vue和react对比学习（详细的）：  [React - 苏苏同学的专栏 - 掘金 (juejin.cn)](https://juejin.cn/column/7052614061607321631)
+
+[Vue3，Vuex，ES6，json-serve，pinia - 掘金 (juejin.cn)](https://juejin.cn/post/7296017207099588671#heading-59)
 
 [细说 Vue 响应式原理的 10 个细节！ (qq.com)](https://mp.weixin.qq.com/s/U9d_mD58B8TzFwG5pQTeHA)
 
-[打造我的 Windows 开发环境 - 掘金 (juejin.cn)](https://juejin.cn/post/7245567988248821797#heading-0)
+[一文揭秘Vue3组件库的优雅打包与细节 (qq.com)](https://mp.weixin.qq.com/s/cgBd1M5wcANOb24w4efArQ)
+
+[Vue有20样写法，你知道么？ - 掘金 (juejin.cn)](https://juejin.cn/post/7303832834623111178#heading-11)
+
+### React
+
+[一键生成前端UI，公司90%项目UI都靠它搞定！react后台管理代码生成 (qq.com)](https://mp.weixin.qq.com/s/4db4fn8yu98_H2N156R25g)
+
+[8 种在 React 中实现条件渲染技术的方法 (qq.com)](https://mp.weixin.qq.com/s/WXlB2Mc7fsAHmjXp-_PTMw)
+
+### git
+
+git命令行操作：   [Git 常用基本命令使用详细大全_git 命令-CSDN博客](https://blog.csdn.net/qtiao/article/details/97783243)
+
+[[Github实战\]双重认证2FA 如何 设置/更改[手把手][2022] - 掘金 (juejin.cn)](https://juejin.cn/post/7154286738280546317#1_2)
+
+[🚀 10 个 GitHub 存储库，助你成为前端巨匠✨ - 掘金 (juejin.cn)](https://juejin.cn/post/7287913225168617487)
+
+### 跨端技术
+
+[ElectronEgg 快速开发一个桌面应用 - 掘金 (juejin.cn)](https://juejin.cn/post/7292961931509186595)
 
 [android studio如何连接夜神模拟器_android连接夜神模拟器-CSDN博客](https://blog.csdn.net/My_Deng_Peng/article/details/82153940)
 
@@ -213,13 +242,27 @@ git命令行操作：   [Git 常用基本命令使用详细大全_git 命令-CSD
 
 [React Native 练习时长 2 月半，踩坑总结 - 掘金 (juejin.cn)](https://juejin.cn/post/7234407587118530597)
 
-[多账号统一登录方案就该这么设计（万能通用），稳的一批！ (qq.com)](https://mp.weixin.qq.com/s/GbQvrMVYlDk3kj3dMG-HMQ)
+### uniapp
 
-[css 实现边框](https://juejin.cn/post/7240458275269984314)
+[开箱即用的 Uniapp 最佳实践集成模板 - 掘金 (juejin.cn)](https://juejin.cn/post/7275932720633888829)
 
-[你知道前端水印功能是怎么实现的吗？ (qq.com)](https://mp.weixin.qq.com/s/sGvnqM1ynec7fvcQijfOzA)
+### 部署
+
+[一次性弄清前端上线和生产环境地址 - 掘金-nginx代理配置 (juejin.cn)](https://juejin.cn/post/7291952951048060940)
 
 [spring Boot 项目部署方案！打包 + Shell 微信公众平台 (qq.com)](https://mp.weixin.qq.com/s/4oVFhyoGC32cGSn3iio4sA)
+
+[Nginx 同一端口下部署多个 Vue3 项目 (qq.com)](https://mp.weixin.qq.com/s/HwGoXJxOjVDaALTpOgRG1w)
+
+### 汇总
+
+[前端常用网站汇总，一定有你想要的🔥🔥🔥 - 掘金 (juejin.cn)](https://juejin.cn/post/7023188150629433357)
+
+
+
+### 后端
+
+[接私活神器！一个Spring Boot + MyBatis-Plus版微信支付项目开源了 (qq.com)](https://mp.weixin.qq.com/s/gqVyrG6yZCIIWzUlx86nMg)
 
 [你管这破玩意儿叫 Token? (qq.com)](https://mp.weixin.qq.com/s/e9UmJJMHPNRNDiTSZN1z4w)
 
@@ -231,19 +274,15 @@ git命令行操作：   [Git 常用基本命令使用详细大全_git 命令-CSD
 
 [常用正则表达式最强整理 (qq.com)](https://mp.weixin.qq.com/s/ixGlgxQLz59UHxC7CHQRCw)
 
-[真的绝了，通过注释来埋点好简单！！ (qq.com)](https://mp.weixin.qq.com/s/SqHTWwbepjjZ42jNi1-uGw)
 
-[Nginx 同一端口下部署多个 Vue3 项目 (qq.com)](https://mp.weixin.qq.com/s/HwGoXJxOjVDaALTpOgRG1w)
-
-[一文揭秘Vue3组件库的优雅打包与细节 (qq.com)](https://mp.weixin.qq.com/s/cgBd1M5wcANOb24w4efArQ)
-
-[接私活神器！一个Spring Boot + MyBatis-Plus版微信支付项目开源了 (qq.com)](https://mp.weixin.qq.com/s/gqVyrG6yZCIIWzUlx86nMg)
 
 ## 开源项目收藏（源码收藏）
 
 我的测试项目：[东方凝洛/我的测试仓库 - 码云 - 开源中国 (gitee.com)](https://gitee.com/fankozhang/my-testing-warehouse/tree/master)
 
 smartadmin：开源SpringBoot和Vue的企业级项目，代码很规范   https://smartadmin.vip/  **https://gitee.com/lab1024/smart-admin**
+
+[AbuCoder-RuoYi-Vue-uniapp-wx: 一直想做一款基于若依后台管理系统的微信小程序，最近比较闲了，所以想做个简单的东西。主要为了学习，走一遍整个过程，也是为像我这种小白提供些简单的学习内容。 这是一套前后端一起的脚手架，省去了好多需要写的东西，开箱即用 (gitee.com)](https://gitee.com/rahman/AbuCoder-RuoYi-Vue-uniapp-wx)
 
 
 
@@ -253,6 +292,12 @@ smartadmin：开源SpringBoot和Vue的企业级项目，代码很规范   https:
 
 【链接：https://pan.baidu.com/s/1ako2ZmIYTJZXOKTP3oesRg?pwd=8888
 提取码：8888】
+
+
+
+[分享一个很实用的开源培训系统，真心推荐给大家去用 (qq.com)](https://mp.weixin.qq.com/s/PvXcNociW8eV49NfoOBiBg)
+
+基于SpringBoot+Vue实现的小区物业管理系统：[基于SpringBoot+Vue实现的小区物业管理系统 (qq.com)](https://mp.weixin.qq.com/s/TPxJIfRWdpnbjxXFaZumWw)
 
 
 

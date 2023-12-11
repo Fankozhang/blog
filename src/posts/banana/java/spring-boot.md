@@ -3067,6 +3067,86 @@ public class thymeController {
 
  https://wwmj.lanzoue.com/iYBOx1a6cbab    密码:guv2 
 
+
+
+## 文件相关
+
+[文件相关_寂寞旅行的博客-CSDN博客](https://blog.csdn.net/qq_32419139/category_12269593.html)
+
+### Minio
+
+#### linux 安装
+
+[MinIO对象存储 Linux — MinIO中文文档 | MinIO Linux中文文档](https://www.minio.org.cn/docs/minio/linux/index.html)
+
+#### docker 安装（实测可用）
+
+ [Docker 搭建 Minio 容器 (完整详细版)_docker minio-CSDN博客](https://blog.csdn.net/BThinker/article/details/125412751)
+
+**下载Minio镜像**
+
+| 命令                                                      | 描述                                                         |
+| :-------------------------------------------------------- | :----------------------------------------------------------- |
+| docker pull minio/minio                                   | 下载最新版Minio镜像 (其实此命令就等同于 : docker pull minio/minio:latest ) |
+| docker pull minio/minio:RELEASE.2022-06-20T23-13-45Z.fips | 下载指定版本的Minio镜像 (xxx指具体版本号)                    |
+
+ **检查当前所有[Docker](https://so.csdn.net/so/search?q=Docker&spm=1001.2101.3001.7020)下载的镜像**         docker images
+
+**创建目录**
+
+> 一个用来存放配置，一个用来存储上传文件的目录
+>
+> 启动前需要先创建Minio外部挂载的配置文件（ /home/minio/config）,和存储上传文件的目录（ /home/minio/data）
+
+```
+mkdir -p /home/minio/config
+mkdir -p /home/minio/data
+```
+
+**创建Minio容器并运行**
+
+多行模式 
+
+```
+docker run -p 9000:9000 -p 9090:9090 \
+     --net=host \
+     --name minio \
+     -d --restart=always \
+     -e "MINIO_ACCESS_KEY=minioadmin" \
+     -e "MINIO_SECRET_KEY=minioadmin" \
+     -v /home/minio/data:/data \
+     -v /home/minio/config:/root/.minio \
+     minio/minio server \
+     /data --console-address ":9090" -address ":9000"
+```
+
+单行模式 
+
+```
+docker run -p 9000:9000 -p 9090:9090      --net=host      --name minio      -d --restart=always      -e "MINIO_ACCESS_KEY=minioadmin"      -e "MINIO_SECRET_KEY=minioadmin"      -v /home/minio/data:/data      -v /home/minio/config:/root/.minio      minio/minio server      /data --console-address ":9090" -address ":9000"
+
+```
+
+9090端口指的是minio的客户端端口
+
+MINIO_ACCESS_KEY ：账号
+
+MINIO_SECRET_KEY ：密码（账号长度必须大于等于5，密码长度必须大于等于8位）
+
+**访问**
+
+访问：http://127.0.0.1:9090/login 用户名：密码 minioadmin：minioadmin  （自己设置的）
+
+
+
+[minIO设置直接通过访问链接在浏览器中打开文件_minio直接访问文件-CSDN博客](https://blog.csdn.net/destin223/article/details/134110194#:~:text=访问文件网址为：ip%3Aaddress%2Fbucket的名字%2F文件的名字。,2、进入页面后，配置只读访问权限，prefix按照提示输入就好。)
+
+在minio上传的文件以    ip:address/bucket的名字/文件的名字  路径来访问
+
+
+
+实测可用（java使用 minio）：[Docker 搭建 Minio 容器 (完整详细版) (qq.com)](https://mp.weixin.qq.com/s/Ejz4RMt9m0nBgFFPGFtjrg)
+
 ## 文章收藏
 
  [告别繁琐：SpringBoot 拦截器与统一功能处理 (qq.com)](https://mp.weixin.qq.com/s/evA1d1vY9Nqt72zFNQvgeA) 

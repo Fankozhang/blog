@@ -8,15 +8,15 @@ tag:
   - electron
 ---
 
-# 知识拓展(electron,qiankun)
+# 知识拓展(electron,微服务)
 
-# electron
+## electron
 
 学习视频地址：https://www.bilibili.com/video/BV1QB4y1F722?p=1&vd_source=f25f5a8d75a3a60d5a288f726803ec11
 
 相关技术  electron-egg:  [介绍 | electron-egg (kaka996.com)](https://www.kaka996.com/pages/8ef798/) 
 
-## 创建electron项目
+### 创建electron项目
 
 1 electron/electron-quick-start  官网示例
 
@@ -55,7 +55,7 @@ cnpm install --save-dev electron   // 不安装这个依赖会报错，报错后
 
  注释掉 src/index.js 的   mainWindow.webContents.openDevTools();  关闭打开窗口默认打开 devtools
 
-## 生命周期
+### 生命周期
 
 官网 api   [app | Electron (electronjs.org)](https://www.electronjs.org/zh/docs/latest/api/app#apprequestsingleinstancelockadditionaldata) 
 
@@ -75,7 +75,7 @@ requestSingleInstanceLock()  true 或 false 禁止多开
 
 
 
-## 打包
+### 打包
 
 1  当适用 electron forge 时
 
@@ -115,7 +115,7 @@ package.json中加入如下命令
 
 下载文件为  https://wwmj.lanzoue.com/b02ef6w8d   密码:7ylu 
 
-## index.js
+### index.js
 
 ```js
 const { app, BrowserWindow } = require('electron');
@@ -163,7 +163,7 @@ app.on('activate', () => {
 
 ```
 
-## 实现读取文件功能
+### 实现读取文件功能
 
 ```html
 <div id="holder">💖文件拖拽到这里</div>
@@ -204,7 +204,7 @@ holder.addEventListener("dragover", function(e) {
 })
 ```
 
-## webview操作和使用
+### webview操作和使用
 
 ```html
 <!-- webview嵌入的网页 所有 target 为 _blank 的 a 标签点击都没反应，这是因为 webview 默认不允许打开新窗口，需要设置 allowpopups 属性才行 -->
@@ -251,7 +251,7 @@ var webview = document.getElementById("wview")
     })
 ```
 
-## 主进程和渲染进程通讯
+### 主进程和渲染进程通讯
 
 index.js      （主进程）
 
@@ -345,7 +345,7 @@ const cWindow = (url) => {
 
 ```
 
-## dialog弹出框
+### dialog弹出框
 
 index.js
 
@@ -393,7 +393,7 @@ const createWindow = () => {
 };
 ```
 
-## 自带的请求模块
+### 自带的请求模块
 
 ```
 const { net } = require('electron');
@@ -410,7 +410,7 @@ const { net } = require('electron');
     request.end()
 ```
 
-## electron-vue（不维护，打包报错，不推荐使用了）
+### electron-vue（不维护，打包报错，不推荐使用了）
 
  [简介 · electron-vue (gitbooks.io)](https://simulatedgreg.gitbooks.io/electron-vue/content/cn/) 
 
@@ -440,7 +440,7 @@ yarn run dev # 或者 npm run dev
 import 'polyfill-object.fromentries';
 ```
 
-## electron-vue build  打包的坑
+### electron-vue build  打包的坑
 
  [electron-vue build的坑 - 简书 (jianshu.com)](https://www.jianshu.com/p/55d0e5b6c085) 
 
@@ -448,7 +448,7 @@ import 'polyfill-object.fromentries';
 
 （打包问题很多）
 
-## ant design vue
+### ant design vue
 
 下载导入 ant-design-vue  报错 
 
@@ -460,7 +460,7 @@ import 'polyfill-object.fromentries';
 
  安装先前版本：cnpm install ant-design-vue@1.7.2 
 
-## electron解决跨域问题（请求数据）
+### electron解决跨域问题（请求数据）
 
 ```
 在electron-vue创建的项目中，在目录src/main/index,js中增加配置
@@ -477,7 +477,7 @@ mainWindow = new BrowserWindow({
     })
 ```
 
-## 路由
+### 路由
 
 ```
 // 路由写法和vue的写法一样，但如果使用require引入的话注意后面的.default不能漏
@@ -501,7 +501,7 @@ routes: [{
 
 
 
-## 搭建vue+Electron应用（推荐这种构建）
+### 搭建vue+Electron应用（推荐这种构建）
 
 **(搭建electron项目，简单快捷,推荐)**
 
@@ -534,11 +534,11 @@ module.exports = {
 
 
 
-## electron自定义菜单
+### electron自定义菜单
 
  [Electron 中的原生菜单 - 掘金 (juejin.cn)](https://juejin.cn/post/7209826725365645369#heading-1) 
 
-### 顶部菜单栏
+#### 顶部菜单栏
 
  菜单栏部分配置可查看 [Electron 编写菜单栏 - Mr. Ma's Blog (misterma.com)](https://www.misterma.com/archives/896/) 
 
@@ -662,7 +662,7 @@ import "./js/menu"
 
 
 
-### 侧边菜单栏
+#### 侧边菜单栏
 
  借鉴  [vue + electronの文件读写_Electron_空城机_InfoQ写作社区](https://xie.infoq.cn/article/ba9f61c8506c9b67f6b34de06)    [Menu | Electron (electronjs.org)](https://www.electronjs.org/zh/docs/latest/api/menu) 
 
@@ -763,7 +763,7 @@ window.ipcRenderer.on('context-menu-command', (e, command) => {
 })
 ```
 
-### 系统托盘
+#### 系统托盘
 
 ```js
 import {
@@ -810,7 +810,7 @@ app.on('ready', async() => {
 })
 ```
 
-## 窗口设置
+### 窗口设置
 
 ```js
 const win = new BrowserWindow({
@@ -850,7 +850,7 @@ win.once('ready-to-show', function() {
     })
 ```
 
-## 调用摄像头
+### 调用摄像头
 
 摄像头被占用会报错（Could not start video source） 关闭占用的软件即可  
 
@@ -885,7 +885,7 @@ win.once('ready-to-show', function() {
 </script>
 ```
 
-## 调用屏幕内容
+### 调用屏幕内容
 
 只要更改stream的获取即可
 
@@ -893,7 +893,7 @@ win.once('ready-to-show', function() {
 const stream= await navigator.mediaDevices.getDisplayMedia({video:true})
 ```
 
-## 屏幕录制和播放
+### 屏幕录制和播放
 
 ```vue
 <template>
@@ -970,13 +970,116 @@ const stream= await navigator.mediaDevices.getDisplayMedia({video:true})
 </script>
 ```
 
-# qiankun  微服务
+## 微前端
+
+微前端就是将前端应用分解成一些更小,更简单的,能够独立开发,测试,部署的小模块,而在用户看来仍然是一个整体的产品技术或者思想
+
+微前端介绍：https://juejin.cn/column/7117245118465179661
+
+[微前端系列 - 三门的专栏 - 掘金 (juejin.cn)](https://juejin.cn/column/7132658057464512519)
+
+[一文读懂5种微前端常用方案 - 知乎 (zhihu.com)](https://zhuanlan.zhihu.com/p/556422347)
+
+
+
+[Cloudflare Workers 和微前端：为彼此而生 (yuque.com)](https://www.yuque.com/kuitos/gky7yw/uohnpu4ddkgf4vt5)
+
+[探索微前端的场景极限 - 知乎 (zhihu.com)](https://zhuanlan.zhihu.com/p/355419817)
+
+介绍17个可以实现微前端的方案：https://juejin.cn/post/7090352489223946271#heading-22
+
+[微前端时代：打造高效、灵活的前端开发体系](https://mp.weixin.qq.com/s/SE_nHEDeXVO47YJdA086dg)
+
+### JavaScript 沙箱
+
+沙箱（Sandbox）是一种用于隔离正在运行程序的安全机制，通常用于执行未经测试或不受信任的程序或代码，它会为待执行的程序创建一个独立的执行环境，内部程序的执行不会影响到外部程序的运行。
+
+利用沙箱，来防止代码对全局产生影响。
+
+[浅析 JavaScript 沙箱 - 掘金 (juejin.cn)](https://juejin.cn/post/7148335784431468551)
+
+[实现 JavaScript 沙箱的几种方式 - 掘金 (juejin.cn)](https://juejin.cn/post/6991025700077568030)
+
+### css样式隔离
+
+[微前端中常见的几种CSS隔离实现方案 - 掘金 (juejin.cn)](https://juejin.cn/post/7243681100005212221)
+
+[微前端 一、CSS隔离 - 掘金 (juejin.cn)](https://juejin.cn/post/7281113851713257487#heading-10)
+
+[【css作用域】scoped css和css module的区别 - 掘金 (juejin.cn)](https://juejin.cn/post/7036282734293024799#heading-2)
+
+### html-entry
+
+qiankun 框架使用的html-entry，single-spa使用的Js Entry 
+
+[JavaScript读源码系列--微前端之import-html-entry-CSDN博客](https://blog.csdn.net/daihaoxin/article/details/106250617)
+
+[为什么HTML Entry > JS Entry (michaeljier.cn)](https://michaeljier.cn/blog/html-entry)
+
+### umd
+
+[可能是最详细的UMD模块入门指南 - 掘金 (juejin.cn)](https://juejin.cn/post/6844903927104667662)
+
+### web components
+
+[Web Component - Web API 接口参考 | MDN (mozilla.org)](https://developer.mozilla.org/zh-CN/docs/Web/API/Web_components)
+
+Web Components 由三项主要技术组成，它们可以一起使用来创建封装功能的定制元素，可以在你喜欢的任何地方重用，不必担心代码冲突。
+
+- **Custom element（自定义元素）**：一组 JavaScript API，允许你定义 custom elements 及其行为，然后可以在你的用户界面中按照需要使用它们。
+- **Shadow DOM（影子 DOM）**：一组 JavaScript API，用于将封装的“影子”DOM 树附加到元素（与主文档 DOM 分开呈现）并控制其关联的功能。通过这种方式，你可以保持元素的功能私有，这样它们就可以被脚本化和样式化，而不用担心与文档的其他部分发生冲突。
+- **HTML template（HTML 模板）：** [` 和 [``](https://developer.mozilla.org/zh-CN/docs/Web/HTML/Element/slot) 元素使你可以编写不在呈现页面中显示的标记模板。然后它们可以作为自定义元素结构的基础被多次重用。
+
+Web Components是如何做到微前端：
+
+1. 技术栈无关：Web Components是浏览器原生组件，那即是在任何框架中都可以使用。
+2. 独立开发：使用Web Components开发的应用无需与其他应用间产生任何关联。
+3. 应用间隔离： Shadow DOM的特性，各个引入的微应用间可以达到相互隔离的效果。
+
+**Web Components是有能力以组件加载的方式将微应用整合在一起作为微前端的一种手段，但不幸的是，Web Components是浏览器的新特性，所以它的兼容性不是很好，如果有兼容性要求的项目还是无法使用，具体请查看can i use：[Can I use... Support tables for HTML5, CSS3, etc](https://caniuse.com/)。**
+
+
+
+[三大微前端框架，哪个才是你的理想型？ - 掘金 (juejin.cn)](https://juejin.cn/post/7309477710523269174)
+
+
+
+## iframe
+
+采用iframe的方案确实可以做到，而且优点非常明显
+
+优点
+
+- 非常简单，使用没有任何心智负担
+- web应用隔离的非常完美，无论是js、css、dom都完全隔离开来
+- 由于其隔离的太完美导致缺点也非常明显
+
+缺点
+
+1. url 不同步。浏览器刷新 iframe url 状态丢失、后退前进按钮无法使用。
+2. UI 不同步，DOM 结构不共享。想象一下屏幕右下角 1/4 的 iframe 里来一个带遮罩层的弹框，同时我们要求这个弹框要浏览器居中显示，还要浏览器 resize 时自动居中..
+3. 全局上下文完全隔离，内存变量不共享。iframe 内外系统的通信、数据同步等需求，主应用的 cookie 要透传到根域名都不同的子应用中实现免登效果。
+4. 慢。每次子应用进入都是一次浏览器上下文重建、资源重新加载的过程。
+
+## qiankun  微前端
 
  官网：[快速上手 - qiankun (umijs.org)](https://qiankun.umijs.org/zh/guide/getting-started#主应用) 
 
  参考：[基于qiankun（乾坤）的微前端实践总结 - 掘金 (juejin.cn)](https://juejin.cn/post/7121515637624537119#heading-16)   [qiankun-demo: 基于qiankun（乾坤）框架的微前端实践demo (gitee.com)](https://gitee.com/qiaoba_1/qiankun-demo) 
 
-## 主应用（vue搭建）：
+
+
+- 基于single-spa封装，提供了更加开箱即用的 API
+- 技术栈无关，任意技术栈的应用均可 使用/接入，不论是 React/Vue/Angular/JQuery 还是其他等框架
+- HTML Entry 接入方式，让你接入微应用像使用 iframe 一样简单
+- 样式隔离，确保微应用之间样式互相不干扰
+- JS 沙箱，确保微应用之间 全局变量/事件 不冲突
+- 资源预加载，在浏览器空闲时间预加载未打开的微应用资源，加速微应用打开速度
+- umi 插件，提供了 @umijs/plugin-qiankun 供 umi 应用一键切换成微前端架构系统 除了最后一点拓展以外，微前端想要达到的效果都已经达到。
+
+
+
+### 主应用（vue搭建）：
 
 安装qiankun：  npm **i** qiankun -S 
 
@@ -1036,9 +1139,13 @@ vueApp.$nextTick( () => {
 
 
 
-## 子应用（vue搭建）：
+### 子应用（vue搭建）：
 
  首先，在 Vue 子应用的 `src` 目录下新增 `public-path.js` 
+
+如果子应用出现静态资源地址404(js、css、图片)，建议设置`publicPath`来尝试解决这个问题。
+
+`publicPath`是webpack提供的功能，它可以补全静态资源的地址，详情参考webpack文档 [publicPath](https://webpack.docschina.org/guides/public-path/#on-the-fly)
 
 ```
 if (window.__POWERED_BY_QIANKUN__) {
@@ -1112,10 +1219,75 @@ module.exports = {
   configureWebpack: {
     output: {
       library: `${name}-[name]`,
-      libraryTarget: 'umd', // 把微应用打包成 umd 库格式
+      libraryTarget: 'umd', // 把微应用打包成 umd 库格式,否则报错
       jsonpFunction: `webpackJsonp_${name}`,
     },
   },
 };
 ```
 
+## Micro App 微前端
+
+`single-spa`是通过监听 url change 事件，在路由变化时匹配到渲染的子应用并进行渲染，这个思路也是目前实现微前端的主流方式。同时`single-spa`要求子应用修改渲染逻辑并暴露出三个方法：`bootstrap`、`mount`、`unmount`，分别对应初始化、渲染和卸载，这也导致子应用需要对入口文件进行修改。因为`qiankun`是基于`single-spa`进行封装，所以这些特点也被`qiankun`继承下来，并且需要对webpack配置进行一些修改。
+
+`micro-app`并没有沿袭`single-spa`的思路，而是借鉴了WebComponent的思想，通过CustomElement结合自定义的ShadowDom，将微前端封装成一个类WebComponent组件，从而实现微前端的组件化渲染。并且由于自定义ShadowDom的隔离特性，`micro-app`不需要像`single-spa`和`qiankun`一样要求子应用修改渲染逻辑并暴露出方法，也不需要修改webpack配置，是目前市面上接入微前端成本最低的方案。
+
+
+
+官网：[介绍 (micro-zoe.github.io)](https://micro-zoe.github.io/micro-app/docs.html#/)
+
+pnpm + Micro App 来实现 monorepo 微前端项目
+
+https://www.zhihu.com/question/338082919
+
+Demo : [MicroApp样例搭建【Vue】 - 掘金 (juejin.cn)](https://juejin.cn/post/7070153633739833375)
+
+官方案例：[GitHub - micro-zoe/micro-app-demo: micro-app 案例](https://github.com/micro-zoe/micro-app-demo)
+
+
+
+vue项目微前端搭建注意点：
+
+1  子应用要设置跨域支持
+
+​    （1） vue.config.js配置
+
+```
+module.exports = {
+    devServer: {
+      headers: {
+        'Access-Control-Allow-Origin': '*',
+      }
+    }
+  }
+```
+
+​	（2）vite默认开启跨域支持，不需要额外配置。
+
+2  vite作为子应用需`切换到iframe沙箱`，否则不显示，其它操作参考各框架接入文档。   [切换到iframe沙箱](https://micro-zoe.github.io/micro-app/docs.html#/zh-cn/framework/vite?id=切换到iframe沙箱)
+
+```html
+<micro-app name='xxx' url='xxx' iframe></micro-app>
+```
+
+
+
+## 无界 微前端
+
+iframe+Web Components
+
+官网：https://wujie-micro.github.io/doc/
+
+demo 预览地址：  https://wujie-micro.github.io/demo-main-vue/home
+
+无界demo创建：      npx create-wujie@latest      运行报错
+
+github demo 下载：https://github.com/Tencent/wujie     正常运行
+
+
+
+深入调研了微前端，还是iframe最香:https://juejin.cn/post/7244070072788287544?searchId=20231205100904B22A5A44F31159B751ED#heading-15
+
+https://juejin.cn/post/7212603829572911159?searchId=20231205100904B22A5A44F31159B751ED#heading-8
+
+[假如你是『无界』微前端框架的开发者 - 掘金 (juejin.cn)](https://juejin.cn/post/7212597327578808380#heading-3)

@@ -446,4 +446,72 @@ dataZoom: [
 
 官方文档： [创建一个场景 – three.js docs (threejs.org)](https://threejs.org/docs/index.html#manual/zh/introduction/Creating-a-scene) 
 
+
+
+[Vue3集成ThreeJS实现3D效果，threejs+Vite+Vue3+TypeScript 实战课程【一篇文章精通系列】-CSDN博客](https://blog.csdn.net/qq_44757034/article/details/134499395)
+
+[Three.js所有材质的属性及实例应用_meshstandardmaterial_请往我的生活里加满快乐的博客-CSDN博客](https://blog.csdn.net/Potatoyou/article/details/127905256)
+
+渲染基础：[Three.js初识:three.js的下载与使用_threejs官网模型选择到下载-CSDN博客](https://blog.csdn.net/weixin_40119412/article/details/104456240)
+
+导入模型基础：[three.js添加3d模型_threejs加载3d模型-CSDN博客](https://blog.csdn.net/xi1213/article/details/123244316?utm_medium=distribute.pc_relevant.none-task-blog-2~default~baidujs_baidulandingword~default-8-123244316-blog-104456240.235^v39^pc_relevant_yljh&spm=1001.2101.3001.4242.5&utm_relevant_index=11)     [three-load-model: three.js加载模型，可切换场景，异步加载3d模型。 (gitee.com)](https://gitee.com/xi1213/three-load-model)
+
+### Demo
+
 [threejs-park: 基于vue3，threeJS智慧园区 (gitee.com)](https://gitee.com/303711888/threejs-park)
+
+[Three.js 导入模型demo分析（随笔记）_three.js demo_Dyz_quite的博客-CSDN博客](https://blog.csdn.net/Dyz_397/article/details/122751301)
+
+[# 一篇文章了解 threejs 在 vue 项目中的基本使用 - 掘金 (juejin.cn)](https://juejin.cn/post/7209852595002032186#heading-19)
+
+[用Three.js做一个3d版的demo-纯前端（Vue3+Three.js+antvG2） - 掘金 (juejin.cn)](https://juejin.cn/post/7293463921729372201)
+
+[Chill the lion (codepen.io)](https://codepen.io/Yakudoo/full/YXxmYR)
+
+
+
+[从零开始初尝Three.js【大量案例、简单入手】 - 掘金 (juejin.cn)](https://juejin.cn/post/6844904177345232903#heading-20)
+
+[threejs3d模型可视化编辑系统: 🔥 🎉基于three.js开发的3D模型可视化编辑系统 包含模型加载，模型文件导入导出，模型背景图，全景图，模型动画，模型灯光，模型定位，辅助线，模型辉光，模型拖拽，模型拆解， 模型材质等可视化操作编辑系统，支持模型编辑数据保存和预览 (gitee.com)](https://gitee.com/ZHANG_6666/Three.js3D)
+
+[3D模型可视化编辑器 (gitee.io)](https://zhang_6666.gitee.io/three.js3d/)
+
+模型下载：[3D模型可视化编辑器 (gitee.io)](https://zhang_6666.gitee.io/three.js3d/)    fankoz  密码fanko202...
+
+[vue中，整合AntV + DataV实现可视化大屏 - 掘金 (juejin.cn)](https://juejin.cn/post/7252171811554967589#heading-8)
+
+
+
+### 问题及解决
+
+#### 贴图纹理渲染黑色：
+
+[Three.js 解决纹理渲染后模型为黑色_three.js 地球添加图片后全黑-CSDN博客](https://blog.csdn.net/qq_52697994/article/details/125613338)
+
+需要注意的是加载贴图的方法是一个异步方法，如果没用控制好渲染的时机，会导致渲染时黑色。
+
+#### 加载gltf模型看不见
+
+gltf加载器方法`.load()`方法也是一个异步方法，注意 renderer.render(scene, camera); //执行渲染操作 要在加载模型后再执行，否则看不见
+
+#### 下载为图片
+
+下载canvas图片时，发现并不能看见canvas的模型，使用如下方法解决，在渲染器中加入保留图形缓冲区 的配置
+
+```
+ // 创建渲染器对象
+
+ const renderer = new THREE.WebGLRenderer({
+
+   antialias:true,
+
+   preserveDrawingBuffer: true,//保留图形缓冲区
+
+ });
+```
+
+
+
+## Cesium
+
+Gis 方向

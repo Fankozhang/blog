@@ -137,7 +137,7 @@ nginx使用：https://juejin.cn/post/7112826654291918855#heading-1
 
 
 
-
+[三年前端还不会配置Nginx？刷完这篇就够了 - 掘金 (juejin.cn)](https://juejin.cn/post/7270153705877241890)
 
 ### 安装虚拟机，linux, nginx
 
@@ -560,6 +560,12 @@ Github Docker 源码：https://github.com/docker/docker-ce
 
 
 
+[Docker学习资料集（从入门到实践） (qq.com)](https://mp.weixin.qq.com/s/bIsWfzAXtT8i_Bx3r2cYBg)
+
+
+
+
+
 ### 安装docker
 
  [ Docker安装指南——如何在Linux中安装Docker？（最新2022-2 for centOS stream 8）](https://blog.csdn.net/m0_51338272/article/details/122801639) 
@@ -720,7 +726,21 @@ OPTIONS说明（常用）：
 | 删除一个容器           | docker rm -f 容器ID                                    |
 | 一次性删除多个容器实例 | docker rm -f $(docker ps -a -q)        docker ps -a -q |
 
+**启动一个已经停止的容器实例**
 
+docker start 容器ID或容器名
+
+1. 先查看已经暂停的容器实例信息
+   2. 通过docker start 59ec 启动容器
+      3. 通过docker ps 查看当前启动的容器
+
+**重启一个容器**
+
+docker restart 容器ID或容器名 ：不管容器是否启动，直接重启容器
+
+1. 首先 docker ps 查看正在运行的容器信息，显示2分钟前启动运行
+   2. docker restart 59ec 重启容器
+      3. 再次 docker ps 查看容器信息 显示 2秒前启动运行
 
 ##### 启动守护式容器(后台服务器)
 
@@ -934,6 +954,8 @@ ufw disable
 ### Docker常规安装简介
 
 搜索镜像  拉取镜像   查看镜像  启动镜像（服务端口映射）  停止容器  移除容器
+
+
 
 #### 安装tomcat
 
@@ -1329,6 +1351,8 @@ CMD /bin/bash
 
 ### Docker-compose容器编排
 
+[【前端Docker部署实战】Docker镜像+Nginx配置部署 Vue 项目 - 掘金 (juejin.cn)](https://juejin.cn/post/6992848354753380389?searchId=20231211102438BE77AE4A0746C6596E13)
+
 Compose 是 Docker 公司推出的一个工具软件，可以管理多个 Docker 容器组成一个应用。你需要定义一个 YAML 格式的配置文件docker-compose.yml，<u>写好多个容器之间的调用关系</u>。然后，只要一个命令，就能同时启动/关闭这些容器
 
 Docker-Compose是Docker官方的开源项目， 负责实现对Docker容器集群的快速编排。
@@ -1456,6 +1480,3 @@ docker run -d -p 8000:8000 -p 9000:9000 --name=portainer --restart=always -v /va
 
 
 
-## jenkens
-
- [使用 Docker 安装 Jenkins 并实现项目自动化部署-阿里云开发者社区 (aliyun.com)](https://developer.aliyun.com/article/892646) 

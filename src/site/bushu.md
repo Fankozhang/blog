@@ -308,3 +308,235 @@ navicat链接mysql  报错 2003，具体可能的问题如下：
 Web server failed to start. Port 8080 was already in use.
 
 [Linux 和 windows 下解决端口占用问题（ Port was already in use）_port 10802was alread inuse-CSDN博客](https://blog.csdn.net/u012995500/article/details/104494808)
+
+
+
+
+
+
+
+## Minio
+
+### linux 安装
+
+[MinIO对象存储 Linux — MinIO中文文档 | MinIO Linux中文文档](https://www.minio.org.cn/docs/minio/linux/index.html)
+
+### docker 安装（实测可用）
+
+ [Docker 搭建 Minio 容器 (完整详细版)_docker minio-CSDN博客](https://blog.csdn.net/BThinker/article/details/125412751)
+
+**下载Minio镜像**
+
+| 命令                                                      | 描述                                                         |
+| :-------------------------------------------------------- | :----------------------------------------------------------- |
+| docker pull minio/minio                                   | 下载最新版Minio镜像 (其实此命令就等同于 : docker pull minio/minio:latest ) |
+| docker pull minio/minio:RELEASE.2022-06-20T23-13-45Z.fips | 下载指定版本的Minio镜像 (xxx指具体版本号)                    |
+
+ **检查当前所有[Docker](https://so.csdn.net/so/search?q=Docker&spm=1001.2101.3001.7020)下载的镜像**         docker images
+
+**创建目录**
+
+> 一个用来存放配置，一个用来存储上传文件的目录
+>
+> 启动前需要先创建Minio外部挂载的配置文件（ /home/minio/config）,和存储上传文件的目录（ /home/minio/data）
+
+```
+mkdir -p /home/minio/config
+mkdir -p /home/minio/data
+```
+
+**创建Minio容器并运行**
+
+多行模式 
+
+```
+docker run -p 9000:9000 -p 9090:9090 \
+     --net=host \
+     --name minio \
+     -d --restart=always \
+     -e "MINIO_ACCESS_KEY=minioadmin" \
+     -e "MINIO_SECRET_KEY=minioadmin" \
+     -v /home/minio/data:/data \
+     -v /home/minio/config:/root/.minio \
+     minio/minio server \
+     /data --console-address ":9090" -address ":9000"
+```
+
+单行模式 
+
+```
+docker run -p 9000:9000 -p 9090:9090      --net=host      --name minio      -d --restart=always      -e "MINIO_ACCESS_KEY=minioadmin"      -e "MINIO_SECRET_KEY=minioadmin"      -v /home/minio/data:/data      -v /home/minio/config:/root/.minio      minio/minio server      /data --console-address ":9090" -address ":9000"
+
+```
+
+9090端口指的是minio的客户端端口
+
+MINIO_ACCESS_KEY ：账号
+
+MINIO_SECRET_KEY ：密码（账号长度必须大于等于5，密码长度必须大于等于8位）
+
+**访问**
+
+访问：http://127.0.0.1:9090/login 用户名：密码 minioadmin：minioadmin  （自己设置的）
+
+
+
+[minIO设置直接通过访问链接在浏览器中打开文件_minio直接访问文件-CSDN博客](https://blog.csdn.net/destin223/article/details/134110194#:~:text=访问文件网址为：ip%3Aaddress%2Fbucket的名字%2F文件的名字。,2、进入页面后，配置只读访问权限，prefix按照提示输入就好。)
+
+在minio上传的文件以    ip:address/bucket的名字/文件的名字  路径来访问
+
+
+
+实测可用（java使用 minio）：[Docker 搭建 Minio 容器 (完整详细版) (qq.com)](https://mp.weixin.qq.com/s/Ejz4RMt9m0nBgFFPGFtjrg)
+
+
+
+## 自动化部署
+
+[Jenkins+Gitee+Docker+Ruoyi项目前后端分离部署-CSDN博客](https://blog.csdn.net/weixin_43976226/article/details/133039035)
+
+### jenkens（docker安装）
+
+ [使用 Docker 安装 Jenkins 并实现项目自动化部署-阿里云开发者社区 (aliyun.com)](https://developer.aliyun.com/article/892646) 
+
+[Docker 搭建 Jenkins 容器 (完整详细版)_docker jenkins-CSDN博客](https://blog.csdn.net/BThinker/article/details/124178670)
+
+- 拉取镜像
+
+  ```
+  #查询镜像
+  docker search jenkins
+  
+  # docker pull jenkinsci/blueocean     // 这个镜像使用的时候有些插件如汉化插件 版本原因无法下载。
+  # docker pull jenkinsci/blueocean:1.25.3       具体版本下载
+  
+  
+  #下载镜像
+  docker pull jenkins/jenkins      // 这个镜像的插件大多正常下载，且自动下载汉化插件，个人推荐用这个
+  ```
+
+- 创建 Jenkins 工作目录，将容器内目录挂载到此目录上，这样我们可以在宿主机上对文件的修改同步到容器内。
+
+  ```
+  mkdir -p /usr/local/jenkins
+  chmod 777 /usr/local/jenkins
+  ```
+
+- 启动容器，同时映射宿主机和容器内端口。
+
+  ```
+  # -d 后台方式启动
+  # -p 映射端口，宿主机端口:容器内端口
+  # -v 挂载卷，将容器Jenkins工作目录/var/jenkins_home挂载到宿主机目录/usr/local/jenkins
+  # -name 给容器起个别名
+  docker run -d -p 8099:8080 -p 50099:50000 -v /usr/local/jenkins:/var/jenkins_home --name myjenkins jenkins/jenkins
+  ```
+
+- docker ps 查看容器是否启动成功。
+
+- 查看 Jenkins 容器日志。      docker logs myjenkins       能够看到一个密码，可以记下来，登录jenkens网页的时候会用到
+
+- 将 Jenkins 端口添加到防火墙。     （服务器安全组别忘了设置）
+
+  ```
+  firewall-cmd --zone=public --add-port=8099/tcp --permanent
+  systemctl restart firewalld
+  firewall-cmd --zone=public --list-ports
+  ```
+
+- 配置镜像加速
+
+  打开宿主机 Jenkins 工作目录下的`hudson.model.UpdateCenter.xml`文件。
+
+  ```
+  vim /usr/local/jenkins/hudson.model.UpdateCenter.xml
+  ```
+
+  url 修改为国内的清华大学官方镜像地址，最终内容如下：
+
+  ```
+  <?xml version='1.1' encoding='UTF-8'?>
+  <sites>
+    <site>
+      <id>default</id>
+      <url>https://mirrors.tuna.tsinghua.edu.cn/jenkins/updates/update-center.json</url>
+    </site>
+  </sites>
+  ```
+
+- 重启 Jenkins 服务。
+
+  ```
+  docker stop 容器ID
+  docker start 容器ID
+  ```
+
+- nginx 登录地址
+
+  服务器ip地址:8099
+
+  输入密码，安装插件（有些下载不了可以先不安装），创建账户，按照流程进行下一步的操作
+  
+  重启后，进入操作界面
+  
+- 中文插件配置
+
+  **操作步骤：**
+
+  - 安装插件：Manage Jenkins -> Manage Plugins -> Available -> Filter 中输入 Locale -> 勾选后点击 Install without restart
+  - 设置中文：Manage Jenkins -> Configure System -> Default Language 中输入 `zh_CN` -> 勾选 Ignore browser preference and force this language to all users -> 点击 Save
+
+### Jenkins的基本配置与基本使用
+
+[Jenkins的四种安装部署方式以及Jenkins的基本配置与基本使用 - 掘金 (juejin.cn)](https://juejin.cn/post/7101851443073646623#heading-28)
+
+#### docker安装maven 
+
+选择安装maven的路径
+
+```
+cd /opt/software
+```
+
+下载想要版本的maven（.tar.gz），上传到服务器     [Index of /dist/maven/maven-3/3.6.3/binaries (apache.org)](https://archive.apache.org/dist/maven/maven-3/3.6.3/binaries/)
+
+下载完成后，解压Maven到 安装Maven的目录。        tar -zxvf apache-maven-3.6.3-bin.tar.gz
+
+添加到全局环境变量：服务器输入命令     export PATH=/path/to/apache-maven-3.6.3/bin:$PATH
+
+**配置settings.xml（可选）**
+此处使用了阿里云的Maven仓库
+
+```java
+<mirror>
+    <id>aliyunmaven</id>
+    <mirrorOf>*</mirrorOf>
+    <name>阿里云公共仓库</name>
+    <url>https://maven.aliyun.com/repository/public</url>
+</mirror>
+```
+
+**使用maven需要有java的环境**
+
+yum安装如下：
+
+查询要安装jdk的版本
+
+> 命令：yum -y list java*
+>
+> #### 1.2 安装jdk1.8
+>
+> > 命令：yum install -y java-1.8.0-[openjdk](https://so.csdn.net/so/search?q=openjdk&spm=1001.2101.3001.7020).x86_64
+>
+> #### 1.3 查询jdk版本
+>
+> > 命令：java -[version](https://so.csdn.net/so/search?q=version&spm=1001.2101.3001.7020)
+>
+> 这样就安装成功了。
+> 默认给安装到 usr/lib/jvm/
+
+**测试安装**    mvn -version  正确输出
+
+#### docker 安装 git 
+
+[Java开发者在Linux环境安装各类开发工具汇总_java linux安装常用软件-CSDN博客](https://blog.csdn.net/qq_38628046/article/details/123591295)

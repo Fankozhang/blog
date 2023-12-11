@@ -163,6 +163,14 @@ async getUserBaseInfo() {
 },
 ```
 
+## 页面传参
+
+[uniapp uni.navigateTo传递（对象类型）参数_uniapp navigateto 传参-CSDN博客](https://blog.csdn.net/weixin_56650035/article/details/119058076)
+
+## 提示消息： 
+
+uni.$u.toast('校验通过')
+
 ## uniapp 高度铺满全屏的小技巧
 
 在uniapp中，高度使用heiht:100vh,h5的屏幕会多出一些高度，导致可以上下滑动
@@ -184,6 +192,66 @@ uni-page-body,html,body{
      height: 100%;
 }
 ```
+
+## uniapp 上传文件
+
+[uni.chooseFile(OBJECT) | uni-app官网 (dcloud.net.cn)](https://uniapp.dcloud.net.cn/api/media/file.html#wx-choosemessagefile)
+
+```
+uni.chooseFile({
+  count: 6, //默认100
+  extension:['.zip','.doc'],
+	success: function (res) {
+		console.log(JSON.stringify(res.tempFilePaths));
+	}
+});
+```
+
+微信小程序：
+
+```js
+           uploadPDF() {
+			    uni.chooseMessageFile({
+			      count: 1,
+				  extension:['.pdf','.doc','.docx','.jpg','.png','.jpeg'],
+			      success: (res) => {
+					  console.log("res",res)
+			        const tempFilePath = res.tempFiles[0];
+			        uni.uploadFile({
+			          url:config.baseUrl+'/system/ossBusiness/upload', // 上传文件的接口地址
+			          filePath: tempFilePath.path,
+			          name: 'file',
+					  header:{
+					  	'Authorization':'Bearer '+getToken()
+					  },
+			          formData: {
+			          },
+			          success: (uploadRes) => {
+			            // 上传成功后的处理逻辑
+			            console.log('上传成功', uploadRes);
+						let temp=JSON.parse(uploadRes.data).data
+						
+						let param={fileName:tempFilePath.name,fileUrl:temp.url,source:'上传'}
+						
+						addResumeFile(param).then(res=>{
+							if(res.code==200){
+								this.getList()
+							}
+							
+						})
+						
+			          },
+			          fail: (err) => {
+			            // 上传失败的处理逻辑
+			            console.log('上传失败', err);
+			          }
+			        });
+			      }
+			    })
+			}
+```
+
+
 
 ## uniapp内打开一个url
 
@@ -231,6 +299,142 @@ go(url){
 
 如此，便可以实现在新页面打开url地址了。
 
+## uniapp打开pdf文件url看不见
+
+这种情况得要通过先下载文件，再预览的形式才能实现预览pdf文件
+
+```js
+            // url 是 pdf文件的线上路径
+            preview(url) {
+				uni.downloadFile({
+					url,
+					success: (res) => {
+						if (res.statusCode == 200) {
+							let filePath = res.tempFilePath;
+							console.log('filePath',filePath)
+							uni.navigateTo({
+							    // 到 web-view 页面查看
+								url:'/page_other/webView/webView?urls='+filePath
+							})
+						}
+					}
+				})
+			},
+```
+
+
+
+## uniapp图片设置双指放大缩小
+
+[movable-area | uni-app官网 (dcloud.net.cn)](https://uniapp.dcloud.net.cn/component/movable-area.html)
+
+[uniapp图片设置双指放大缩小这个功能相对来说比较简单的_uniapp图片放大_棕色小马龙的博客-CSDN博客](https://blog.csdn.net/qq_37363320/article/details/132511137)
+
+```vue
+<template>
+<view>
+<view class="uni-padding-wrap uni-common-mt">
+    <movable-area scale-area>
+    <movable-view direction="all" @scale="onScale" scale="true" scale-min="1" scale-max="4" :scale-value="scale">
+    <image src="图片路径" mode="widthFix"></image>
+    </movable-view>
+    </movable-area>
+</view>
+</view>
+</template>
+
+需要说一下movable-view标签里的 scale-min=“1” scale-max="4"是干嘛用的，这两个设置相对来说也比较重要
+scale-min 拿图片来说，如果 scale-min=“0.5” 的话那图片就会显示50%，不会完全100%显示，所以就让他初始化等于 1
+scale-max 他的意思是双指放大可以放大几倍，比如 scale-max=“4” 那么双指放大4倍
+movable-area是不需要写任何js代码的
+
+onScale是空函数
+
+css代码
+
+
+movable-view {
+display: flex;
+align-items: center;
+justify-content: center;
+width: 100%;
+height:100%;
+}
+movable-area {
+height: 100%;
+width: 100%;
+position:fixed;
+overflow: hidden;
+}
+movable-view image{
+width:100%;
+}
+
+
+```
+
+
+
+## h5使用Window.open()跳转在ios下失效问题
+
+[使用Window.open()跳转页面在ios下失效问题_iphone window.open-CSDN博客](https://blog.csdn.net/qq_62809806/article/details/129926247)
+
+解决方法
+
+获取浏览器识别兼容的系统类型
+找到安卓和苹果端
+
+```js
+ let system = navigator.userAgent
+ let isAndroid = system.indexOf('Android') > -1 || system.indexOf('Adr') > -1 // android终端
+ let isiOS = !!system.match(/\(i[^;]+;( U;)? CPU.+Mac OS X/) //ios终端
+
+
+// 使用
+        if (isAndroid) {
+                //android终端
+                console.log('我是安卓')
+                window.open('https://www.baidu.com/')
+            } else if (isiOS) {
+                //ios终端
+                console.log('我是ios')
+                window.location.href = 'https://www.baidu.com/'
+            }
+
+```
+
+
+
+## uniapp返回上一页携带参数
+
+[uniapp返回上一页携带参数,两种方法，实测有效_uniapp携带参数返回上一页-CSDN博客](https://blog.csdn.net/qq2942713658/article/details/114581476)
+
+```
+// 下一页
+uni.$emit('updateData', this.mydata)
+
+// 返回页
+uni.$on('updateData',function(data){
+	console.log('监听到事件来自 updateData ，携带参数为：' + data);
+})
+```
+
+拓展：在 onShow 中使用 uni.$on 时，每次返回会叠加触发 uni.$on ，例如返回页面5次，会叠加触发5次 uni.$on，此时需要在合适的时机触发  uni.$off('updateData')  来清除，以免出现 bug .   例如下方所示。
+
+```
+onShow(){
+			 let that=this
+			 uni.$on('updatePageData',function(num){
+			 // pageView 浏览次数
+				that.policyList[num].pageView=Number(that.policyList[num].pageView)+1
+				 uni.$off('updatePageData')
+			 })
+			
+},
+```
+
+
+
 ## uniapp的分包操作
 
 我的uniapp小程序在微信开发者工具打开后，在点击真机调试的时候会出现问题。这个问题在打包发布时也会出现，具体原因是项目整体包的体积太大，会影响小程序的运行速度。因此小程序对此做了限制。 即小程序的单独一个包的大小不能超过2M,一旦超过就需要分包处理。
@@ -268,6 +472,20 @@ pages代表分包的页面文件路径（注意，有几个页面，就有几个
 				"path":"pages/notice/notice"
 			}
 	      ]
+	     }，
+	     {
+	      "root": "packageB",
+	      "pages": [
+	      	{
+				"path":"pages/notice/notice"
+			}，
+			{
+				"path":"pages/notice/notice"
+			}，
+			{
+				"path":"pages/notice/notice"
+			}
+	      ]
 	     }
 ]
 ```
@@ -290,6 +508,10 @@ pages代表分包的页面文件路径（注意，有几个页面，就有几个
 ![PackageAuniWechat](/PackageAuniWechat.png)
 
 [【已解决】uniapp小程序体积过大、隐私协议的问题 - 掘金 (juejin.cn)](https://juejin.cn/post/7296025902911897627)
+
+
+
+[京东快递小程序分包优化实践 (qq.com)](https://mp.weixin.qq.com/s/YSQehiY3iji7xZBTpqDT2w)
 
 ## pages.json
 
@@ -406,6 +628,10 @@ pages代表分包的页面文件路径（注意，有几个页面，就有几个
   }
 }
 ```
+
+## Uniapp中分页触底加载
+
+[Uniapp中分页触底加载的实现方式_uniapp触底分页_babyxuqian的博客-CSDN博客](https://blog.csdn.net/babyxuqian/article/details/119409966)
 
 ## uniapp使用echarts图
 

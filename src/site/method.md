@@ -11,6 +11,10 @@ typora-root-url: ..\.vuepress\public
 
 # 工作问题及解决方法
 
+## Git操作
+
+[Git 常用基本命令使用详细大全_git 命令-CSDN博客](https://blog.csdn.net/qtiao/article/details/97783243)
+
 ## vscode
 
 ### vscode代码片段
@@ -88,6 +92,8 @@ https://mp.weixin.qq.com/s/6SuNY3Y27RGXPx89zCJnEg
 [关于前端实现上传文件这个功能，我只能说so easy！ - 掘金 (juejin.cn)](https://juejin.cn/post/7224402365452238906)
 
 ## 下载（url）
+
+[Blob (javascript.info)](https://zh.javascript.info/blob)
 
 ### 后端返回文件流(文档流)如何下载
 
@@ -369,6 +375,12 @@ delForm(item, index){
 
 [邮箱、手机号、url等常用正则表达式-腾讯云开发者社区-腾讯云 (tencent.com)](https://cloud.tencent.com/developer/article/1751120)
 
+
+
+邮箱正则表达式（能够匹配@126.com结尾）： /[a-zA-Z0-9]+([-_.][A-Za-zd]+)*@([a-zA-Z0-9]+[-.])+[A-Za-zd]{2,5}$/
+
+
+
 ### this.$refs[formName].validat验证（自定义校验）
 
 
@@ -414,9 +426,13 @@ data(){
 
 ```
 
-## 
+ 
+
+
 
 ### 自定义表单（表单生成器）
+
+简易表单生成器  [Vue3项目我做到让组员的表单开发效率提示30%！ (qq.com)](https://mp.weixin.qq.com/s/qVYPFvAEV7HpqiTkVO0GjA)
 
  [vue拖拽表单生成器 - 掘金 (juejin.cn)](https://juejin.cn/post/7065863860669906952) 
 
@@ -791,6 +807,26 @@ https://blog.csdn.net/coralime/article/details/122979010
 
    
 
+###  el-dialog 初次渲染时，滚动到最顶部
+
+当dialog弹框的内容高度很高时，初次打开弹框会显示弹框最底下的内容，希望实现的是初次打开弹框，展示最顶部的内容
+
+在dialog的open方法中实现获取dom，设置scrollTop为0
+
+```
+<el-dialog :title="title" :visible.sync="open" width="70%" append-to-body  @open="dialogOpen" class="eDialog">
+
+
+this.$nextTick(() => {
+  const dialog = document.querySelector('.el-dialog__body');
+  if (dialog) {
+    dialog.scrollTop = 0;
+  }
+});
+```
+
+
+
 ### TimePicker设置只能选择当前时间之前或之后的时间
 
  picker-options 当前时间日期选择器特有的选项 
@@ -953,7 +989,7 @@ export default {
 </style>
 ```
 
-### Element-ui中 选择器（Select 数据量大
+### Element-ui中 选择器（Select 数据量大）
 
 [解决 Element-ui中 选择器（Select）因options 数据量大导致渲染慢、页面卡顿的问题-阿里云开发者社区 (aliyun.com)](https://developer.aliyun.com/article/1086565)
 
@@ -1075,7 +1111,7 @@ css  注意：/deep/  不能缺少
 }
 ```
 
-## vue里cdn引入改为本地js文件引用
+## vue里cdn改为本地js文件引用（缺少网络）
 
 [vue里cdn引入改为本地js文件引用](https://www.cnblogs.com/qingjiawen/p/17292707.html)
 
@@ -1085,13 +1121,13 @@ css  注意：/deep/  不能缺少
 
 ```js
 <% if(process.env.NODE_ENV === 'production' && process.env.VUE_APP_PREVIEW!='true'){
-                %>
-                <script src="/static/vue.main.js"></script>
-                <script src="/static/vue-router.min.js"></script>
-                <script src="/static/vuex.min.js"></script>
-                <script src="/static/axios.min.js"></script>
-                <%
-            } %>
+      %>
+      <script src="/static/vue.main.js"></script>
+      <script src="/static/vue-router.min.js"></script>
+      <script src="/static/vuex.min.js"></script>
+      <script src="/static/axios.min.js"></script>
+      <%
+  } %>
 ```
 
 
@@ -1727,6 +1763,8 @@ https://blog.csdn.net/weixin_43845597/article/details/115000670
 
 ## 前端dom生成文件下载
 
+[HTML 转 PDF 最佳实现方案 (qq.com)](https://mp.weixin.qq.com/s/zwht7yjbex6WNpcsRi6V9w)
+
 ### vue截取网页的dom，生成pdf并下载
 
 npm install html2canvas         npm install  jspdf
@@ -1997,5 +2035,35 @@ vue实现可以参考 electron 部分的调用摄像头(以下是原生js实现�
 </script>
 </body>
 </html>
+```
+
+## 密码加密
+
+### sm-crypto
+
+[VUE使用 sm-crypto 加解密以及签名验签遇到的坑 (后端java)-CSDN博客](https://blog.csdn.net/weixin_39475476/article/details/111593319)
+
+npm install --save sm-crypto@0.3.13
+
+sm2.js
+
+```
+const sm2 = require('sm-crypto').sm2
+// 加密密钥  不要搞成动态接口获取的
+const publicKeyServer = '049D4DB5CECC1DBA1B08E0118CC3B216A6245FF84CD0C9347FDF5E91B3A3C473A4238E7649CCF4B615A9207A695CD47A2B1C4E4D422A9284260DBC23F7F04448FE'
+
+export default {
+  get (password) {
+    return sm2.doEncrypt(password, publicKeyServer, 0)
+  }
+}
+```
+
+登录方法处
+
+```
+import sm2 from '@/utils/sm2'
+// 对密码使用 sm2 进行加密
+userInfo.password = sm2.get(userInfo.password.trim())
 ```
 
