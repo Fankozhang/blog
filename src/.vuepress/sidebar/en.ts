@@ -93,7 +93,11 @@ export const enSidebar = sidebar({
               text: "实战项目",
               icon: "",
               link: "spring",
-            },
+            },{
+              text: "harmony",
+              icon: "edit",
+              link: "harmony"
+            }
             // "3",
             // "4",
         //   ],
@@ -122,6 +126,10 @@ export const enSidebar = sidebar({
           text: "部署",
           icon: "edit",
           link: "bushu"
+        },{
+          text: "native",
+          icon: "edit",
+          link: "native"
         }
       ]
     },

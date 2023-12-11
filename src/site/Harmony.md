@@ -5,8 +5,7 @@ tag:
   - question
   - method
 
-typora-copy-images-to: ./
-typora-root-url: ..\.vuepress\public
+typora-root-url: ..\..\..\.vuepress\public
 
 ---
 
@@ -48,7 +47,7 @@ src/main/resources/base/profile/main_pages.json  文件保存的是页面page的
 
 ### 新建页面
 
-![image-20231118025204427](D:%5Cqian%5Cvue-press%5Cpress%5Cblog%5Csrc%5C.vuepress%5Cpublic%5Cimage-20231118025204427.png)
+![javaCreateSimple](D:%5Cqian%5Cvue-press%5Cpress%5Cblog%5Csrc%5C.vuepress%5Cpublic%5Cimage-20231118025204427.png)
 
 使用此方法新建的页面，会自动在 src/main/resources/base/profile/main_pages.json   生成页面配置
 

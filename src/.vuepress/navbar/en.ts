@@ -106,6 +106,14 @@ export const enNavbar = navbar([
         text: "部署",
         icon: "edit",
         link: "bushu"
+      },{
+        text: "native",
+        icon: "edit",
+        link: "native"
+      },{
+        text: "harmony",
+        icon: "edit",
+        link: "harmony"
       }
     ]
   },
