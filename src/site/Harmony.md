@@ -48,7 +48,7 @@ src/main/resources/base/profile/main_pages.json  文件保存的是页面page的
 
 ### 新建页面
 
-![javaCreateSimple](/../../site/image-20231118025204427.png)
+![](/image-20231118025204427.png)
 
 
 
