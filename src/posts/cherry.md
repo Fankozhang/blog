@@ -684,8 +684,8 @@ OPTIONS说明（常用）：有些是一个减号，有些是两个减号
 -t：为容器重新分配一个伪输入终端，通常与 -i 同时使用；
 也即启动交互式容器(前台有伪终端，等待交互)；
 
--P: 随机端口映射，大写P
--p: 指定端口映射，小写p
+-P: 随机端口映射，大写P      
+-p: 指定端口映射，小写p          左边是映射的宿主机端口，右边是容器端口。
 
 使用镜像centos:latest以交互模式启动一个容器,在容器内执行/bin/bash命令。
 
@@ -1375,6 +1375,8 @@ curl -L "https://github.com/docker/compose/releases/download/1.29.2/docker-compo
 添加可执行权限
 chmod +x /usr/local/bin/docker-compose
 
+
+yum install docker-compose  // centos
 docker-compose --version
 ```
 
@@ -1410,7 +1412,7 @@ sudo rm /usr/local/bin/docker-compose
 
 docker-compose -h              # 查看帮助
 
-docker-compose up              # 启动所有docker-compose服务
+docker-compose up              # 启动所有docker-compose服务     切换到docker-compose.yml所在目录运行
 
 docker-compose up -d             # 启动所有docker-compose服务并后台运行
 
@@ -1436,21 +1438,35 @@ docker-compose start   # 启动服务
 
 docker-compose stop    # 停止服务
 
+
+
+使用示例：Docker Compose 部署 WordPress ：https://developer.aliyun.com/article/986242
+
 ### portainer安装
 
  [Install Portainer CE with Docker on Linux - Portainer Documentation](https://docs.portainer.io/start/install-ce/server/docker/linux) 
 
-（官网默认端口是带证书的，不需要，可以使用9000端口）
+1 创建挂载目录 ：    docker volume create portainer_data
 
-1 docker volume create portainer_data
+   查看具体挂载的信息：  docker inspect portainer_data
 
-2 
+2 运行命令（官网默认端口是带证书的，不需要，可以使用9000端口）
 
 ```
 docker run -d -p 8000:8000 -p 9000:9000 --name=portainer --restart=always -v /var/run/docker.sock:/var/run/docker.sock -v portainer_data:/data portainer/portainer-ce
 ```
 
+```
+docker run -d -p 8000:8000 -p 9443:9443 --name portainer --restart=always -v /var/run/docker.sock:/var/run/docker.sock -v portainer_data:/data portainer/portainer-ce:latest
+```
 
+```
+// 9000 端口已经占用的话，可以换一个端口
+
+docker run -d -p 8000:8000 -p 8088:9000 --name=portainer --restart=always -v /var/run/docker.sock:/var/run/docker.sock -v portainer_data:/data portainer/portainer-ce
+```
+
+密码要求12位，admin   adminzf20......
 
 ### Docker容器监控之 CAdvisor+InfluxDB+Granfana
 

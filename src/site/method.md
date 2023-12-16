@@ -11,6 +11,41 @@ typora-root-url: ..\.vuepress\public
 
 # 工作问题及解决方法
 
+## 部署问题
+
+### 一个nginx中通过不同的路由部署多个vue前端项目
+
+[【Java日常运维】Nginx部署多个vue项目方法以及所遇问题解决方法-CSDN博客-谭任圣博客](https://blog.csdn.net/qq_45248284/article/details/134955797)
+
+步骤完整，正常解决：[使用Nginx部署多个前端Vue项目_nginx配置多个vue前端-CSDN博客](https://blog.csdn.net/qq_41930094/article/details/118570747)
+
+
+
+Vue **中如何给路由添加一个统一的前缀**（或者说基路径）
+
+nginx部署时，一个nginx部署多个前端vue项目，通过前缀不同来匹配资源，需要在前端vue项目中加上跟路由，配置如下：
+
+[VUE在现有的路由地址前加一个统一的基础地址_vue中路由统一添加一个地址-CSDN博客](https://blog.csdn.net/weixin_44003789/article/details/109815417)
+
+[Vue 中如何给路由添加一个统一的前缀（或者说基路径） - 掘金 (juejin.cn)](https://juejin.cn/post/7041131131005042725)
+
+```
+new Router({
+    base: 'abc',  // 统一前缀（基路径）
+})
+```
+
+加载静态资源 vue.config.js 也要加上配置
+
+```
+// 生产环境发布的路径 process.env.VUE_APP_PUBLIC_PATH  ：  ’abc‘
+  publicPath: process.env.VUE_APP_PUBLIC_PATH + "/",
+```
+
+[vue-router的base和vue.config.js的publicPath区别和联系_vuerouter base-CSDN博客](https://blog.csdn.net/atu1111/article/details/121371310)
+
+[vue - vue中的publicPath讲解-CSDN博客](https://blog.csdn.net/qq_43886365/article/details/128372030)
+
 ## Git操作
 
 [Git 常用基本命令使用详细大全_git 命令-CSDN博客](https://blog.csdn.net/qtiao/article/details/97783243)
@@ -584,6 +619,46 @@ export default {
 
 ## 适配
 
+### 微信修改字体大小或者开启关怀模式导致H5页面错乱的解决方案
+
+[微信修改字体大小或者开启关怀模式导致H5页面错乱的解决方案-CSDN博客](https://blog.csdn.net/m0_47791238/article/details/128460101#:~:text=原因：当微信内修改默认字体大小或者开启微信内关怀模式，由于H5页面是在微信内置浏览器中打开，所以字体也会随之修改，导致页面布局改变。,解决方案： 需要给安卓、ios同时添加配置，禁止内置浏览器修改H5页面。)
+
+```
+安卓 在script标签内添加方法，通过方法进行配置
+
+(function () {
+          if (typeof WeixinJSBridge === 'object' && typeof WeixinJSBridge.invoke === 'function') {
+              handleFontSize()
+          } else {
+              if (document.addEventListener) {
+                  document.addEventListener('WeixinJSBridgeReady', handleFontSize, false)
+              } else if (document.attachEvent) {
+                  document.attachEvent('WeixinJSBridgeReady', handleFontSize)
+                  document.attachEvent('onWeixinJSBridgeReady', handleFontSize)
+              }
+          }
+          function handleFontSize () {
+              // 设置网页字体为默认大小
+              WeixinJSBridge.invoke('setFontSizeCallback', { fontSize: 0 })
+              // 重写设置网页字体大小的事件
+              WeixinJSBridge.on('menu:setfont', function () {
+                  WeixinJSBridge.invoke('setFontSizeCallback', { fontSize: 0 })
+              })
+          }
+      })()
+      
+      
+ios 在style标签内添加样式，通过修改样式进行配置
+
+  body { /* IOS禁止微信调整字体大小 */
+            -webkit-text-size-adjust: 100% !important;
+            text-size-adjust: 100% !important;
+            -moz-text-size-adjust: 100% !important;
+        }
+```
+
+
+
 ### vue项目（两套路由）适配  pc端 移动端
 
 vue项目开发中，我们已经开发实现了pc端的网站开发，当想要实现移动端适配时，当时有两种适配的方法作为参考。  
@@ -1110,6 +1185,20 @@ css  注意：/deep/  不能缺少
 
 }
 ```
+
+## vue如何判断项目是开发环境还是线上环境或者本地环境
+
+```
+if (process.env.NODE_ENV == "development") {
+  //开发环境
+} else if (process.env.NODE_ENV == "production") {
+  //生产环境
+}else{
+	//本地环境
+
+```
+
+
 
 ## vue里cdn改为本地js文件引用（缺少网络）
 

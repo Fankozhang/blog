@@ -311,13 +311,17 @@ Web server failed to start. Port 8080 was already in use.
 
 
 
+## Docker部署
+
+[Docker部署SpringBoot +Vue项目流程详解（含域名 + HTTPS）_docker部署vue的前端项目-CSDN博客](https://blog.csdn.net/weixin_46594796/article/details/133962200)
+
 
 
 
 
 ## Minio
 
-### linux 安装
+### linux 安装Minio
 
 [MinIO对象存储 Linux — MinIO中文文档 | MinIO Linux中文文档](https://www.minio.org.cn/docs/minio/linux/index.html)
 
@@ -540,3 +544,4 @@ yum安装如下：
 #### docker 安装 git 
 
 [Java开发者在Linux环境安装各类开发工具汇总_java linux安装常用软件-CSDN博客](https://blog.csdn.net/qq_38628046/article/details/123591295)
+

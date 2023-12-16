@@ -1108,7 +1108,9 @@ getDatas() async {
 
 ## Mixins 混入
 
-目的：给一个类增加功能。是多继承。
+目的：给一个类增加功能。是多继承。（我还不太清楚）
+
+[Flutter 语法进阶 | 深入理解混入类 mixin - 掘金 (juejin.cn)](https://juejin.cn/post/7132651702980706312#heading-4)
 
 ## UI库
 

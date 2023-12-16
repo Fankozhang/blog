@@ -198,7 +198,7 @@ tag:
 
 [真的绝了，通过注释来埋点好简单！！ (qq.com)](https://mp.weixin.qq.com/s/SqHTWwbepjjZ42jNi1-uGw)
 
-[前端知识tips](https://mp.weixin.qq.com/s/SO_ICq2k9CeerFJU2aybXQ)
+[前端学习 - 明远湖之鱼的专栏 - 掘金 (juejin.cn)](https://juejin.cn/column/7235216665432424505)
 
 ### css
 
@@ -230,6 +230,8 @@ git命令行操作：   [Git 常用基本命令使用详细大全_git 命令-CSD
 
 [🚀 10 个 GitHub 存储库，助你成为前端巨匠✨ - 掘金 (juejin.cn)](https://juejin.cn/post/7287913225168617487)
 
+[git_程序员小富的博客-CSDN博客](https://blog.csdn.net/xinzhifu1/category_6938518.html)
+
 ### 跨端技术
 
 [ElectronEgg 快速开发一个桌面应用 - 掘金 (juejin.cn)](https://juejin.cn/post/7292961931509186595)
@@ -253,6 +255,8 @@ git命令行操作：   [Git 常用基本命令使用详细大全_git 命令-CSD
 [spring Boot 项目部署方案！打包 + Shell 微信公众平台 (qq.com)](https://mp.weixin.qq.com/s/4oVFhyoGC32cGSn3iio4sA)
 
 [Nginx 同一端口下部署多个 Vue3 项目 (qq.com)](https://mp.weixin.qq.com/s/HwGoXJxOjVDaALTpOgRG1w)
+
+使用 Dockerfile + Docker Compose 部署 Web 项目：https://juejin.cn/post/7238918259755745339#heading-16
 
 ### 汇总
 
