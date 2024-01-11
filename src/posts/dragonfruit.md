@@ -895,7 +895,9 @@ https://juejin.cn/post/7087789961490989070
 	  },
 ```
 
+## uniapp 仿微信朋友圈点击评论唤起软键盘并自定义输入框占位符
 
+[uniapp 仿微信朋友圈点击评论唤起软键盘并自定义输入框占位符_uniapp评论框和键盘-CSDN博客](https://blog.csdn.net/m0_58135258/article/details/132212889)
 
 ## uni-cloud云开发
 

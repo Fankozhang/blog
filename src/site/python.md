@@ -11,6 +11,10 @@ tag:
 
  下载： [Download Python | Python.org](https://www.python.org/downloads/)    安装时勾选 add to path
 
+[Python 教程 (w3schools.cn)](https://www.w3schools.cn/python/default.asp)
+
+[Python教程 - 廖雪峰的官方网站 (liaoxuefeng.com)](https://www.liaoxuefeng.com/wiki/1016959663602400)
+
 ## python主要的数据类型和方法
 
 ai生成 请生成一张表格，一列展示python中所有的数据类型，一列展示这种数据类型存储什么类型的数据，一列展示这种数据类型的特点，一列展示这种数据类型有哪些方法，一列展示这种方法的使用方法和作用。 
@@ -276,6 +280,8 @@ finally:
 
 ## 模块
 
+[详解Python模块化——模块（Modules）和包（Packages）_python包与模块-CSDN博客](https://blog.csdn.net/Bit_Coders/article/details/119318000)
+
 **什么是模块**
 Python模块（Module）,是一个Python文件，以.py结尾.模块能定义函数，类和变量,模块里也能包含可执行的代码
 模块的作用：python中有很多各种不同的模块，每一个模块都可以帮助我们快速的实现一些功能，比如实现和时间相关的功能就可以使用time模块,我们可以认为一个模块就是一个工具包，每一个工具包中都有各种不同的工具供我们使用,进而实现各种不同的功能.
@@ -327,6 +333,8 @@ __init__.py  文件中   __all__=['module1','module2']  控制import * 能访问
 ```
 
 ## 安装第三方包~pip
+
+[PyPI · The Python Package Index](https://pypi.org/)
 
 第三方包的安装非常简单，我们只需要使用Python内置的pip程序即可。
 打开我们许久未见的：命令提示符程序，在里面输入：

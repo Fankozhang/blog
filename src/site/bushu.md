@@ -11,6 +11,53 @@ typora-root-url: ..\.vuepress\publixi
 
 # 项目部署相关
 
+## 端口操作：
+
+https://blog.csdn.net/daocaokafei/article/details/115364111
+
+列出所有打开的端口 ：  netstat -lntu
+
+systemctl start firewalld *#开启防火墙*
+
+firewall-cmd --permanent --zone=public --add-port=8080/tcp  开放端口
+
+```
+1:查看防火状态
+
+systemctl status firewalld
+
+service  iptables status
+
+2:暂时关闭防火墙
+
+systemctl stop firewalld
+
+service  iptables stop
+
+3:永久关闭防火墙
+
+systemctl disable firewalld
+
+chkconfig iptables off
+
+4:重启防火墙
+
+systemctl enable firewalld
+
+service iptables restart  
+
+5:永久关闭后重启
+
+//暂时还没有试过
+
+chkconfig iptables on　
+————————————————
+版权声明：本文为CSDN博主「魔道不误砍柴功」的原创文章，遵循CC 4.0 BY-SA版权协议，转载请附上原文出处链接及本声明。
+原文链接：https://blog.csdn.net/qq_35971258/article/details/79318842
+```
+
+
+
 ## 相关文章：
 
 [Springboot+Vue在开发和部署相关问题解决 (qq.com)](https://mp.weixin.qq.com/s/TEk9PnWBceh35g1Px5XcLQ)
@@ -314,10 +361,6 @@ Web server failed to start. Port 8080 was already in use.
 ## Docker部署
 
 [Docker部署SpringBoot +Vue项目流程详解（含域名 + HTTPS）_docker部署vue的前端项目-CSDN博客](https://blog.csdn.net/weixin_46594796/article/details/133962200)
-
-
-
-
 
 ## Minio
 

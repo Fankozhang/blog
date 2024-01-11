@@ -414,6 +414,8 @@ delForm(item, index){
 
 邮箱正则表达式（能够匹配@126.com结尾）： /[a-zA-Z0-9]+([-_.][A-Za-zd]+)*@([a-zA-Z0-9]+[-.])+[A-Za-zd]{2,5}$/
 
+​                                                                                  /^[A-Za-z0-9u4e00-u9fa5]+@[a-zA-Z0-9_-]+(.[a-zA-Z0-9_-]+)+$/
+
 
 
 ### this.$refs[formName].validat验证（自定义校验）
@@ -446,6 +448,18 @@ data(){
       ]
 
 }
+
+
+   {
+      trigger: "blur",
+      validator: (rule, value, callback) => {
+        if (!form.value.city) {
+          callback(new Error("请选择所在地市"));
+        }  else {
+          callback();
+        }
+      },
+    },
 ```
 
 直接在dom里添加验证参考：
@@ -932,6 +946,10 @@ data() {
   }
 
 ```
+
+### el-date-picker禁用指定日期之前或之后的日期
+
+[el-date-picker禁用指定日期之前或之后的日期_element日期选择器限制今天以后的日期-CSDN博客](https://blog.csdn.net/cyqzy/article/details/129951052)
 
 ### element 表格实现导入
 

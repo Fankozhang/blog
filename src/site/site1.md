@@ -76,7 +76,11 @@ tag:
 
 - [第二版序 | 《Flutter实战·第二版》 (flutterchina.club)](https://book.flutterchina.club/#第二版变化)
 
--      [2023最全高质量前端资源分享 - 掘金 (juejin.cn)](https://juejin.cn/post/7304932252827287604#heading-48)
+- [2023最全高质量前端资源分享 - 掘金 (juejin.cn)](https://juejin.cn/post/7304932252827287604#heading-48)
+
+- [史上最全设计模式导学目录（完整版）_史上最全设计模式lovelion-CSDN博客](https://blog.csdn.net/LoveLion/article/details/17517213)
+
+-      [个人博客|沧沧凉凉的小站 (cclliang.com)](https://www.cclliang.com/)
 
 
 
@@ -100,6 +104,7 @@ tag:
 -   [cssinspirationguide - csc inspiration guide online (chokcoco.github.io)](https://chokcoco.github.io/CSS-Inspiration/#/)
 -   [磨砂风格背景生成   Claymorphism CSS Generator | SquarePlanet (hype4.academy)](https://hype4.academy/tools/claymorphism-generator)
 -   [磨砂风格背景生成  Glassmorphism CSS Generator | SquarePlanet | SquarePlanet (hype4.academy)](https://hype4.academy/tools/glassmorphism-generator)
+-   CSS clip-path 生成器(多边形)  [Clippy — CSS clip-path 生成器 (jiangweishan.com)](https://www.jiangweishan.com/tool/clippy/)
 
 ## 工具
 
@@ -157,6 +162,8 @@ tag:
 
 - [（网址加密成ooooooo...）ooooooooooooooooooooooo.ooo | URL Lengthner](https://ooooooooooooooooooooooo.ooo/) 
 
+- [18＋成人必须收藏的60个网站，吐血整理！ (qq.com)](https://mp.weixin.qq.com/s/bj-_88dek0QAs2htvZMouw)
+
   
 
 ## 开源项目
@@ -180,7 +187,7 @@ tag:
 
 [前端传参如果参数过多你还会拼接在URL上嘛？ - 掘金 (juejin.cn)](https://juejin.cn/post/7291468863395954749)
 
-[[小白知识点学习+实战\]大厂布局！-瀑布流+实战案例 - 掘金 (juejin.cn)](https://juejin.cn/post/7296062929098981402)
+[小白知识点学习+实战\]大厂布局！-瀑布流+实战案例 - 掘金 (juejin.cn)](https://juejin.cn/post/7296062929098981402)
 
 [常见文件下载与上传方式整理 - 掘金 (juejin.cn)](https://juejin.cn/post/7296089060833017871)
 
@@ -200,9 +207,21 @@ tag:
 
 [前端学习 - 明远湖之鱼的专栏 - 掘金 (juejin.cn)](https://juejin.cn/column/7235216665432424505)
 
+高质量前端资源分享  [https://juejin.cn/post/7304932252827287604#heading-48](https://mp.weixin.qq.com/s/B1YaeuCXrCrq_hJaGSqmgQ)
+
+### 3d
+
+[GitHub - mtsee/vr-hall: three.js 3D vr hall](https://github.com/mtsee/vr-hall)
+
 ### css
 
 [css 实现边框](https://juejin.cn/post/7240458275269984314)
+
+### js
+
+[12个强大的 JavaScript 动画库，可帮助你提升用户体验 (qq.com)](https://mp.weixin.qq.com/s/AsaT9H8mhaJVmEpg9zLH8A)
+
+[GSAP 中文教程 中文文档 ｜官方文档 官方教程翻译 ｜好奇代码出品](https://gsap.framer.wiki/timelines)
 
 ### vue
 
@@ -216,11 +235,17 @@ vue和react对比学习（详细的）：  [React - 苏苏同学的专栏 - 掘�
 
 [Vue有20样写法，你知道么？ - 掘金 (juejin.cn)](https://juejin.cn/post/7303832834623111178#heading-11)
 
+[7 个最常用的 Vue 3 UI 组件 (qq.com)](https://mp.weixin.qq.com/s/dXcypys7mpEA2T2HwC7ejQ)
+
+
+
 ### React
 
 [一键生成前端UI，公司90%项目UI都靠它搞定！react后台管理代码生成 (qq.com)](https://mp.weixin.qq.com/s/4db4fn8yu98_H2N156R25g)
 
 [8 种在 React 中实现条件渲染技术的方法 (qq.com)](https://mp.weixin.qq.com/s/WXlB2Mc7fsAHmjXp-_PTMw)
+
+[使用 React18 + Vite + TypeScript 完成公司项目经验总结，学到了很多 - 掘金 (juejin.cn)](https://juejin.cn/post/7205842390842458149)
 
 ### git
 
@@ -258,6 +283,12 @@ git命令行操作：   [Git 常用基本命令使用详细大全_git 命令-CSD
 
 使用 Dockerfile + Docker Compose 部署 Web 项目：https://juejin.cn/post/7238918259755745339#heading-16
 
+Docker-compose 安装 Wordpress 博客  [Docker-compose 安装 Wordpress 博客 - 知乎 (zhihu.com)](https://zhuanlan.zhihu.com/p/93832797)
+
+[正确使用 acme.sh， 让你的网站永久免费使用 ssl 证书 👍 - 掘金 (juejin.cn)](https://juejin.cn/post/7308782851360292874)
+
+
+
 ### 汇总
 
 [前端常用网站汇总，一定有你想要的🔥🔥🔥 - 掘金 (juejin.cn)](https://juejin.cn/post/7023188150629433357)
@@ -278,7 +309,17 @@ git命令行操作：   [Git 常用基本命令使用详细大全_git 命令-CSD
 
 [常用正则表达式最强整理 (qq.com)](https://mp.weixin.qq.com/s/ixGlgxQLz59UHxC7CHQRCw)
 
+### java
 
+[我写了个工具，让CRUD开发效率提升100倍 - 掘金 (juejin.cn)](https://juejin.cn/post/7197237024972144697)
+
+
+
+### 低代码生成(可视化)
+
+[自从用了这款代码生成工具，项目开发效率大大提高了！ (qq.com) ](https://mp.weixin.qq.com/s/KeI9lN0uyNU0_8wTYwBzwQ)   [业务代码生成器 - 猿猿工具 (utilsbox.cn)](https://utilsbox.cn/?app=bizcode)
+
+[解放双手！MyBatis-Plus可视化代码生成器来了，yyds！ (qq.com)](https://mp.weixin.qq.com/s/23ggmOeXjEfcwRx0BRX8-g)
 
 ## 开源项目收藏（源码收藏）
 
@@ -304,6 +345,10 @@ smartadmin：开源SpringBoot和Vue的企业级项目，代码很规范   https:
 基于SpringBoot+Vue实现的小区物业管理系统：[基于SpringBoot+Vue实现的小区物业管理系统 (qq.com)](https://mp.weixin.qq.com/s/TPxJIfRWdpnbjxXFaZumWw)
 
 
+
+[SpringBoot+RabbitMQ+Redis 开发一个秒杀系统，细节打满（附源码） (qq.com)](https://mp.weixin.qq.com/s/L2-AChMEP7OOtj0wV-e_yA)
+
+- https://gitee.com/jike11231/sec-kill-product
 
 
 

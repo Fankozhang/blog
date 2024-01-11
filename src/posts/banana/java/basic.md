@@ -27,6 +27,14 @@ C:\Program Files (x86)\Common Files\Oracle\Java\javapath
 
 
 
+## jdk
+
+GraalVM-jdk之Windows详细安装及使用教程 https://zhuanlan.zhihu.com/p/673241258
+
+
+
+
+
  [使用IDEA 创建 SpringBoot 多模块项目_idea 建springboot module-CSDN博客](https://blog.csdn.net/tangthh123/article/details/106837999) 
 
 ## **idea创建java项目（maven）** 

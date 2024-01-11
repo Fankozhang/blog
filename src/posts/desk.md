@@ -972,6 +972,24 @@ const stream= await navigator.mediaDevices.getDisplayMedia({video:true})
 
 ## 微前端
 
+### 微前端的发展历程：
+
+微前端是一种新兴的软件开发架构，其概念最早由英国的监控和诊断领域的专家于2016年提出。微前端是一种将前端应用分解为一系列小型、独立的前端应用，并采用微服务的架构理念进行开发和部署的方式。
+
+微前端的发展历程可以分为以下几个阶段：
+
+1. 起步阶段：在这个阶段，微前端的理念开始被提出，但还没有得到广泛的应用和推广。
+2. 探索阶段：随着前端开发领域的不断发展和应用，越来越多的开发者和团队开始意识到传统的大型单体前端应用的局限性，开始尝试采用微前端的架构进行开发。
+3. 成熟阶段：在这个阶段，微前端的架构理念和开发方式已经得到了广泛的应用和认可，越来越多的企业和团队开始采用微前端进行开发，同时也出现了越来越多的微前端工具和框架。
+
+微前端的发展前景：
+
+随着前端开发领域的不断发展和应用，微前端作为一种新兴的架构理念，其前景是广阔的。未来，随着更多的企业和团队采用微前端进行开发，微前端的架构理念和开发方式将会得到更加广泛的应用和推广。同时，随着技术的发展和市场的变化，微前端也将面临更多的挑战和机遇。
+
+总之，微前端作为一种新兴的软件开发架构，其发展前景是广阔的。未来，随着技术的不断发展和市场的不断变化，微前端将会得到更加广泛的应用和推广。对于对前端开发感兴趣的人来说，微前端是一个值得关注和深入研究的领域。
+
+
+
 微前端就是将前端应用分解成一些更小,更简单的,能够独立开发,测试,部署的小模块,而在用户看来仍然是一个整体的产品技术或者思想
 
 微前端介绍：https://juejin.cn/column/7117245118465179661
@@ -1042,6 +1060,106 @@ Web Components是如何做到微前端：
 
 [三大微前端框架，哪个才是你的理想型？ - 掘金 (juejin.cn)](https://juejin.cn/post/7309477710523269174)
 
+### 路由通信（如何使用vuex实现微前端的路由通信）
+
+在微前端架构中，使用 Vuex 实现路由通信可以帮助不同微应用之间进行状态管理和数据共享。下面是一个使用 Vuex 实现微前端路由通信的基本步骤：
+
+1. **创建 Vuex Store**：首先，在主应用中创建一个 Vuex Store，用于管理全局状态。可以使用 `Vue.use(Vuex)` 来安装 Vuex 插件，并创建一个包含 state、mutations、actions 等的 store 实例。
+
+```javascript
+import Vue from 'vue';  
+import Vuex from 'vuex';  
+  
+Vue.use(Vuex);  
+  
+const store = new Vuex.Store({  
+  state: {  
+    // 定义全局状态  
+  },  
+  mutations: {  
+    // 定义修改状态的方法  
+  },  
+  actions: {  
+    // 定义异步操作  
+  },  
+});
+```
+
+1. **共享 Vuex Store**：将创建的 Vuex Store 共享给各个微应用。这可以通过在主应用中将 store 实例导出，并在微应用中导入实现。
+
+在主应用中导出 store：
+
+```javascript
+javascript复制代码
+
+export default store;
+```
+
+在微应用中导入 store：
+
+```javascript
+javascript复制代码
+
+import store from 'path/to/store'; // 替换为实际的 store 路径
+```
+
+1. **在微应用中使用 Vuex**：在微应用中，可以通过导入的 Vuex Store 访问全局状态和执行状态变更。可以使用 `mapState`、`mapMutations`、`mapActions` 等辅助函数简化代码。
+
+在微应用的组件中使用 Vuex：
+
+```javascript
+import { mapState, mapMutations } from 'vuex';  
+  
+export default {  
+  computed: {  
+    // 使用 mapState 映射全局状态到组件计算属性  
+    ...mapState(['globalState']),  
+  },  
+  methods: {  
+    // 使用 mapMutations 映射 mutations 方法到组件方法  
+    ...mapMutations(['updateGlobalState']),  
+  },  
+};
+```
+
+1. **路由通信**：在微应用中，可以使用 Vue Router 进行路由管理。当路由发生变化时，可以通过 Vuex 进行通信和状态更新。可以在路由守卫（如 `beforeEach`）中派发 Vuex action，或者在组件中监听路由变化并执行相应的操作。
+
+在路由守卫中派发 Vuex action：
+
+```javascript
+import router from './router'; // 导入路由配置  
+import store from './store'; // 导入 Vuex Store  
+  
+router.beforeEach((to, from, next) => {  
+  // 根据路由变化派发相应的 Vuex action  
+  store.dispatch('updateRoute', to);  
+  next();  
+});
+```
+
+在组件中监听路由变化并执行操作：
+
+```javascript
+export default {  
+  watch: {  
+    '$route': {  
+      handler(to, from) {  
+        // 监听路由变化，执行相应的操作，如更新状态或请求数据等  
+        this.updateData(to);  
+      },  
+      immediate: true, // 立即执行一次监听回调函数  
+    },  
+  },  
+  methods: {  
+    updateData(route) {  
+      // 根据路由变化更新数据或执行其他操作  
+    },  
+  },  
+};
+```
+
+通过以上步骤，你可以使用 Vuex 实现微前端的路由通信。请注意，在实际应用中，你可能需要根据具体需求进行适当的调整和优化。
+
 
 
 ## iframe
@@ -1066,6 +1184,20 @@ Web Components是如何做到微前端：
  官网：[快速上手 - qiankun (umijs.org)](https://qiankun.umijs.org/zh/guide/getting-started#主应用) 
 
  参考：[基于qiankun（乾坤）的微前端实践总结 - 掘金 (juejin.cn)](https://juejin.cn/post/7121515637624537119#heading-16)   [qiankun-demo: 基于qiankun（乾坤）框架的微前端实践demo (gitee.com)](https://gitee.com/qiaoba_1/qiankun-demo) 
+
+
+
+乾坤微前端框架的实现原理主要包括以下几个方面：
+
+1. 基于单-spa进行封装：单-spa是一个用于前端微服务化的JavaScript框架，提供了生命周期管理、路由管理等核心功能。乾坤微前端框架在此基础上进行封装，提供了更加开箱即用的API，让接入微应用如同使用iframe一样简单。
+2. 沙箱隔离：乾坤微前端框架使用沙箱隔离技术，将每个子应用的JavaScript代码包裹在单独的作用域中，实现各个子应用之间的运行环境隔离。这样可以防止子应用之间的代码相互干扰，保证各个子应用的独立性和安全性。
+3. CSS隔离：乾坤微前端框架使用shadow dom，这是浏览器支持的特性，shadow root下的dom的样式不会影响其他dom的样式。这样可以实现CSS的隔离，保证各个子应用之间的样式独立，避免样式冲突。
+4. 全局变量代理：为了防止子应用修改全局变量导致其他子应用受影响，乾坤微前端框架使用Proxy对全局变量进行代理，防止子应用直接修改全局变量。这样可以保证全局变量的安全性和一致性。
+5. 消息通信机制：乾坤微前端框架提供全局API和props等方式进行数据共享，同时也支持使用自定义事件或者pub/sub等方式实现消息通信。这样可以实现各个子应用之间的数据共享和通信，提高系统的灵活性和可维护性。
+6. 路由管理和资源加载：乾坤微前端框架会根据路由或者菜单等方式来决定加载哪些子应用，并负责资源的加载和缓存管理。这样可以提高系统的性能和响应速度，同时也方便开发者对系统进行管理和维护。
+7. 资源预加载：乾坤微前端框架在浏览器空闲时间预加载未打开的微应用资源，加速微应用打开速度。这样可以提高用户体验和系统性能。
+
+综上所述，乾坤微前端框架通过封装单-spa框架、使用沙箱隔离技术、CSS隔离、全局变量代理、消息通信机制、路由管理和资源加载以及资源预加载等实现原理，实现了多个子应用的协同工作，每个子应用都可以独立开发、部署。同时保证了各个子应用之间的安全性和一致性，提高了系统的性能和响应速度，方便了开发和维护工作。
 
 
 
@@ -1291,3 +1423,48 @@ github demo 下载：https://github.com/Tencent/wujie     正常运行
 https://juejin.cn/post/7212603829572911159?searchId=20231205100904B22A5A44F31159B751ED#heading-8
 
 [假如你是『无界』微前端框架的开发者 - 掘金 (juejin.cn)](https://juejin.cn/post/7212597327578808380#heading-3)
+
+
+
+### 使用：
+
+打开一个终端并使用以下命令创建一个新的`wujie demo` 示例：
+
+```
+# Create a new wujie-app project   自己根据需要选择生成
+npx create-wujie@latest
+```
+
+组件使用参考：  [Vue组件封装 | 无界 (wujie-micro.github.io)](https://wujie-micro.github.io/doc/pack/)
+
+```
+<WujieVue
+  width="100%"
+  height="100%"
+  name="xxx"
+  :url="xxx"
+  :sync="true"
+  :fetch="fetch"
+  :props="props"
+  :beforeLoad="beforeLoad"
+  :beforeMount="beforeMount"
+  :afterMount="afterMount"
+  :beforeUnmount="beforeUnmount"
+  :afterUnmount="afterUnmount"
+></WujieVue>
+```
+
+
+
+## 微前端注意事项：
+
+### 路由懒加载（无界遇到）
+
+当微前端里面嵌套微前端应用地址时，例如无界里面引入了乾坤的网址，需要注意组件异步加载的问题。子组件使用懒加载之后可能路由跳转报错。（如果发生路由跳转失败时，可以尝试将路由懒加载改成普通加载）
+
+### 跨域
+
+微前端的子应用都应该设置好跨域问题
+
+
+

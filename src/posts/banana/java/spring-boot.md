@@ -1668,6 +1668,8 @@ Redis，Mongo，ES
 
 ### Redis
 
+[Redis 详解-CSDN博客](https://blog.csdn.net/weixin_45683550/article/details/122565733)
+
 Redis是一款key-value存储结构的内存级NoSQL数据库
 支持多种数据存储格式
 支持持久化
@@ -2382,9 +2384,9 @@ springBoot整合 mongoDB
 
 ```
 
-#### Elasticsearch (ES)
+## Elasticsearch (ES)
 
-Elasticsearch是一个分布式全文搜索引擎
+Elasticsearch是一个分布式全文搜索引擎(倒排索引)
 
 下载： [Download Elasticsearch | Elastic](https://www.elastic.co/cn/downloads/elasticsearch) 
 
@@ -2401,6 +2403,122 @@ Elasticsearch 8.0报错：received plaintext http traffic on an https channel, c
 解决：  ES8默认开启了 SSL 认证。   **使用 https 发送请求，即：把 http 请求改成 https 即可。** 
 
 或者修改 config/elasticsearch.yml         xpack.security.enabled: false
+
+https://elasticsearch.bookhub.tech/
+
+
+
+基于Docker安装Elasticsearch:https://blog.csdn.net/Acloasia/article/details/130683934
+
+确认可使用，版本较低，Docker安装ElasticSearch教程:https://juejin.cn/post/7074115690340286472
+
+### docker 安装 es
+
+https://juejin.cn/post/7074115690340286472
+
+```
+// 采用docker安装首先要确认网段，为了方便操作，我们直接创建一个网络
+docker network create itmentu-net
+
+// 安装ElasticSearch
+docker run -d \
+  --name elasticsearch \
+    -e "ES_JAVA_OPTS=-Xms512m -Xmx512m" \
+    -e "discovery.type=single-node" \
+    -v es-data:/usr/share/elasticsearch/data \
+    -v es-plugins:/usr/share/elasticsearch/plugins \
+    --privileged \
+    --network itmentu-net \
+    -p 9200:9200 \
+    -p 9300:9300 \
+elasticsearch:7.12.1
+// 安装完成后，在浏览器中输入：http://192.168.211.130:9200/ 即可看到elasticsearch的响应结果：
+
+```
+
+###  Kibana安装 (可视化工具)
+
+   ELASTICSEARCH_HOSTS  需要改为自己的es地址
+
+```
+docker run -d \
+--name kibana \
+-e ELASTICSEARCH_HOSTS=http://1.94.16.149:9200 \
+--network itmentu-net \
+-p 5601:5601  \
+kibana:7.12.1
+
+
+//Kibana切换中文操作如下:
+#进入容器
+docker exec -it kibana /bin/bash
+#进入配置文件目录
+cd /usr/share/kibana/config
+#编辑文件kibana.yml
+vi kibana.yml
+#在最后一行添加如下配置
+i18n.locale: zh-CN
+#保存退出
+exit
+#并重启容器
+docker restart kibana
+```
+
+
+
+### IK分词器安装 (符合中文分词)
+
+作用：创建倒排索引时对文档分词，   用户搜索时，对输入的文档分词
+
+下载地址：[Releases · medcl/elasticsearch-analysis-ik · GitHub](https://github.com/medcl/elasticsearch-analysis-ik/releases?page=8)
+
+docker volume inspect es-plugins    获取数据卷地址，将下载好的压缩包解压后改名为 ik 上传到数据卷的地址
+
+docker restart elasticsearch    重启容器
+
+`IK`分词器包含两种模式：
+
+- `ik_smart`：最少切分，智能切分，粗粒度
+- `ik_max_word`：最细切分，细粒度
+
+
+
+ik分词器设置，拓展和停用词条  ：  ik目录下  修改`config/IKAnalyzer.cfg.xml`
+
+```xml
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE properties SYSTEM "http://java.sun.com/dtd/properties.dtd">
+<properties>
+	<comment>IK Analyzer 扩展配置</comment>
+	<!--用户可以在这里配置自己的扩展字典 -->
+	<!--此处使用ext.dic文件里面的拓展词，若当前目录下没有ext.dic文件，则自己创建这个文件并在里面添加自己要的拓展词-->
+	<entry key="ext_dict">ext.dic</entry>
+	 <!--用户可以在这里配置自己的扩展停止词字典-->
+	 <!--此处使用stopword.dic文件里面的拓展词，若当前目录下没有stopword.dic文件，则自己创建这个文件并在里面添加自己要的拓展停止词-->
+	<entry key="ext_stopwords">stopword.dic</entry>
+	<!--用户可以在这里配置远程扩展字典 -->
+	<!-- <entry key="remote_ext_dict">words_location</entry> -->
+	<!--用户可以在这里配置远程扩展停止词字典-->
+	<!-- <entry key="remote_ext_stopwords">words_location</entry> -->
+</properties>
+
+```
+
+配置完成后，重启容器，配置生效  docker restart elasticsearch
+
+
+
+
+
+docker 启动容器报 iptables: No chain/target/match by that name:https://blog.csdn.net/JineD/article/details/113886368
+
+```
+service docker restart   systemctl restart docker
+
+systemctl stop firewalld  systemctl stop iptables
+```
+
+
 
 ## 整合第三方数据
 

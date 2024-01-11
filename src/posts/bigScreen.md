@@ -13,6 +13,10 @@ tag:
 
 对于echarts图表的配置可以参考 [Echarts数据可视化_腾讯数据架构师的博客-CSDN博客](https://blog.csdn.net/luanpeng825485697/category_11735465.html) 
 
+快速搞定可视化大屏:https://juejin.cn/post/7236974705025220645?searchId=20240102162705DC1D6A1FA16220EC1E87#heading-10
+
+大屏解决方案：https://github.com/Alfred-Skyblue/v-scale-screen
+
 ### echarts设置主题
 
  [主题编辑器 - Apache ECharts](https://echarts.apache.org/zh/theme-builder.html) 
@@ -86,6 +90,7 @@ mounted(){
           // resize方法监听图表容器的大小并改变图表大小
              window.addEventListener('resize', () => {
                 myChart.resize()
+            })
           
       }
 
@@ -436,7 +441,17 @@ dataZoom: [
         ]
 ```
 
+### echarts柱状图柱形修改为三角形
 
+[echarts柱状图柱形修改为三角形_echarts 柱状图变成三角形-CSDN博客](https://blog.csdn.net/qq_36652782/article/details/103822830#:~:text=柱状图 变成 Echarts 柱状图 的图形 变成三角形 ，可以使用 `symbol`,的 `series` 属性中设置 `symbol` 为 `"triangle"`（ 三角形 ）。)
+
+### echarts环形图自动轮播选中，中间显示数据
+
+[echarts环形图自动轮播选中，中间显示数据，移入停止轮播_echarts环形图自动选中-CSDN博客](https://blog.csdn.net/weixin_44237806/article/details/117027396)
+
+## 可视化大屏开发及相关资源
+
+http://www.datagear.tech/
 
 ## Three.js
 

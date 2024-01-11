@@ -124,11 +124,11 @@ export const enSidebar = sidebar({
           link: "python",
         },{
           text: "部署",
-          icon: "edit",
+          icon: "",
           link: "bushu"
         },{
           text: "native",
-          icon: "edit",
+          icon: "",
           link: "native"
         }
       ]

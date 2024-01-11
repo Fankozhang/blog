@@ -18,9 +18,17 @@ typora-root-url: ..\.vuepress\publixi
 
 官网：[Flutter 开发文档 - Flutter 中文文档 - Flutter 中文开发者网站 - Flutter](https://flutter.cn/docs)
 
+http://www.laomengit.com/guide/introduction/mobile_system.html
+
 flutter属于声名式UI
 
 视频学习：[发送网络请求_哔哩哔哩_bilibili](https://www.bilibili.com/video/BV19x4y1R7LE?p=36&spm_id_from=pageDriver&vd_source=f25f5a8d75a3a60d5a288f726803ec11)
+
+[周糖果 的个人主页 - 搜索 - 掘金 (juejin.cn)](https://juejin.cn/user/26804746471054/search?search_type=0)
+
+
+
+[Dart 语言开发文档 | Dart](https://dart.cn/guides)
 
 ## 包下载网站 
 
@@ -44,9 +52,23 @@ dependencies:
   http: ^1.1.2
 ```
 
+3  导包
 
+```
+import 'package:http/http.dart' as http;
 
-## 安装
+关于import
+1、as关键字-  给库起别名！目的：防止类名方法名冲突！
+2、导入库，默认是整个文件中的都会导入
+        *shoW:执行需要导入的内容
+        *hide:需要隐藏的内容。
+```
+
+## pubspec.yaml 配置文件
+
+[【Flutter 实战】pubspec.yaml 配置文件详解 - 掘金 (juejin.cn)](https://juejin.cn/post/6891263591058538510)
+
+## flutter安装
 
 下载：[Flutter SDK archive | Flutter](https://docs.flutter.dev/release/archive?tab=windows#windows)
 
@@ -61,6 +83,8 @@ https://blog.csdn.net/qq_43231248/article/details/132591061
 下载flutter插件
 
 配置sdk ,   命令行 flutter doctor -v   第一行显示 sdk 路径
+
+[Android实战——正确配置 XXX_HOME 环境变量_androidhome配置-CSDN博客](https://blog.csdn.net/willway_wang/article/details/123014598)
 
 ### vscode
 
@@ -83,6 +107,18 @@ https://blog.csdn.net/weixin_43840202/article/details/110353440
 https://services.gradle.org/distributions/            镜像网站： https://mirrors.cloud.tencent.com/gradle/
 
 一定要下载对应的版本，替换掉文件
+
+gradle-wrapper.ropeties
+
+```
+distributionBase=GRADLE_USER_HOME
+distributionPath=wrapper/dists
+zipStoreBase=GRADLE_USER_HOME
+zipStorePath=wrapper/dists
+distributionUrl=https\://services.gradle.org/distributions/gradle-7.5-all.zip
+```
+
+
 
 最终android目录下  build.gradle如下所示
 
@@ -1106,12 +1142,125 @@ getDatas() async {
                             }))));
 ```
 
+### dio
+
+[dio/dio/README-ZH.md at main · cfug/dio · GitHub](https://github.com/cfug/dio/blob/main/dio/README-ZH.md)
+
+[11.3 Http请求库-dio | 《Flutter实战·第二版》 (flutterchina.club)](https://book.flutterchina.club/chapter11/dio.html)
+
 ## Mixins 混入
 
 目的：给一个类增加功能。是多继承。（我还不太清楚）
 
 [Flutter 语法进阶 | 深入理解混入类 mixin - 掘金 (juejin.cn)](https://juejin.cn/post/7132651702980706312#heading-4)
 
+## 异常处理
+
+## 异步处理  多线程
+
+[Flutter-Dart中的异步和多线程讲解 - 掘金 (juejin.cn)](https://juejin.cn/post/7039115158261596191)
+
+## flutter 生命周期
+
+[Flutter 的生命周期 - 掘金 (juejin.cn)](https://juejin.cn/post/7023254324851507214)
+
 ## UI库
 
 [开源 Flutter UI 库，简化 Flutter 应用程序开发 - Getwidget](https://www.getwidget.dev/)
+
+
+
+# react native
+
+官网：[简介 · React Native 中文网](https://reactnative.cn/docs/getting-started)
+
+检查运行环境 ： npx react-native doctor           npx react-native info npx react-native     部分error不影响运行
+
+创建项目：npx react-native init AwesomeProject
+
+运行  npm start,   需要启动Metro之后，才能在 android 运行
+
+环境变量一定要配对，包括tools的相关变量。 提前启动模拟器
+
+我这个被要求的jdk17  使用的17.0.9   可以去官网下载，需要配置好环境变量
+
+
+
+[[react native\] android sdk not found - 掘金 (juejin.cn)](https://juejin.cn/post/7263128272504963127)
+
+[android - ReactNative 找不到 Android SDK - IT工具网 (coder.work)](https://www.coder.work/article/7545226)
+
+[保姆级别——Android Studio安装教程&环境变量配置 - 掘金 (juejin.cn)](https://juejin.cn/post/7239249100335759421#heading-15)
+
+[React Native环境配置搭建（全网最全 没有之一）_cannot start server in new window because no termi-CSDN博客](https://blog.csdn.net/summer___cold/article/details/135421493)
+
+（react native环境变量配置有点麻烦，尽量在科学上网的情况下下载依赖的文件）
+
+
+
+gradle-wrapper.properties 文件修改
+
+```
+distributionUrl=https://mirrors.cloud.tencent.com/gradle/gradle-8.1.1-all.zip    使用国内镜像文件下载更快 
+```
+
+
+
+## 环境变量配置（根据自己路径配置）：
+
+| 变量名       | 变量值                      |
+| ------------ | --------------------------- |
+| JAVA17_HOME  | E:\jdk\jdk-17.0.9           |
+| ANDROID_HOME | E:\androidStudio\androidSdk |
+| JAVA_HOME    | %JAVA17_HOME%               |
+
+**path 里面加入**
+
+%JAVA_HOME%\jre\bin
+
+%JAVA_HOME%\bin
+
+E:\androidStudio\androidSdk
+
+%ANDROID_HOME%\platform-tools
+
+%ANDROID_HOME%\tools
+
+%ANDROID_HOME%\build-tools\34.0.0
+
+%ANDROID_HOME%\emulator
+
+%ANDROID_HOME%\build-tools
+
+%ANDROID_HOME%\tools\bin
+
+
+
+## 清除编译缓存（npm start运行之前运行）
+
+编译缓存不清除的话，可能会出现编译时还是用之前的环境变量下载的依赖文件运行，造成编译错误
+
+在React Native中，清除编译缓存可以通过以下步骤实现：
+
+1. 清除Metro缓存:
+
+   ```
+   npx react-native start --reset-cache
+   ```
+
+2. 清除iOS工程缓存:
+
+   ```
+   rm -rf ios/build
+   ```
+
+3. 清除Android工程缓存:
+
+   ```
+   rm -rf android/build
+   ```
+
+这些命令将清除React Native项目中的编译缓存，以确保在重新编译应用程序时不会出现任何问题。
+
+关于React Native清除编译缓存的更多信息，您可以参考官方文档： https://reactnative.dev/docs/next/cli#start--reset-cache
+
