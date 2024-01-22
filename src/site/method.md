@@ -86,6 +86,10 @@ new Router({
 
 https://blog.csdn.net/qq_39606853/article/details/122192555
 
+### vscode代码爆红
+
+可以尝试切换编辑器右下角的  LF 和 CRLF     切换文件类型的检测
+
 ### 快速删除文件夹下所有文件
 
 在我们的项目安装依赖时，会生成 node_modules 文件夹，当出现依赖相关的问题难以解决时，可能会需要删除
@@ -126,7 +130,7 @@ https://mp.weixin.qq.com/s/6SuNY3Y27RGXPx89zCJnEg
 
 [关于前端实现上传文件这个功能，我只能说so easy！ - 掘金 (juejin.cn)](https://juejin.cn/post/7224402365452238906)
 
-## 下载（url）
+## 文件下载（url）
 
 [Blob (javascript.info)](https://zh.javascript.info/blob)
 
@@ -266,6 +270,66 @@ console.log(b); // ["http:", "", "www.jb51.net", "html", "images", "logo.gif"]
 var c=b.slice(b.length-1, b.length).toString(String).split(".");
 console.log(c); // ["logo", "gif"]
 alert("取得的文件名是:" + c.slice(0, 1)); // 取得的文件名是:logo
+```
+
+## 文件预览
+
+### vue-office
+
+vue-office是一个支持多种文件(docx、.xlsx、pdf)预览的vue组件库，支持vue2和vue3。
+
+官网：https://501351981.github.io/vue-office/examples/docs/guide/  (包含上传文件预览，非Vue框架文件预览，目前不支持doc、xls格式文件的预览)
+
+```
+#docx文档预览组件
+npm install @vue-office/docx vue-demi
+
+#excel文档预览组件
+npm install @vue-office/excel vue-demi
+
+#pdf文档预览组件  (也可直接iframe)
+npm install @vue-office/pdf vue-demi
+```
+
+使用：
+
+```
+    <vue-office-docx 
+          src="http://1.94.16.149:9000/test/123.docx"
+          style="height:50vh"
+          @rendered="rendered"
+          @error="errorHandler"
+      />
+    <vue-office-excel
+        src="http://1.94.16.149:9000/test/模板.xlsx"
+    />
+    <vue-office-pdf 
+        src="http://1.94.16.149:9000/test/tjzysx.pdf"
+    />
+    
+<script setup>
+  
+//引入VueOfficeDocx组件
+import VueOfficeDocx from '@vue-office/docx'
+//引入相关样式
+import '@vue-office/docx/lib/index.css'
+
+//引入VueOfficeExcel组件
+import VueOfficeExcel from '@vue-office/excel'
+//引入相关样式
+import '@vue-office/excel/lib/index.css'
+
+//引入VueOfficePdf组件
+import VueOfficePdf from '@vue-office/pdf'
+
+
+  const rendered=()=>{
+    console.log("渲染完成")
+  }
+  const errorHandler=()=>{
+    console.log("渲染失败")
+  }
+</script>
 ```
 
 
@@ -416,11 +480,26 @@ delForm(item, index){
 
 ​                                                                                  /^[A-Za-z0-9u4e00-u9fa5]+@[a-zA-Z0-9_-]+(.[a-zA-Z0-9_-]+)+$/
 
+用户注册弱口令问题：   正则匹配6-16位包含数字字母特殊字符的密码`/(?=.*[0-9])(?=.*[a-zA-Z])(?=.*[^a-zA-Z0-9]).{6,16}/`
+
+身份证号：   /^[1-9]\d{5}(18|19|20)\d{2}((0[1-9])|(1[0-2]))(([0-2][1-9])|10|20|30|31)\d{3}[0-9Xx]$/
+
+```
+    var checkName = (rule, value, cb) => {
+      //验证名字的正则表达式
+      const regName = /^([\\u4e00-\\u9fa5]{1,20}|[a-zA-Z\\.\\s]{1,20})$/;
+      if (regName.test(value)) {
+        //正确的名字
+        return cb();
+      }
+      cb(new Error("请输入正确的名字"));
+    };
+
+```
+
 
 
 ### this.$refs[formName].validat验证（自定义校验）
-
-
 
 验证不生效可参考文章  https://www.jianshu.com/p/5ebd1bd9ecaf
 
@@ -690,6 +769,24 @@ vue项目开发中，我们已经开发实现了pc端的网站开发，当想要
 **vue项目PC端移动端适配方案**
 
 [(115条消息) vue项目PC端移动端适配方案_coderDragon的博客-CSDN博客_vue项目pc端和移动端适配](https://blog.csdn.net/weixin_53876218/article/details/125225893)
+
+
+
+### 媒体查询：
+
+- 通过 `@media` 判断设备的尺寸应用不同的 `css` 样式
+
+```
+// 屏幕大于 1024px 或小于 1440px 时应用该样式
+@media screen and (min-width: 1024px) and (max-width: 1440px) {
+  
+}
+
+// 屏幕大于 1440px 时应用该样式
+@media screen and (min-width: 1441px) { 
+  
+}
+```
 
 
 
@@ -1086,6 +1183,34 @@ export default {
 
 [解决 Element-ui中 选择器（Select）因options 数据量大导致渲染慢、页面卡顿的问题-阿里云开发者社区 (aliyun.com)](https://developer.aliyun.com/article/1086565)
 
+### Element-ui upload组件 上传文件类型限制
+
+[Element-ui upload组件 上传文件类型限制_el-upload默认支持的文件类型-CSDN博客](https://blog.csdn.net/qq_34707272/article/details/103895176)
+
+首先写accept，其次判断文件后缀名，在组件beforeUpload事件中将文件格式控制在合理范围内，防止用户自己选择可接受的文件格式；另外控制文件大小。
+
+```
+extType: "png,jpg,jpeg,doc,docx,xls,xlsx,pdf"   文件后缀名
+
+:before-upload="(file)=>beforeUpload(file,extType)"
+
+beforeUpload (file, extType) {
+      const fileSuffix = file.name.substring(file.name.lastIndexOf('.') + 1)
+      const whiteList = extType.split(',')
+      if (whiteList.indexOf(fileSuffix) === -1) {
+        this.$message.error(`上传文件只能是 ${extType}格式`)
+        return false
+      }
+      const isLt10M = file.size / 1024 / 1024 < 10
+      if (!isLt10M) {
+        this.$message.error('上文件大小不能超过 10MB!')
+      }
+      return isLt10M
+    },
+```
+
+
+
 ## 数据格式转化
 
 ### 列表形数据转树形数据
@@ -1222,7 +1347,7 @@ if (process.env.NODE_ENV == "development") {
 
 [vue里cdn引入改为本地js文件引用](https://www.cnblogs.com/qingjiawen/p/17292707.html)
 
-下载需要引入的 js文件 到public文件夹下
+下载vue.config.js里面需要引入的 js文件 到public文件夹下
 
 在index.html引入
 

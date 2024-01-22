@@ -2392,6 +2392,8 @@ Elasticsearch是一个分布式全文搜索引擎(倒排索引)
 
 文档参考： [(217条消息) ElasticSearch使用教程、设计到实战_ForFuture Code的博客-CSDN博客](https://blog.csdn.net/ganquanzhong/article/details/108633025) 
 
+[一口气看完43个关于 ElasticSearch 的使用建议 (qq.com)](https://mp.weixin.qq.com/s/7H8kjUcJNoQJRqwJTyfXOw)
+
 启动：bin/elasticsearch.bat
 
 warning: ignoring JAVA_HOME=C:\Program Files\Java\jdk1.8.0_74; using bundled JDK

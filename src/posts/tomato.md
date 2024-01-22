@@ -34,6 +34,8 @@ ReactPc项目讲义: https://www.yuque.com/fechaichai/tzzlh1
 
 ## vite创建react项目
 
+https://juejin.cn/post/7240838046789812282?searchId=20240111164719A152F422F9A9C8A6FEFD#heading-11
+
 ```
 npm init vite@latest
 ```

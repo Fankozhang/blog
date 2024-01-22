@@ -430,7 +430,11 @@ MINIO_SECRET_KEY ：密码（账号长度必须大于等于5，密码长度必�
 
 [minIO设置直接通过访问链接在浏览器中打开文件_minio直接访问文件-CSDN博客](https://blog.csdn.net/destin223/article/details/134110194#:~:text=访问文件网址为：ip%3Aaddress%2Fbucket的名字%2F文件的名字。,2、进入页面后，配置只读访问权限，prefix按照提示输入就好。)
 
+ bucket 的 Access Policy 设置为public可以直接浏览器访问
+
 在minio上传的文件以    ip:address/bucket的名字/文件的名字  路径来访问
+
+例子：http://1.14.16.145:9000/test/MyLogo.jpg
 
 
 

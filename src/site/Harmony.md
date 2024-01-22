@@ -14,6 +14,8 @@ typora-root-url: ..\.vuepress\public
 
 官网：[HarmonyOS鸿蒙专区-开源鸿蒙IDE低代码-云开发-华为开发者学堂 (huawei.com)](https://developer.huawei.com/consumer/cn/training/harmonyOS/l44yheg8?ha_source=HM-yetou&ha_sourceId=89000240)
 
+[前端卷鸿蒙？推荐 12 个 yyds 的开源鸿蒙实战项目 (qq.com)](https://mp.weixin.qq.com/s/LFvY152vujufw0UL3Oqp7A)
+
 ## DevEco Studio 下载
 
 网址：[HUAWEI DevEco Studio和SDK下载和升级 | 华为开发者联盟](https://developer.huawei.com/consumer/cn/deveco-studio/)

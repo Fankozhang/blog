@@ -209,6 +209,14 @@ tag:
 
 高质量前端资源分享  [https://juejin.cn/post/7304932252827287604#heading-48](https://mp.weixin.qq.com/s/B1YaeuCXrCrq_hJaGSqmgQ)
 
+[全网最全的docx、pptx、xlsx、pdf文件预览方案（典藏版） (qq.com)](https://mp.weixin.qq.com/s/pkixaJUmFGvc_RitLYr6Fg)
+
+[vue:实时天气小demo - 掘金 (juejin.cn)](https://juejin.cn/post/7309443151687663668)
+
+[使用 vue3 指令封装一个后台管理系统图片预览功能 - 掘金 (juejin.cn)](https://juejin.cn/post/7324653675456364596)
+
+待尝试：[点击页面元素打开IDE源码的开源提效工具——支持webpack/vite/rspack/react/vue/SSR等众多场景 - 掘金 (juejin.cn)](https://juejin.cn/post/7326002010084311079#heading-11)
+
 ### 3d
 
 [GitHub - mtsee/vr-hall: three.js 3D vr hall](https://github.com/mtsee/vr-hall)
@@ -246,6 +254,8 @@ vue和react对比学习（详细的）：  [React - 苏苏同学的专栏 - 掘�
 [8 种在 React 中实现条件渲染技术的方法 (qq.com)](https://mp.weixin.qq.com/s/WXlB2Mc7fsAHmjXp-_PTMw)
 
 [使用 React18 + Vite + TypeScript 完成公司项目经验总结，学到了很多 - 掘金 (juejin.cn)](https://juejin.cn/post/7205842390842458149)
+
+[聊一聊 2024 年 React 生态系统 (qq.com)](https://mp.weixin.qq.com/s/h-RSl_4oHJwDM8XtJ2F02A)
 
 ### git
 
@@ -321,7 +331,11 @@ Docker-compose 安装 Wordpress 博客  [Docker-compose 安装 Wordpress 博客 
 
 [解放双手！MyBatis-Plus可视化代码生成器来了，yyds！ (qq.com)](https://mp.weixin.qq.com/s/23ggmOeXjEfcwRx0BRX8-g)
 
-## 开源项目收藏（源码收藏）
+### 其他收藏
+
+b站的up主推荐：https://juejin.cn/post/7322401091237511222#heading-3
+
+## 开源项目收藏（源码收藏，资源收藏）
 
 我的测试项目：[东方凝洛/我的测试仓库 - 码云 - 开源中国 (gitee.com)](https://gitee.com/fankozhang/my-testing-warehouse/tree/master)
 
@@ -352,6 +366,13 @@ smartadmin：开源SpringBoot和Vue的企业级项目，代码很规范   https:
 
 
 
+
+
+夸克：最新编程合集
+链接：https://pan.quark.cn/s/18d6209c1bee
+
+
+
 黑马程序员：公众号
 
 黑马《SpringBoot3+Vue3全套教程》
@@ -371,6 +392,8 @@ smartadmin：开源SpringBoot和Vue的企业级项目，代码很规范   https:
 
 下载链接：https://pan.baidu.com/s/1sVjfjrGLgGRtbYIgFq6ang?pwd=abcd 
 提取码：abcd 
+
+
 
 spring全家桶课程资料链接：https://pan.baidu.com/s/1AVRWD-0ukDee9QxxhBhwvA 
 提取码：gosq 
