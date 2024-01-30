@@ -80,7 +80,9 @@ tag:
 
 - [史上最全设计模式导学目录（完整版）_史上最全设计模式lovelion-CSDN博客](https://blog.csdn.net/LoveLion/article/details/17517213)
 
--      [个人博客|沧沧凉凉的小站 (cclliang.com)](https://www.cclliang.com/)
+- [个人博客|沧沧凉凉的小站 (cclliang.com)](https://www.cclliang.com/)
+
+-      [互联网 Java 工程师进阶知识完全扫盲 - Doocs 技术社区](https://doocs.github.io/advanced-java/#/?id=互联网-java-工程师进阶知识完全扫盲)
 
 
 
@@ -166,6 +168,16 @@ tag:
 
   
 
+## 软件、网站收藏
+
+- [Miru](https://miru.js.org/)
+
+- [益达：开源跨平台看图片、视频、RSS、小说神器 – APP喵-软件猫：阿喵软件阿喵分享 (appmiu.com)](https://www.appmiu.com/19693.html)
+
+- [APP喵-软件猫：阿喵软件阿喵分享 – 软件猫：优质APP软件资源分享下载站 (appmiu.com)](https://www.appmiu.com/)
+
+  
+
 ## 开源项目
 
 - 支持多种文件(**docx、excel、pdf**)预览的vue组件库，支持vue2/3。   https://github.com/501351981/vue-office    
@@ -182,6 +194,8 @@ tag:
 ## 文章收藏
 
 ### 前端相关
+
+前端框架语法特性对比，可用于对比学习：[JavaScript框架语法特性对比 (jason-liang.com)](https://component-party.jason-liang.com/)
 
  [写给5年前端妹子的三万字脚手架教程 - 掘金 (juejin.cn)](https://juejin.cn/post/7260144602471776311) 
 
@@ -230,6 +244,10 @@ tag:
 [12个强大的 JavaScript 动画库，可帮助你提升用户体验 (qq.com)](https://mp.weixin.qq.com/s/AsaT9H8mhaJVmEpg9zLH8A)
 
 [GSAP 中文教程 中文文档 ｜官方文档 官方教程翻译 ｜好奇代码出品](https://gsap.framer.wiki/timelines)
+
+### ts
+
+学习入门文章:https://juejin.cn/post/7018805943710253086
 
 ### vue
 
@@ -327,9 +345,9 @@ Docker-compose 安装 Wordpress 博客  [Docker-compose 安装 Wordpress 博客 
 
 ### 低代码生成(可视化)
 
-[自从用了这款代码生成工具，项目开发效率大大提高了！ (qq.com) ](https://mp.weixin.qq.com/s/KeI9lN0uyNU0_8wTYwBzwQ)   [业务代码生成器 - 猿猿工具 (utilsbox.cn)](https://utilsbox.cn/?app=bizcode)
+[自从用了这款代码生成工具，项目开发效率大大提高了！ (qq.com) ](https://mp.weixin.qq.com/s/KeI9lN0uyNU0_8wTYwBzwQ)        [业务代码生成器 - 猿猿工具 (utilsbox.cn)](https://utilsbox.cn/?app=bizcode)
 
-[解放双手！MyBatis-Plus可视化代码生成器来了，yyds！ (qq.com)](https://mp.weixin.qq.com/s/23ggmOeXjEfcwRx0BRX8-g)
+mybatis-plus-generator-ui ：https://blog.csdn.net/afreon/article/details/129153154
 
 ### 其他收藏
 

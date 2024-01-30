@@ -11,6 +11,84 @@ typora-root-url: ..\.vuepress\public
 
 # 工作问题及解决方法
 
+## Node npm nvm
+
+### node
+
+安装：[Download | Node.js (nodejs.org)](https://nodejs.org/en/download)
+
+### npm
+
+[前端开发技术栈（工具篇）：详细介绍npm、pnpm和cnpm分别是什么，使用方法以及之间有哪些关系-CSDN博客](https://blog.csdn.net/zhouruifu2015/article/details/132303744?spm=1001.2101.3001.6650.4&utm_medium=distribute.pc_relevant.none-task-blog-2~default~OPENSEARCH~Rate-4-132303744-blog-134191726.235^v38^pc_relevant_sort_base3&depth_1-utm_source=distribute.pc_relevant.none-task-blog-2~default~OPENSEARCH~Rate-4-132303744-blog-134191726.235^v38^pc_relevant_sort_base3&utm_relevant_index=5)
+
+### nvm
+
+node版本过高，vue项目运行时报错 ： Error: error:0308010C:digital envelope routines::unsupported
+
+出错原因：因为 node.js V17版本中最近发布的OpenSSL3.0, 而OpenSSL3.0对允许算法和密钥大小增加了严格的限制，可能会对生态系统造成一些影响.
+
+具体原因可查看： [终极解决：Error: error:0308010C:digital envelope routines::unsupported_CSDN博客](https://blog.csdn.net/m0_48300767/article/details/131450325)
+
+
+
+为了解决node版本冲突等问题，选择安装 nvm-windows 包管理工具：[Releases · coreybutler/nvm-windows (github.com)](https://github.com/coreybutler/nvm-windows/releases)
+
+node版本管理：[nvm-下载、安装、使用（2023/07/12更新）_nvm 下载-CSDN博客](https://blog.csdn.net/m0_54345753/article/details/131653960)
+
+以下是在nvm-windows中安装和使用Node.js的示例代码：
+
+安装Node.js：
+
+```
+nvm install <version>
+```
+
+例如，要安装Node.js v14.17.0：
+
+```
+nvm install 16.20.0
+```
+
+切换Node.js版本：
+
+```
+nvm use <version>
+```
+
+例如，要切换到Node.js v14.17.0：
+
+```
+nvm use 16.20.0
+```
+
+查看已安装的Node.js版本：
+
+```
+nvm list
+```
+
+查看可安装的Node.js版本：
+
+```
+nvm list available
+```
+
+卸载Node.js：
+
+```
+nvm uninstall <version>
+```
+
+例如，要卸载Node.js v16.20.0
+
+```
+nvm uninstall 16.20.0
+```
+
+### 多个项目复用node_modules (没用过)
+
+[多个项目复用node_modules_node_module 可以多个项目共用一个吗-CSDN博客](https://blog.csdn.net/weixin_42863883/article/details/134835441)
+
 ## 部署问题
 
 ### 一个nginx中通过不同的路由部署多个vue前端项目
@@ -148,6 +226,15 @@ export function getExcelList (params) {
     params: params
   })
 }
+export function downReport (data) {
+  return request({
+    url: '/manage/gwyp/exportWord/batch',
+    method: 'post',
+    responseType: "blob",
+    responseEncoding: "utf8",
+    data: data
+  })
+}
 ```
 
 请求后端文件流的接口要加上  responseType: "arraybuffer"   ，否则导出可能会打不开    
@@ -274,7 +361,11 @@ alert("取得的文件名是:" + c.slice(0, 1)); // 取得的文件名是:logo
 
 ## 文件预览
 
-### vue-office
+[前端实现word、excel、pdf、ppt、mp4、图片、文本等文件的预览 - 掘金 (juejin.cn)](https://juejin.cn/post/7071598747519549454)
+
+[纯前端文档预览，还要支持所有主流格式，有这一篇就足够了_file-viewer安装-CSDN博客](https://blog.csdn.net/wybaby168/article/details/122842866)
+
+### vue-office  (docx、.xlsx、pdf)
 
 vue-office是一个支持多种文件(docx、.xlsx、pdf)预览的vue组件库，支持vue2和vue3。
 
@@ -293,7 +384,8 @@ npm install @vue-office/pdf vue-demi
 
 使用：
 
-```
+```vue
+<template>
     <vue-office-docx 
           src="http://1.94.16.149:9000/test/123.docx"
           style="height:50vh"
@@ -306,6 +398,7 @@ npm install @vue-office/pdf vue-demi
     <vue-office-pdf 
         src="http://1.94.16.149:9000/test/tjzysx.pdf"
     />
+</template>
     
 <script setup>
   
@@ -334,7 +427,7 @@ import VueOfficePdf from '@vue-office/pdf'
 
 
 
-## 表单（校验）
+## 表单（校验）(生成器)
 
 ### 一个表单里面添加，删除子级表单
 
@@ -772,7 +865,26 @@ vue项目开发中，我们已经开发实现了pc端的网站开发，当想要
 
 
 
-### 媒体查询：
+### 媒体查询 @media
+
+常见的屏幕尺寸
+
+```yaml
+yaml复制代码分辨率   比例 | 设备尺寸
+
+1024 * 500		（8.9 寸）
+1024 * 768		（4 : 3  | 10.4 寸、12.1 寸、14.1 寸、15 寸）
+1280 * 800		（16 : 10  |15.4 寸）
+1280 * 1024		（5：4  | 14.1寸、15.0寸）
+1280 * 854		（15 : 10 | 15.2）
+1366 * 768		（16：9 | 不常见）
+1440 * 900		（16：10  17寸 仅苹果用）
+1440 * 1050		（5：4  | 14.1寸、15.0寸）
+1600 * 1024		（14：9 | 不常见）
+1600 * 1200		（4：3 | 15、16.1）
+1680 * 1050		（16：10 | 15.4寸、20.0寸）
+1920 * 1200		（23寸）
+```
 
 - 通过 `@media` 判断设备的尺寸应用不同的 `css` 样式
 
@@ -1189,6 +1301,8 @@ export default {
 
 首先写accept，其次判断文件后缀名，在组件beforeUpload事件中将文件格式控制在合理范围内，防止用户自己选择可接受的文件格式；另外控制文件大小。
 
+**注意事项：**不使用默认上传，使用手动上传时，beforeUpload 一定要返回 false,否则还是会调用默认的上传事件。
+
 ```
 extType: "png,jpg,jpeg,doc,docx,xls,xlsx,pdf"   文件后缀名
 
@@ -1206,6 +1320,25 @@ beforeUpload (file, extType) {
         this.$message.error('上文件大小不能超过 10MB!')
       }
       return isLt10M
+    },
+```
+
+```js
+// 上传图片限制
+
+beforeUpload (file) {
+      // let isType, isLtSize
+        const isType = file.type.indexOf('image/') !== -1
+       const isLtSize = file.size / 1024 / 1024 < 10
+
+      if (!isType && !isLtSize) {
+        this.$message.error('上传的文件格式错误，文件大小不能超过 10MB!')
+      } else if (!isType) {
+        this.$message.error('上传的文件格式错误！')
+      } else if (!isLtSize) {
+        this.$message.error('上传的文件大小不能超过 10MB!')
+      }
+      return isType && isLtSize
     },
 ```
 

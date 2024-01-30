@@ -1247,7 +1247,11 @@ E:\androidStudio\androidSdk
 1. 清除Metro缓存:
 
    ```
+   # react native
    npx react-native start --reset-cache
+   
+   # npm
+   npm start -- --reset-cache
    ```
 
 2. 清除iOS工程缓存:
@@ -1620,6 +1624,11 @@ loding 效果
           uri: 'data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAADMAAAAzCAYAAAA6oTAqAAAAEXRFWHRTb2Z0d2FyZQBwbmdjcnVzaEB1SfMAAABQSURBVGje7dSxCQBACARB+2/ab8BEeQNhFi6WSYzYLYudDQYGBgYGBgYGBgYGBgYGBgZmcvDqYGBgmhivGQYGBgYGBgYGBgYGBgYGBgbmQw+P/eMrC5UTVAAAAABJRU5ErkJggg==',
         }}
       />
+
+{/* 背景图片 */}
+<ImageBackground source={...} style={{width: '100%', height: '100%'}}>
+    <Text>Inside</Text>
+  </ImageBackground>
 ```
 
 ### TextInput 输入
@@ -1718,6 +1727,49 @@ const styles = StyleSheet.create({
 `SafeAreaView`会自动根据系统的各种导航栏、工具栏等预留出空间来渲染内部内容。更重要的是，它还会考虑到设备屏幕的局限，比如屏幕四周的圆角或是顶部中间不可显示的“刘海”区域。
 
 使用：只需简单地把你原有的视图用`SafeAreaView`包起来，同时设置一个`flex: 1`的样式。当然可能还需要一些和你的设计相匹配的背景色。
+
+注意：在android挖孔屏幕中，使用 SafeAreaView 可能并不能显示出安全区域，此时需要引入别的库来解决这一问题
+
+#### react-native-safe-area-context 反应原生安全区域上下文
+
+```
+npm install react-native-safe-area-context
+```
+
+使用：
+
+```jsx
+import React, {useEffect, useState} from 'react';
+import { StatusBar } from 'expo-status-bar';
+import { StyleSheet, Text, View,Button } from 'react-native';
+
+// 注意  SafeAreaView 从 react-native-safe-area-context 引入，而不是从 'react-native' 引入。
+import { SafeAreaView  } from 'react-native-safe-area-context';
+
+export default function App() {
+ 
+  return (
+      <SafeAreaView style={styles.container}>
+        <Text>Open up App.js to start working on your app!123456</Text>
+        <Button title="存储" onPress={() => storeData('hello RN')} />
+        <Button title="获取" onPress={getData} />
+        <Text>{storesData}</Text>
+        <StatusBar style="auto" />
+      </SafeAreaView>
+    
+  );
+}
+
+const styles = StyleSheet.create({
+  container: {
+    flex: 1,
+    backgroundColor: '#fff',
+    marginHorizontal: 16,
+  },
+});
+```
+
+
 
 ### SectionList
 
@@ -2075,11 +2127,180 @@ export default class SwiperComponent extends Component {
 
 ### AsyncStorage持久化存储系统
 
+[Installation | Async Storage (react-native-async-storage.github.io)](https://react-native-async-storage.github.io/async-storage/docs/install/)
+
+异步存储只能存储 `string` 数据。为了存储对象数据，您需要先对其进行序列化。对于可以序列化为 JSON 的数据，可以在保存数据和 `JSON.parse()` 加载数据时使用 `JSON.stringify()` 。
+
+```
+import AsyncStorage from '@react-native-async-storage/async-storage';
+```
+
+引入，重启后编译报错 ：  Error: [@RNC/AsyncStorage]: NativeModule: AsyncStorage is null.
+
+暂未找到合适的解决办法  （使用 Expo 创建的react项目运行后没有这样的问题。）
+
+使用如下展示：
+
+```jsx
+import React, {useEffect, useState} from 'react';
+import { StatusBar } from 'expo-status-bar';
+import { StyleSheet, Text, View,Button } from 'react-native';
+import AsyncStorage from '@react-native-async-storage/async-storage';
+import { SafeAreaView  } from 'react-native-safe-area-context';
+
+export default function App() {
+  const [storesData, setstoresData] = useState('');
+  const storeData = async value => {
+    console.log('storeData', value);
+    try {
+      await AsyncStorage.setItem('my-key', value);
+    } catch (e) {
+      // saving error
+    }
+  };
+  const getData = async () => {
+    console.log('123');
+    try {
+      const value = await AsyncStorage.getItem('my-key');
+      console.log('getData', value);
+      if (value !== null) {
+        // value previously stored
+        console.log(value);
+        setstoresData(value)
+      }
+    } catch (e) {
+      console.log('error', e);
+      // error reading value
+    }
+  };
+  return (
+      // 安全区域展示
+      <SafeAreaView style={styles.container}>
+        <Button title="存储" onPress={() => storeData('hello RN')} />
+        <Button title="获取" onPress={getData} />
+        <Text>{storesData}</Text>
+        <StatusBar style="auto" />
+      </SafeAreaView>
+    
+  );
+}
+```
+
+
+
 ### Geolocation获取定位信息
+
+[@react-native-community/geolocation - npm (npmjs.com)](https://www.npmjs.com/package/@react-native-community/geolocation)
 
 ### Camera调用摄像头
 
+[Installation · React Native Camera (react-native-camera.github.io)](https://react-native-camera.github.io/react-native-camera/docs/installation.html)
+
+### video 视频播放器（报错，暂未解决）
+
+[react-native-video - npm (npmjs.com)](https://www.npmjs.com/package/react-native-video)         [A  component for React Native – Video (react-native-video.github.io)](https://react-native-video.github.io/react-native-video)
+
+
+
+使用参考：[A  component for React Native – Video (react-native-video.github.io)](https://react-native-video.github.io/react-native-video)
+
+报错：对照源码改代码 [react-native-video/examples/basic/android/app/build.gradle at master · react-native-video/react-native-video · GitHub](https://github.com/react-native-video/react-native-video/blob/master/examples/basic/android/app/build.gradle)
+
+```
+npm install --save react-native-video
+```
+
+Android 安装配置：  **android/settings.gradle**
+
+```
+include ':react-native-video'
+project(':react-native-video').projectDir = new File(rootProject.projectDir, '../node_modules/react-native-video/android-exoplayer')
+```
+
+**android/app/build.gradle**
+
+从版本 >= 5.0.0 开始，您必须应用以下更改：
+
+```
+dependencies {
+   ...
+    compile project(':react-native-video')
++   implementation "androidx.appcompat:appcompat:1.0.0"
+-   implementation "com.android.support:appcompat-v7:${rootProject.ext.supportLibVersion}"
+
+}
+```
+
+#### expo 视频播放(正常播放，编译warning)
+
+安装：  npx expo install expo-av
+
+```jsx
+import { Video, ResizeMode } from 'expo-av';
+
+export default function App() {
+  return (
+    <View style={styles.container}>
+        <Video
+        style={{width:400,height:400}}
+        source={{
+          uri: 'http://1.94.16.149:9000/test/movie.mp4',
+        }}
+        useNativeControls
+        resizeMode={ResizeMode.CONTAIN}
+        isLooping
+      />
+      <StatusBar style="auto" />
+    </View>
+  );
+}
+```
+
+#### expo-video-player
+
+下载，引入报错（暂未解决）
+
+### [**React Native ECharts**](https://wuba.github.io/react-native-echarts/zh-Hans/)
+
+[简介 | React Native ECharts (wuba.github.io)](https://wuba.github.io/react-native-echarts/zh-Hans/docs/intro)
+
+### Icon 图标
+
+具体的图标查看网站    [Material Community Icons (enapter.com) ](https://static.enapter.com/rn/icons/material-community.html) 
+
+具体的图标查看网站    [react-native-vector-icons directory (oblador.github.io)](https://oblador.github.io/react-native-vector-icons/)  
+
+ [React Native 应用程序的 react-native-vector-icons -图标和字体](https://blog.logrocket.com/react-native-vector-icons-fonts-react-native-app-ui/)
+
+
+
+安装使用步骤具体看 npm 介绍： [react-native-vector-icons - npm (npmjs.com)](https://www.npmjs.com/package/react-native-vector-icons)
+
+```
+npm install --save react-native-vector-icons
+```
+
+配置： 编辑 `android/app/build.gradle` （NOT `android/build.gradle` ） 并添加：
+
+```
+apply from: file("../../node_modules/react-native-vector-icons/fonts.gradle")
+```
+
+使用： （具体的图标名称去上面的网站上查看）
+
+```
+import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons';
+import FontAwesome from 'react-native-vector-icons/FontAwesome';
+
+<FontAwesome name="home" size={26} />
+<MaterialCommunityIcons name="account-edit-outline" color={'#FF7200'} size={26} />
+```
+
+
+
 ## 路由
+
+**这一部分建议按照官网来查看，通过官网中的示例，可以尽快搞懂用法**
 
 RN中的路由是通过React-Navigation来完成的
 	React中通过React-Router实现路由
@@ -2089,14 +2310,15 @@ RN中的路由是通过React-Navigation来完成的
 
 ### 安装：安装部分最好跟着官网一步步来
 
-npm install --save react-navigation
+npm install --save react-navigation            npx expo install react-native-screens react-native-safe-area-context
 
 ```
 安装的时候，需要安装多个。按照官方文档，依次输入命令行。
 也可以直接输入下面命令行一步完成。
 
 yarn add  react-native-screens react-native-safe-area-context
-react-native-reanimated react-native-gesture-handler  // 这两个不确定是否必须安装
+ react-native-gesture-handler  //动画相关的依赖   // 这两使用非必须安装 (安装可能报错，但不安装，后续运行也可能报错)
+ react-native-reanimated
 ```
 
 `react-native-screens` 软件包需要一个额外的配置步骤才能在 Android 设备上正常工作。编辑 `MainActivity.kt` 或 `MainActivity.java` 位于 下 `android/app/src/main/java/<your package name>/` 的文件。
@@ -2134,12 +2356,16 @@ public class MainActivity extends ReactActivity {
 
 
 
+
+
 ### stack navigator 堆栈导航器
 
 RN中默认没有类似浏览器的history对象
 在RN中跳转之前，先将路由声明在Stack中
 
 安装：npm install @react-navigation/native-stack
+
+NavigationContainer 一定是在最外层（具体属性查看官网，英文版）
 
 <Stack.Navigator    …属性 />    作用于整个导航（包含多个屏幕）
 <Stack.Screen      …属性/>   仅仅作用于当前屏幕
@@ -2168,7 +2394,12 @@ function App() {
     <NavigationContainer>
       <Stack.Navigator
         initialRouteName="Text1" //默认展示的页面名称
-        headerMode={'none'} //  指定标题栏的渲染方式
+        screenOptions={{
+          headerShown: false,   // 是显示还是隐藏屏幕的标题。默认情况下显示标头。设置此项可隐藏标头。false
+          gestureEnabled: true,   //  是否可以使用手势关闭此屏幕。
+          cardOverlayEnabled: true,  // 启用叠加层（您不能点击叠加层以这种方式关闭屏幕，请参阅下面的替代方法）cardOverlayEnabled: true
+          ...TransitionPresets.ModalPresentationIOS,     //过渡预设 您可以将这些预设展开以自定义屏幕的动画
+        }}
       >
         <Stack.Screen
           name="Text1"
@@ -2187,6 +2418,9 @@ function App() {
 }
 
 export default App;
+
+
+// 页面跳转：   onPress={() => navigation.navigate('Profile')}
 ```
 
 ### BottomTab 导航 （底部选项卡）
@@ -2199,18 +2433,54 @@ import { Text, View } from 'react-native';
 import { NavigationContainer } from '@react-navigation/native';
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 
-function HomeScreen() {
+//  组件参数中：navigation有跳转方法，可传参，  route包含跳转参数 （route?.params）
+function HomeScreen({navigation}) {
+     console.log(route);
+  // 当用户在选项卡栏中按下当前屏幕的选项卡按钮时，将触发此事件。
+  React.useEffect(() => {
+    const unsubscribe = navigation.addListener('tabPress', e => {
+      // e.preventDefault();   阻止默认事件
+      //  写下切换按钮要操作的内容
+      console.log('123');
+    });
+    return unsubscribe;
+  }, [navigation]);
+  // 当用户长时间按下选项卡栏中当前屏幕的选项卡按钮时，将触发此事件。
+  React.useEffect(() => {
+    const unsubscribe = navigation.addListener('tabLongPress', e => {
+      console.log('456');
+    });
+
+    return unsubscribe;
+  }, [navigation]);
+
   return (
-    <View style={{ flex: 1, justifyContent: 'center', alignItems: 'center' }}>
+    <View style={{flex: 1, justifyContent: 'center', alignItems: 'center'}}>
       <Text>Home!</Text>
+      <Button
+        title="Go to Settings"
+        onPress={() => navigation.jumpTo('Settings', {owner: '用有人张三'})}
+      />
+      <FontAwesome name="home" size={26} />
     </View>
   );
 }
 
-function SettingsScreen() {
+function SettingsScreen({navigation, route}) {
+  console.log(route);
   return (
-    <View style={{ flex: 1, justifyContent: 'center', alignItems: 'center' }}>
+    <View style={{flex: 1, justifyContent: 'center', alignItems: 'center'}}>
       <Text>Settings!</Text>
+      <Text>{route?.params?.owner}</Text>
+      <Button
+        title="Go to Home"
+        onPress={() => navigation.jumpTo('Home', {owner: '用有人张三'})}
+      />
+      <MaterialCommunityIcons
+        name="account-edit-outline"
+        color={'#FF7200'}
+        size={26}
+      />
     </View>
   );
 }
@@ -2219,9 +2489,35 @@ const Tab = createBottomTabNavigator();
 
 function MyTabs() {
   return (
-    <Tab.Navigator>
-      <Tab.Screen name="Home" component={HomeScreen} />
-      <Tab.Screen name="Settings" component={SettingsScreen} />
+    <Tab.Navigator
+      initialRouteName="Home" // 默认选中的导航
+      screenOptions={{
+        tabBarActiveTintColor: '#e91e63', //高亮的颜色
+      }}>
+      <Tab.Screen
+        name="Home"
+        component={HomeScreen}
+        options={{
+          tabBarLabel: 'Home', // 展示的label名
+          tabBarIcon: ({color, size}) => (
+            //  这里可以直接放入图片
+            <Image
+              style={{width: 30, height: 30}}
+              source={require('@/assets/images/MyLogo.jpg')}
+            />
+          ),
+        }}
+      />
+      <Tab.Screen
+        name="Settings"
+        component={SettingsScreen}
+        options={{
+          tabBarLabel: 'Settings', // 展示的label名
+          tabBarIcon: ({color, size}) => (
+            <MaterialCommunityIcons name="account" color={color} size={size} /> // 图标
+          ),
+        }}
+      />
     </Tab.Navigator>
   );
 }
@@ -2235,3 +2531,600 @@ export default function App() {
 }
 ```
 
+### 底部的 Material Design 主题标签栏
+
+**也是一个BottomTab 导航 （底部选项卡） 只是样式有变化**
+
+安装：npm install @react-navigation/material-bottom-tabs react-native-paper react-native-vector-icons
+
+官网示例：
+
+```jsx
+import * as React from 'react';
+import {Text, View} from 'react-native';
+import {NavigationContainer} from '@react-navigation/native';
+import {createMaterialBottomTabNavigator} from '@react-navigation/material-bottom-tabs';
+import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons';
+
+function Feed() {
+  return (
+    <View style={{flex: 1, justifyContent: 'center', alignItems: 'center'}}>
+      <Text>Feed!</Text>
+    </View>
+  );
+}
+
+function Profile() {
+  return (
+    <View style={{flex: 1, justifyContent: 'center', alignItems: 'center'}}>
+      <Text>Profile!</Text>
+    </View>
+  );
+}
+
+function Notifications() {
+  return (
+    <View style={{flex: 1, justifyContent: 'center', alignItems: 'center'}}>
+      <Text>Notifications!</Text>
+    </View>
+  );
+}
+
+const Tab = createMaterialBottomTabNavigator();
+
+function MyTabs() {
+  return (
+    <Tab.Navigator
+      initialRouteName="Feed"
+      activeColor="#e91e63"
+      labelStyle={{fontSize: 12}}
+      style={{backgroundColor: 'tomato'}}
+      barStyle={{backgroundColor: '#694fad'}} // 底部导航栏的样式。您可以在此处传递自定义背景颜色：
+        
+        >
+      <Tab.Screen
+        name="Feed"
+        component={Feed}
+        options={{
+          tabBarLabel: 'Home',
+          tabBarIcon: ({color}) => (
+            <MaterialCommunityIcons name="home" color={color} size={26} />
+          ),
+        }}
+      />
+      <Tab.Screen
+        name="Notifications"
+        component={Notifications}
+        options={{
+          tabBarLabel: 'Updates',
+          tabBarIcon: ({color}) => (
+            <MaterialCommunityIcons name="bell" color={color} size={26} />
+          ),
+        }}
+      />
+      <Tab.Screen
+        name="Profile"
+        component={Profile}
+        options={{
+          tabBarLabel: 'Profile',
+          tabBarIcon: ({color}) => (
+            <MaterialCommunityIcons name="account" color={color} size={26} />
+          ),
+        }}
+      />
+    </Tab.Navigator>
+  );
+}
+
+export default function App() {
+  return (
+    <NavigationContainer>
+      <MyTabs />
+    </NavigationContainer>
+  );
+}
+
+```
+
+
+
+### 抽屉导航器(依赖报错，暂未解决)
+
+安装：npm install @react-navigation/drawer
+
+安装并配置抽屉导航器所需的库：  npm install react-native-gesture-handler react-native-reanimated
+
+要完成 的安装，请在入口文件的顶部添加以下内容（确保它位于**顶部**，并且之前没有其他内容）例如 或 ： `react-native-gesture-handler` `index.js` `App.js`
+
+```
+import 'react-native-gesture-handler';
+```
+
+
+
+#### Expo(可正常运行)
+
+npm install @react-navigation/drawer
+
+npx expo install react-native-gesture-handler react-native-reanimated
+
+
+
+```jsx
+import * as React from 'react';
+import { View, Text } from 'react-native';
+import { NavigationContainer } from '@react-navigation/native';
+import { createDrawerNavigator } from '@react-navigation/drawer';
+
+function Feed() {
+  return (
+    <View style={{ flex: 1, justifyContent: 'center', alignItems: 'center' }}>
+      <Text>Feed Screen</Text>
+    </View>
+  );
+}
+
+function Notifications() {
+  return (
+    <View style={{ flex: 1, justifyContent: 'center', alignItems: 'center' }}>
+      <Text>Notifications Screen</Text>
+    </View>
+  );
+}
+
+function Profile() {
+  return (
+    <View style={{ flex: 1, justifyContent: 'center', alignItems: 'center' }}>
+      <Text>Profile Screen</Text>
+    </View>
+  );
+}
+
+const Drawer = createDrawerNavigator();
+
+function MyDrawer() {
+  return (
+    <Drawer.Navigator  initialRouteName="Feed">
+      <Drawer.Screen
+        name="Feed"
+        component={Feed}
+        options={{ drawerLabel: 'Home' }}
+      />
+      <Drawer.Screen
+        name="Notifications"
+        component={Notifications}
+        options={{ drawerLabel: 'Updates' }}
+      />
+      <Drawer.Screen
+        name="Profile"
+        component={Profile}
+        options={{ drawerLabel: 'Profile' }}
+      />
+    </Drawer.Navigator>
+  );
+}
+
+export default function App() {
+  return (
+    <NavigationContainer>
+      <MyDrawer />
+    </NavigationContainer>
+  );
+}
+```
+
+
+
+### 顶部的 Material Design 标签栏 导航器
+
+安装： npm install @react-navigation/material-top-tabs react-native-tab-view
+
+npm install react-native-pager-view
+
+官网示例如下：
+
+```jsx
+import * as React from 'react';
+import { Text, View } from 'react-native';
+import { NavigationContainer } from '@react-navigation/native';
+import { createMaterialTopTabNavigator } from '@react-navigation/material-top-tabs';
+
+function FeedScreen() {
+  return (
+    <View style={{ flex: 1, justifyContent: 'center', alignItems: 'center' }}>
+      <Text>Feed!</Text>
+    </View>
+  );
+}
+
+function NotificationsScreen() {
+  return (
+    <View style={{ flex: 1, justifyContent: 'center', alignItems: 'center' }}>
+      <Text>Notifications!</Text>
+    </View>
+  );
+}
+
+function ProfileScreen() {
+  return (
+    <View style={{ flex: 1, justifyContent: 'center', alignItems: 'center' }}>
+      <Text>Profile!</Text>
+    </View>
+  );
+}
+
+const Tab = createMaterialTopTabNavigator();
+
+function MyTabs() {
+  return (
+    <Tab.Navigator
+      initialRouteName="Feed"
+      screenOptions={{
+        tabBarActiveTintColor: '#e91e63',
+        tabBarLabelStyle: { fontSize: 12 },
+        tabBarStyle: { backgroundColor: 'powderblue' },
+      }}
+    >
+      <Tab.Screen
+        name="Feed"
+        component={FeedScreen}
+        options={{ tabBarLabel: 'Home' }}
+      />
+      <Tab.Screen
+        name="Notifications"
+        component={NotificationsScreen}
+        options={{ tabBarLabel: 'Updates' }}
+      />
+      <Tab.Screen
+        name="Profile"
+        component={ProfileScreen}
+        options={{ tabBarLabel: 'Profile' }}
+      />
+    </Tab.Navigator>
+  );
+}
+export default function App() {
+  return (
+    <NavigationContainer>
+      <MyTabs />
+    </NavigationContainer>
+  );
+}
+
+```
+
+### 
+
+### 导航嵌套：
+
+[带有嵌套导航器的屏幕选项 |React 导航 --- Screen options with nested navigators | React Navigation](https://reactnavigation.org/docs/screen-options-resolution)
+
+官网展示了好几种嵌套方法：如下是展示效果比较好的
+
+```jsx
+import * as React from 'react';
+import {View, Button} from 'react-native';
+import {
+  NavigationContainer,
+  getFocusedRouteNameFromRoute,
+} from '@react-navigation/native';
+import {createBottomTabNavigator} from '@react-navigation/bottom-tabs';
+import {createNativeStackNavigator} from '@react-navigation/native-stack';
+
+function getHeaderTitle(route) {
+  // If the focused route is not found, we need to assume it's the initial screen
+  // This can happen during if there hasn't been any navigation inside the screen
+  // In our case, it's "Feed" as that's the first screen inside the navigator
+  const routeName = getFocusedRouteNameFromRoute(route) ?? 'Feed';
+
+  switch (routeName) {
+    case 'Feed':
+      return 'News feed';
+    case 'Profile':
+      return 'My profile';
+    case 'Account':
+      return 'My account';
+  }
+}
+
+function FeedScreen({navigation}) {
+  return (
+    <View style={{flex: 1, alignItems: 'center', justifyContent: 'center'}}>
+      <Button
+        title="Go to Settings"
+        onPress={() => navigation.navigate('Settings')}
+      />
+    </View>
+  );
+}
+
+function ProfileScreen() {
+  return <View />;
+}
+
+function AccountScreen() {
+  return <View />;
+}
+
+function SettingsScreen() {
+  return <View />;
+}
+
+const Tab = createBottomTabNavigator();
+
+function HomeTabs() {
+  return (
+    <Tab.Navigator screenOptions={{headerShown: false}}>
+      <Tab.Screen name="Feed" component={FeedScreen} />
+      <Tab.Screen name="Profile" component={ProfileScreen} />
+      <Tab.Screen name="Account" component={AccountScreen} />
+    </Tab.Navigator>
+  );
+}
+
+const Stack = createNativeStackNavigator();
+
+export default function App() {
+  return (
+    <NavigationContainer>
+      <Stack.Navigator>
+        <Stack.Screen
+          name="Home"
+          component={HomeTabs}
+          options={({route}) => ({
+            headerTitle: getHeaderTitle(route),
+          })}
+        />
+        <Stack.Screen name="Settings" component={SettingsScreen} />
+      </Stack.Navigator>
+    </NavigationContainer>
+  );
+}
+
+```
+
+## 数据请求
+
+[访问网络 · React Native 中文网](https://reactnative.cn/docs/network#发起请求)
+
+可以通过fetch发起请求，也可以引入其他的请求库
+
+```jsx
+import React, {useEffect, useState} from 'react';
+import {Text, View, Image, StyleSheet, ScrollView} from 'react-native';
+function Feed() {
+  const [list, setList] = useState([]);
+  const getList = () => {
+    fetch('http://rap2api.taobao.org/app/mock/315841/getMessageList')
+      .then(response => response.json())
+      .then(responseJson => {
+        console.log(responseJson);
+        setList(responseJson.chatList);
+      });
+  };
+  useEffect(() => {
+    console.log('执行副作用'); // 普通函数，执行副作用，可以实现componentDidMount、componentDidUpdate
+    getList();
+  }, []);
+  return (
+    <View style={{flex: 1, position: 'relative'}}>
+      <Text
+        style={{
+          zIndex: 1,
+          textAlign: 'center',
+          fontSize: 16,
+          fontWeight: 600,
+          padding: 5,
+        }}>
+        标题
+      </Text>
+      {/* <Image
+          style={{width: '100%', position: 'absolute', top: 0}}
+          source={require('@/assets/images/MyLogo.jpg')}
+        /> */}
+      <ScrollView
+        contentContainerStyle={{}} //contentContainerStyle这些样式将应用于封装所有子视图的滚动视图内容容器。
+        showsVerticalScrollIndicator={false} // 当 true 时，显示垂直滚动指示器。
+        showsHorizontalScrollIndicator={false} // 当 true 时，显示水平滚动指示器。
+      >
+        <View>
+          {list.map(item => {
+            return (
+              <View
+                style={{
+                  flexDirection: 'row',
+                  justifyContent: 'space-around',
+                  padding: 10,
+                  margin: 10,
+                  backgroundColor: 'white',
+                }}>
+                <View style={{paddingRight: 10}}>
+                  <Image
+                    style={{width: 50, height: 50, borderRadius: 5}}
+                    source={{
+                      uri: item.imageUrl,
+                    }}
+                  />
+                </View>
+                <View style={{flex: 1}}>
+                  <Text key={item.message}>{item.message}</Text>
+                </View>
+              </View>
+            );
+          })}
+        </View>
+      </ScrollView>
+     
+    </View>
+  );
+}
+
+export default Feed;
+```
+
+## 打包
+
+打包可完全按照官网步骤进行，测试后可以正常打包
+
+[打包发布 · React Native 中文网](https://reactnative.cn/docs/signed-apk-android)
+
+安装运行 app-debug.apk 后发现有些静态资源获取不到，可能是因为需要 https 请求才行
+
+## UI库
+
+### Ant Design Mobile RN
+
+[Ant Design Mobile RN of React - Ant Design](https://rn.mobile.ant.design/docs/react/introduce-cn)
+
+### NutUi  京东
+
+[NutUI - 移动端 React Native 组件库 (jd.com)](https://nutui.jd.com/react-native/#/zh-CN/guide/start)
+
+## Expo （可以避免一些错误，推荐使用）
+
+Expo 里面也有一些组件可供使用：[Reference - Expo Documentation](https://docs.expo.dev/versions/latest/)
+
+[Tutorial: Introduction - Expo Documentation](https://docs.expo.dev/tutorial/introduction/)
+
+[概述 - Expo 中文网 (nodejs.cn)](https://expo.nodejs.cn/overview/)
+
+[RN 学习小记之使用 Expo 创建项目 - 掘金 (juejin.cn)](https://juejin.cn/post/7246694803814531133?from=search-suggest#heading-5)
+
+cnpm install --global expo-cli
+
+报错：This project is missing expo-updates. Please install it in order to publish an update.
+
+npx expo install expo-updates
+
+**安装Expo**
+
+```
+npm install --global expo-cli
+```
+
+初始化一个新的Expo应用:      此命令将为项目创建一个新目录，名称为： **StickerSmash**。
+
+```
+ npx create-expo-app StickerSmash    
+```
+
+要在网络上运行该项目，我们需要安装以下依赖，这将有助于在网络上运行该项目：
+
+```
+npx expo install react-dom react-native-web @expo/webpack-config
+```
+
+运行：
+
+```
+npx expo start
+```
+
+google应用商店下载 Expo go,扫描运行出现的二维码，可以查看运行结果。  如果遇到超时，尝试关闭电脑的防火墙，随后运行成功。
+
+代码示例：
+
+```jsx
+import React, {useEffect, useState} from 'react';
+import { StatusBar } from 'expo-status-bar';
+import { StyleSheet, Text, View,Button } from 'react-native';
+import AsyncStorage from '@react-native-async-storage/async-storage';
+import { SafeAreaView  } from 'react-native-safe-area-context';
+
+export default function App() {
+  const [storesData, setstoresData] = useState('');
+  const storeData = async value => {
+    console.log('storeData', value);
+    try {
+      await AsyncStorage.setItem('my-key', value);
+    } catch (e) {
+      // saving error
+    }
+  };
+  const getData = async () => {
+    console.log('123');
+    try {
+      const value = await AsyncStorage.getItem('my-key');
+      console.log('getData', value);
+      if (value !== null) {
+        // value previously stored
+        console.log(value);
+        setstoresData(value)
+      }
+    } catch (e) {
+      console.log('error', e);
+      // error reading value
+    }
+  };
+  return (
+      // 安全区域展示
+      <SafeAreaView style={styles.container}>
+        <Text>Open up App.js to start working on your app!123456</Text>
+        <Button title="存储" onPress={() => storeData('hello RN')} />
+        <Button title="获取" onPress={getData} />
+        <Text>{storesData}</Text>
+        <StatusBar style="auto" />
+      </SafeAreaView>
+    
+  );
+}
+```
+
+
+
+### Expo构建：
+
+[创建你的第一个版本 - Expo 中文网 (nodejs.cn)](https://expo.nodejs.cn/build/setup/)
+
+cnpm install --global eas-cli 
+
+配置项目： eas build:configure   (生成 esa.json文件)
+
+ eas build --platform android 
+
+eas build -p android --profile preview
+
+网络问题，上传失败。(上传有时成功，有时失败。挺烦的。)  尝试用科学上网。能访问到 [google.cloud.com](https://google.cloud.com/)  就行 
+
+上传成功后，访问底下生成的链接，跳转到 Expo 网站查看生成的程序。
+
+android 默认打包生成的是  aab 格式，如果要生成 apk 格式，需要做以下配置：
+
+eas.json修改：
+
+```
+"preview": {
+      "distribution": "internal",
+      "ios": {
+        "resourceClass": "m-medium"
+      },"android": {
+          "buildType": "apk"
+      }
+    },
+```
+
+此时运行  eas build -p android --profile preview  ，上传打包完成后，进入 Expo 网站，Download build 下载下来的是 apk 文件，手机可以安装查看。
+
+
+
+
+
+### [本地应用编译](https://expo.nodejs.cn/guides/local-app-development/#本地应用编译)
+
+要在本地构建项目，你可以使用 Expo CLI 中的编译命令生成 **android** 和 **ios** 目录：
+
+```
+npx expo run:android
+npx expo run:ios
+
+
+npx expo prebuild --clean  重新构建
+```
+
+生成android目录后，打包行为和之前的一样   [打包发布 · React Native 中文网](https://reactnative.cn/docs/signed-apk-android)
+
+最终打包报错了，暂未解决。
+
+## react-native热更新与冷更新
+
+[react-native热更新与冷更新踩坑指南 - 掘金 (juejin.cn)](https://juejin.cn/post/7190203133585260599#heading-1)
