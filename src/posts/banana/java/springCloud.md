@@ -1191,3 +1191,11 @@ https://juejin.cn/post/7077197582077788167#heading-23
 
 
 
+## 实战项目
+
+视频查看：[黑马程序员Java项目企业级微服务实战《学成在线》](https://www.bilibili.com/video/BV1j8411N7Bm?p=1&vd_source=f25f5a8d75a3a60d5a288f726803ec11)
+
+黑马Java微服务项目《学成在线》配套资源
+在线学习：https://www.bilibili.com/video/BV1j8411N7Bm/
+网盘链接：https://pan.baidu.com/s/16iXzw7cFDk3FqG9DfPqbdg?pwd=6633
+提取码：6633

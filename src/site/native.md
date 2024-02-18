@@ -1359,6 +1359,8 @@ const windowWidth = useWindowDimensions().width;
 const windowHeight = useWindowDimensions().height;
 ```
 
+### 
+
 #### Platform （获取平台信息）
 
 Platform API 是 React Native 提供的获取平台信息用的 API，同时也提供了一些方法来方便开发人员对各个平台进行分支处理。
@@ -1451,6 +1453,28 @@ const Component = Platform.select({
 <Component />;
 ```
 
+## 通过@获取文件路径
+
+babel.config.js
+
+```
+module.exports = {
+  presets: ['module:@react-native/babel-preset'],
+  plugins: [
+    [
+      'module-resolver',
+      {
+        root: ['./src'],
+        extensions: ['.ios.js', '.android.js', '.js', '.ts', '.tsx', '.json'],
+        alias: {
+          '@': ['./src'],
+        },
+      },
+    ],
+  ],
+};
+```
+
 
 
 ## 组件
@@ -1464,6 +1488,26 @@ RN中的核心组件，是对原生组件的封装
 ### View
 
 注意：View 标签里面不能直接写文字，要用 Text 标签包裹
+
+### Text
+
+多行显示省略号
+
+1：显示几行(numberOfLines)
+
+`<Text numberOfLines={1}/>`
+
+2：省略号显示的位置(ellipsizeMode)  可以是以下几个值tail、head、 middle、clip
+
+默认的是tail (尾部) 
+
+头部 head
+
+中间 middle
+
+从尾部截掉 clip
+
+`<Text numberOfLines={1} ellipsizeMode={'tail'}>`
 
 ### Alert 弹框
 
@@ -1596,6 +1640,8 @@ loding 效果
 
 ### Image 图片
 
+[在React Native中缓存图片。一个有例子的教程 - 掘金 (juejin.cn)](https://juejin.cn/post/7067108601671712781)
+
 用于显示不同类型的图片，包括网络图片、静态资源、临时本地图片以及本地磁盘中的图片，例如相机胶卷。
 
 请注意，对于网络和数据图片，你将需要手动指定图片的尺寸！
@@ -1616,6 +1662,10 @@ loding 效果
         source={{
           uri: 'https://rn.nodejs.cn/img/tiny_logo.png',
         }}
+      />
+	  <Image
+        style={{width: 165, height: 165}}
+        src={item.pic}
       />
       {/* 加载 Base64 图片 */}
       <Image
@@ -1731,6 +1781,8 @@ const styles = StyleSheet.create({
 注意：在android挖孔屏幕中，使用 SafeAreaView 可能并不能显示出安全区域，此时需要引入别的库来解决这一问题
 
 #### react-native-safe-area-context 反应原生安全区域上下文
+
+**注意：如果使用了路由导航器的标题，那么就可以不使用 SafeAreaView 了，否则顶部可能会有空白**
 
 ```
 npm install react-native-safe-area-context
@@ -1877,10 +1929,14 @@ function Text1() {
         showsHorizontalScrollIndicator={false} // 当 true 时，显示水平滚动指示器。
       >
         <FlatList
-            horizontal={true} // 设置为 true 时，水平滚动。
-          data={DATA}
-          renderItem={({item}) => <Item title={item.title} />}
-          keyExtractor={item => item.id}
+          horizontal={true} // 设置为 true 时，水平滚动。
+          data={DATA}   // 渲染的数据
+          renderItem={({item}) => <Item title={item.title} />}   //渲染每一项的组件
+          keyExtractor={item => item.id}     //key值
+          ListHeaderComponent={<View><Scroll content={content}></Scroll></View>}  // 渲染在所有项目的顶部。
+          ListFooterComponent={<View><Scroll content={content}></Scroll></View>}  // 渲染在所有项目的底部。
+          onEndReached={handleReach}   // 底部触发 （可用于底部加载数据）
+          onEndReachedThreshold={0.5}  //距离底部多少时触发事件onEndReachedThreshold参数最好设置为0.1或者0.2这样，符合大部分软件的设计模式
         />
       </ScrollView>
     </SafeAreaView>
@@ -2090,12 +2146,12 @@ function Text1() {
 
 ### Swiper展示轮播效果
 
-[@react-native-picker/picker - npm (npmjs.com)](https://www.npmjs.com/package/@react-native-picker/picker)
+[react-native-swiper - npm (npmjs.com)](https://www.npmjs.com/package/react-native-swiper)
 
 安装：npm i react-native-swiper --save
 
 ```jsx
-
+import Swiper from 'react-native-swiper'
  
 export default class SwiperComponent extends Component {
   render() {
@@ -2962,6 +3018,8 @@ function Feed() {
 export default Feed;
 ```
 
+注意：setState之后无法获取最新值查看：[React Hook 避坑指南（useState & useEffect） - 掘金 (juejin.cn)](https://juejin.cn/post/7232187022398767162#heading-6)
+
 ## 打包
 
 打包可完全按照官网步骤进行，测试后可以正常打包
@@ -3107,7 +3165,17 @@ eas.json修改：
 
 
 
+[创建开发版本 - Expo 中文网 (nodejs.cn)](https://expo.nodejs.cn/develop/development-builds/create-a-build/)
 
+**npx expo install expo-dev-client**
+
+eas build --profile preview --platform all  打包（包括ios）
+
+eas build --profile development --platform android
+
+启动：npx expo start --dev-client
+
+eas update  更新
 
 ### [本地应用编译](https://expo.nodejs.cn/guides/local-app-development/#本地应用编译)
 
@@ -3128,3 +3196,32 @@ npx expo prebuild --clean  重新构建
 ## react-native热更新与冷更新
 
 [react-native热更新与冷更新踩坑指南 - 掘金 (juejin.cn)](https://juejin.cn/post/7190203133585260599#heading-1)
+
+## 代码模板
+
+```jsx
+import * as React from 'react';
+import {Text, View} from 'react-native';
+import { SafeAreaView  } from 'react-native-safe-area-context';
+function Product() {
+  return (
+    <SafeAreaView style={{flex: 1}}>
+      <View>
+        <View><Text>1</Text></View>
+      </View>
+    </SafeAreaView>
+  );
+}
+
+export default Product;
+```
+
+## 问题：
+
+### FlatList 触底加载
+
+使用 FlatList 组件的 onEndReached 方法实现。注意不要把 FlatList 放在 ScrollView里面，会报性能错误。可以将头部，尾部的页面通过 `ListHeaderComponent`
+
+`ListFooterComponent` 渲染到 FlatList 里面，以实现页面的布局
+
+[RN解决警告：VirtualizedLists should never be nested inside plain ScrollViews-CSDN博客](https://blog.csdn.net/gang544043963/article/details/106525516)

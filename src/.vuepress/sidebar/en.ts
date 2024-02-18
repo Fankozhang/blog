@@ -37,10 +37,10 @@ export const enSidebar = sidebar({
           ],
         },
         
-        { text: "vuePress,nginx,docker", icon: "", link: "cherry" },
-        { text: "uni-app", icon: "", link: "dragonfruit" },
-        "tomato",
-        "strawberry",
+        { text: "vuePress,nginx,docker", icon: "", link: "nginx-docker" },
+        { text: "uni-app", icon: "", link: "uni-app" },
+        "react",
+        "UI-data",
         "bigScreen",
         "desk"
       ],
@@ -81,22 +81,26 @@ export const enSidebar = sidebar({
               {
                 text: "spring cloud",
                 icon: "",
-                link: "1",
+                link: "springCloud",
               }
             ]
           },
             {
               text: "node",
               icon: "",
-              link: "2",
+              link: "node",
             },{
               text: "实战项目",
               icon: "",
               link: "spring",
             },{
-              text: "harmony",
-              icon: "edit",
-              link: "harmony"
+              text: "第三方登录",
+              icon: "",
+              link: "sanFangDengLu",
+            },{
+              text: "支付",
+              icon: "",
+              link: "zhifu",
             }
             // "3",
             // "4",
@@ -130,6 +134,10 @@ export const enSidebar = sidebar({
           text: "native",
           icon: "",
           link: "native"
+        },{
+          text: "harmony",
+          icon: "edit",
+          link: "harmony"
         }
       ]
     },

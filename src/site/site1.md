@@ -12,6 +12,12 @@ tag:
 
 - [被删的前端游乐场 ](https://godbasin.github.io/front-end-playground/)  
 
+- 查看github topics,优质开源项目:   https://github.com/topics/java
+
+- [CS-Notes 面试笔记 (cyc2018.xyz)](https://cyc2018.xyz/)
+
+- [Java工程师成神之路 (gitee.io)](https://hollischuang.gitee.io/tobetopjavaer/#/menu)
+
 -  [ 前端进阶之旅 (poetries.top)](https://interview.poetries.top/docs/base.html) 
 
 -  [Vue Guidebook ](https://tsejx.github.io/vue-guidebook/overview/api/application-config) 
@@ -189,7 +195,9 @@ tag:
 
 [guiplan低代码开发平台](http://www.guiplan.com/)
 
+## 进阶知识
 
+[0.1  关于本书 - Hello 算法 (hello-algo.com)](https://www.hello-algo.com/chapter_preface/about_the_book/#013)
 
 ## 文章收藏
 
@@ -231,13 +239,21 @@ tag:
 
 待尝试：[点击页面元素打开IDE源码的开源提效工具——支持webpack/vite/rspack/react/vue/SSR等众多场景 - 掘金 (juejin.cn)](https://juejin.cn/post/7326002010084311079#heading-11)
 
+参与大型开源项目：[如何参与大型开源项目-Taro 共建 (qq.com)](https://mp.weixin.qq.com/s/MyoB3Bmb1jMYVyCzsQT1cw)
+
 ### 3d
 
 [GitHub - mtsee/vr-hall: three.js 3D vr hall](https://github.com/mtsee/vr-hall)
 
+[Three.js 实现年会3D抽奖页面 (qq.com)](https://mp.weixin.qq.com/s/ezQpucdL93Kyyl8p1bYwLg)
+
+[基于 Vue3.0 + Three.js 实现炫酷3D网页 (qq.com)](https://mp.weixin.qq.com/s/G-VL1jUPmaKMJ3o2jIEyfA)
+
 ### css
 
 [css 实现边框](https://juejin.cn/post/7240458275269984314)
+
+前端最全的5种换肤方案总结：[微信公众平台 (qq.com)](https://mp.weixin.qq.com/s/9Hv-KA-Ay_DRdGI-S_P4QQ)
 
 ### js
 
@@ -349,6 +365,8 @@ Docker-compose 安装 Wordpress 博客  [Docker-compose 安装 Wordpress 博客 
 
 mybatis-plus-generator-ui ：https://blog.csdn.net/afreon/article/details/129153154
 
+
+
 ### 其他收藏
 
 b站的up主推荐：https://juejin.cn/post/7322401091237511222#heading-3
@@ -357,13 +375,19 @@ b站的up主推荐：https://juejin.cn/post/7322401091237511222#heading-3
 
 我的测试项目：[东方凝洛/我的测试仓库 - 码云 - 开源中国 (gitee.com)](https://gitee.com/fankozhang/my-testing-warehouse/tree/master)
 
-smartadmin：开源SpringBoot和Vue的企业级项目，代码很规范   https://smartadmin.vip/  **https://gitee.com/lab1024/smart-admin**
+
+
+### smartadmin
+
+开源SpringBoot和Vue的企业级项目，代码很规范   https://smartadmin.vip/  **https://gitee.com/lab1024/smart-admin**
 
 [AbuCoder-RuoYi-Vue-uniapp-wx: 一直想做一款基于若依后台管理系统的微信小程序，最近比较闲了，所以想做个简单的东西。主要为了学习，走一遍整个过程，也是为像我这种小白提供些简单的学习内容。 这是一套前后端一起的脚手架，省去了好多需要写的东西，开箱即用 (gitee.com)](https://gitee.com/rahman/AbuCoder-RuoYi-Vue-uniapp-wx)
 
 
 
-若依 ：    https://www.bilibili.com/video/BV1684y1X7tK?p=1  资料：[阿里云盘 (aliyundrive.com)](https://www.aliyundrive.com/drive/file/backup/654313898bd10ccec4d34eaf918c075038adbd51)
+### 若依 
+
+​    https://www.bilibili.com/video/BV1684y1X7tK?p=1  资料：[阿里云盘 (aliyundrive.com)](https://www.aliyundrive.com/drive/file/backup/654313898bd10ccec4d34eaf918c075038adbd51)
 
 [基于SpringCloud Alibaba技术栈，若依微服务版(RuoYi-Cloud)脚手架入门精解，保证上手那种~_哔哩哔哩_bilibili](https://www.bilibili.com/video/BV14g4y1N7tD/?spm_id_from=autoNext&vd_source=f25f5a8d75a3a60d5a288f726803ec11)
 
@@ -377,6 +401,34 @@ smartadmin：开源SpringBoot和Vue的企业级项目，代码很规范   https:
 基于SpringBoot+Vue实现的小区物业管理系统：[基于SpringBoot+Vue实现的小区物业管理系统 (qq.com)](https://mp.weixin.qq.com/s/TPxJIfRWdpnbjxXFaZumWw)
 
 
+
+###  Mall
+
+基于 SpringBoot+MyBatis 实现的一套电商系统，包括前台商城系统及后台管理系统。
+
+前台商城系统包含首页门户、商品推荐、商品搜索、商品展示、购物车、订单流程、会员中心、客户服务、帮助中心等模块。
+
+后台管理系统包含商品管理、订单管理、会员管理、促销管理、运营管理、内容管理、统计报表、财务管理、权限管理、设置等模块。
+
+Github：[https://github.com/macrozheng/mall](https://github.com/macrozheng/mall?spm=a2c6h.12873639.article-detail.8.dd8d6f09C2hfzM)
+
+**后台管理系统**
+
+[macrozheng/mall-admin-web: mall-admin-web是一个电商后台管理系统的前端项目，基于Vue+Element实现。 主要包括商品管理、订单管理、会员管理、促销管理、运营管理、内容管理、统计报表、财务管理、权限管理、设置等功能。 (github.com)](https://github.com/macrozheng/mall-admin-web)
+
+**前台商城系统**
+
+前端项目`mall-app-web`地址：https://github.com/macrozheng/mall-app-web
+
+项目演示地址（将浏览器切换为手机模式效果更佳）：https://www.macrozheng.com/app/
+
+### 无忧·企业文档
+
+（可以搭建公司内部的文档平台，避免泄露）
+
+[JVS/jvs-knowledge-ui - 码云 - 开源中国 (gitee.com)](https://gitee.com/software-minister/jvs-knowledge-ui/tree/master/)
+
+### 其他编程资料
 
 [SpringBoot+RabbitMQ+Redis 开发一个秒杀系统，细节打满（附源码） (qq.com)](https://mp.weixin.qq.com/s/L2-AChMEP7OOtj0wV-e_yA)
 

@@ -1494,5 +1494,6 @@ docker run -d -p 8000:8000 -p 8088:9000 --name=portainer --restart=always -v /va
 
  [Kubernetes核心实战 (yuque.com)](https://www.yuque.com/leifengyang/oncloud/ctiwgo) 
 
+[1-1 K8s架构师课程大纲详解-_哔哩哔哩_bilibili](https://www.bilibili.com/video/BV1be411z7HB/?p=2&spm_id_from=pageDriver&vd_source=f25f5a8d75a3a60d5a288f726803ec11)
 
-
+### 安装

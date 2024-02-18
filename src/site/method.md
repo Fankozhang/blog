@@ -21,6 +21,8 @@ typora-root-url: ..\.vuepress\public
 
 [前端开发技术栈（工具篇）：详细介绍npm、pnpm和cnpm分别是什么，使用方法以及之间有哪些关系-CSDN博客](https://blog.csdn.net/zhouruifu2015/article/details/132303744?spm=1001.2101.3001.6650.4&utm_medium=distribute.pc_relevant.none-task-blog-2~default~OPENSEARCH~Rate-4-132303744-blog-134191726.235^v38^pc_relevant_sort_base3&depth_1-utm_source=distribute.pc_relevant.none-task-blog-2~default~OPENSEARCH~Rate-4-132303744-blog-134191726.235^v38^pc_relevant_sort_base3&utm_relevant_index=5)
 
+npm 淘宝镜像下载：  npm install --registry=http://registry.npmmirror.com
+
 ### nvm
 
 node版本过高，vue项目运行时报错 ： Error: error:0308010C:digital envelope routines::unsupported
@@ -185,6 +187,16 @@ cd 到需要清空的文件夹父目录 ，控制台输入    `rimraf  ‘要删
 ```
 rimraf node_modules
 ```
+
+## 提升开发效率
+
+### Code Inspector
+
+[Code Inspector | Code Inspector (fe-dev.cn)](https://inspector.fe-dev.cn/)
+
+点击页面上的 DOM 元素，它能自动打开 IDE 并将光标定位至 DOM 的源代码位置
+
+实测可用，配置简单
 
 ## 利用Gitee搭建免费图床
 
@@ -1075,6 +1087,8 @@ module.exports = {
 
 ## element UI
 
+
+
 ### element的table错位
 
 https://blog.csdn.net/coralime/article/details/122979010
@@ -1342,7 +1356,52 @@ beforeUpload (file) {
     },
 ```
 
+## 时间操作：
 
+[JavaScript日期时间操作完整指南！ - 掘金 (juejin.cn)](https://juejin.cn/post/7254127644211822653#heading-30)
+
+可以使用 `newDate()` 来创建日期，传入的参数通常有4种常用的方式：
+
+1. 使用日期字符串参数
+2. 使用一系列的参数
+3. 时间戳参数
+4. 不带参数
+
+```
+new Date('1988-03-21')
+```
+
+如果创建没有任何参数的日期，则会将日期设置为当前时间（以本地时间为单位）。
+
+```
+new Date()     // 获取当前时间
+```
+
+注意， 创建一个新Date对象的唯一方法是通过 `new` 操作符，例如：`let now = new Date();` 若将它作为常规函数调用（即不加 `new` 操作符），将返回一个字符串，而非 `Date` 对象。
+
+
+
+使用 `getTime()` 方法来获取当前时间戳
+
+```
+const currentDate = new Date();
+const timestamp = currentDate.getTime();
+```
+
+### 比较时间
+
+在比较时间时，首先需要创建日期对象，<、>、<= 和 >= 都可以工作。 因此，比较 两个日期就很简单：
+
+```javascript
+const date1 = new Date("July 19, 2014");
+const date2 = new Date("July 28, 2014");
+
+if(date1 > date2) {
+    console.log(date1);
+} else {
+    console.log(date2);
+}
+```
 
 ## 数据格式转化
 
@@ -1571,6 +1630,8 @@ router.beforeEach((to,from,next)=>{
 
 
 ## vue  this.$router 跳转打开新页面
+
+[vue-router跳转时打开新页面的两种方法_vue路由跳转方式 target=black-CSDN博客](https://blog.csdn.net/qq_37939251/article/details/106240043)
 
 ```
 go (item) {
@@ -2066,6 +2127,58 @@ export default {
           </a-button>
 ```
 
+### 分页器（模板）
+
+```vue
+<template>
+	<div class="pagination">
+                <a-pagination
+                  size="small"
+                  :current="queryParams.pageNum"
+                  :pageSize="queryParams.pageSize"
+                  @change="pageChange"
+                  @showSizeChange="pageSizeChange"
+                  :total="total"
+                  :show-total="total => `共 ${total} 条`"
+                  show-size-changer
+                  show-quick-jumper />
+     </div>
+</template>
+
+<script>
+export default {
+  data () {
+    return {
+      data:[]
+      queryParams: {
+        pageNum: 1,
+        pageSize: 10
+      },
+      total: 0
+    }
+  },
+  methods: {
+    // 接口获取数据
+    getList () {
+      this.getList(this.queryParams).then((res) => {
+        // 表格数据
+        this.data = res.data.records
+        this.total = res.total
+      })
+    },
+    pageChange (page, pageSize) {
+      this.queryParams.pageNum = page
+      this.getList()
+    },
+    pageSizeChange (current, size) {
+      this.queryParams.pageSize = size
+      this.getList()
+    }
+  }
+}
+</script>
+```
+
 
 
 ## 内网穿透
@@ -2430,5 +2543,7 @@ export default {
 import sm2 from '@/utils/sm2'
 // 对密码使用 sm2 进行加密
 userInfo.password = sm2.get(userInfo.password.trim())
+// '04'前缀，后端没加的话，前端要加上
+userInfo.password ='04'+ sm2.get(userInfo.password.trim())  
 ```
 
