@@ -42,7 +42,16 @@ export const enSidebar = sidebar({
         "react",
         "UI-data",
         "bigScreen",
-        "desk"
+        "desk",
+        {
+          text: "flutter",
+          icon: "",
+          link: "flutter"
+        },{
+          text: "RN",
+          icon: "",
+          link: "RN"
+        }
       ],
     },
     {
@@ -130,10 +139,6 @@ export const enSidebar = sidebar({
           text: "部署",
           icon: "",
           link: "bushu"
-        },{
-          text: "native",
-          icon: "",
-          link: "native"
         },{
           text: "harmony",
           icon: "edit",

@@ -3269,4 +3269,10 @@ MINIO_SECRET_KEY ：密码（账号长度必须大于等于5，密码长度必�
 
 ## 文章收藏
 
+### SpringBoot 拦截器与统一功能处理
+
  [告别繁琐：SpringBoot 拦截器与统一功能处理 (qq.com)](https://mp.weixin.qq.com/s/evA1d1vY9Nqt72zFNQvgeA) 
+
+### DTO、BO、PO、VO
+
+https://juejin.cn/post/7334691453833166848

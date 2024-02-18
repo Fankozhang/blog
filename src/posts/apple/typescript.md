@@ -1017,8 +1017,6 @@ interface Box {
 
 ### interface 与 type 的异同
 
-
-
 interface 与 type 的区别有下面几点。
 
 （1）`type`能够表示非对象类型，而`interface`只能表示对象类型（包括数组、函数等）。
