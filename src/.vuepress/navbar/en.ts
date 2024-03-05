@@ -2,7 +2,7 @@
  * @Author: 东方凝洛 3180806542@qq.com
  * @Date: 2022-12-02 21:19:19
  * @LastEditors: Andy
- * @LastEditTime: 2024-02-18 14:08:48
+ * @LastEditTime: 2024-03-05 13:58:22
  * @FilePath: \blog\src\.vuepress\navbar\en.ts
  * @Description: 这是默认设置,请设置`customMade`, 打开koroFileHeader查看配置 进行设置: https://github.com/OBKoro1/koro1FileHeader/wiki/%E9%85%8D%E7%BD%AE
  */
@@ -105,24 +105,24 @@ export const enNavbar = navbar([
     children:[
       {
         text: "网址收藏",
-        icon: "edit",
+        icon: "",
         link: "site1",
       },
       {
         text: "工作中问题及解决",
-        icon: "edit",
+        icon: "",
         link: "method",
       },{
         text: "python",
-        icon: "edit",
+        icon: "",
         link: "python",
       },{
         text: "部署",
-        icon: "edit",
+        icon: "",
         link: "bushu"
       },{
         text: "harmony",
-        icon: "edit",
+        icon: "",
         link: "harmony"
       }
     ]
@@ -131,5 +131,10 @@ export const enNavbar = navbar([
     text: "github",
     icon: "note",
     link: "https://github.com/Fankozhang",
+  },
+  {
+    text: "gitee",
+    icon: "note",
+    link: "https://gitee.com/fankozhang",
   },
 ]);

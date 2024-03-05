@@ -2636,6 +2636,8 @@ SpringBoot:提供了缓存技术，方便缓存使用
 
 ### 定时任务
 
+[Java 定时任务详解 | JavaGuide](https://javaguide.cn/system-design/schedule-task.html#redis)
+
 市面上流行的定时任务技术：Quartz ，Spring Task
 
 springboot整合Quartz 
@@ -2646,9 +2648,190 @@ springboot整合Quartz
 触发器(Trigger):用于描述触发工作的规则，通常使用cron表达式定义调度规则
 调度器(Scheduler):描述了工作明细与触发器的对应关系
 
+#### xxl-job
+
+[分布式任务调度平台XXL-JOB (xuxueli.com)](https://www.xuxueli.com/xxl-job/#1.5 下载)
+
+[XXL-JOB的使用(详细教程)-CSDN博客](https://blog.csdn.net/f2315895270/article/details/104714692)      [xxl-job的配置和使用步骤（Xxl-job保姆级基础使用教程）_xxljob 配置-CSDN博客](https://blog.csdn.net/qq_53775184/article/details/130843805)
+
+XXL-Job的搭建&接入Springboot项目（详细）：https://blog.csdn.net/m0_52985087/article/details/135646151
+
+**源码仓库地址**
+
+| 源码仓库地址                         | Release Download                                          |
+| :----------------------------------- | :-------------------------------------------------------- |
+| https://github.com/xuxueli/xxl-job   | [Download](https://github.com/xuxueli/xxl-job/releases)   |
+| http://gitee.com/xuxueli0323/xxl-job | [Download](http://gitee.com/xuxueli0323/xxl-job/releases) |
+
+下载源码后，导入数据库文件（sql文件位于doc/db）
+
+修改 xxl-job-admin 下的端口配置， （运行端口，数据库连接配置，邮件配置等，按需修改）
+
+```yml
+### web   运行端口，网页打开的端口
+server.port=9090
+
+### xxl-job, email(配置 报警邮箱配置  即调度任务失败时，可以把错误日志发送指定的负责人，通知他们去处理   )
+```
+
+运行xxl-job-admin，在浏览器中输入 http://localhost:9090/xxl-job-admin/   （我修改的端口是9090），打开管理页面（默认账户admn，密码123456）
+
+（报警邮箱配置的设置参考 ： [xxl-job报警邮箱配置_xxljob使用其他的邮件-CSDN博客](https://blog.csdn.net/m0_37527542/article/details/104507810#:~:text=1xxl-job,户端的专用密码。)）
 
 
 
+**执行器管理（调用定时任务）：**
+
+xxl-job-excutor-samples/xxl-job-excutor-samples-springboot/   下修改配置文件
+
+```yml
+# web port 执行器启动的端口
+server.port=9998
+
+# xxl-admin 运行后的浏览器地址
+xxl.job.admin.addresses=http://127.0.0.1:9090/xxl-job-admin
+
+# 执行器的运行端口（网页配置执行器。手动输入时的机器地址   http://localhost:9999/）
+xxl.job.executor.port=9999
+```
+
+配置好文件之后，运行XxlJobExcutorApplication 。
+
+网页上配置执行器管理-》任务管理增加定时任务-》调度日志查看定时器任务运行结果
+
+定时任务的代码示例在 jobhandler文件下，可以参考示例编写自己的执行器代码，在网页配置任务的运行调度时间。
+
+```java
+    @XxlJob("demoJobHandler1")
+    public void demoJobHandler1() throws Exception {
+        System.out.println("demoJobHandler1");
+    }
+
+	// 带参数的定时任务，参数从网页上获取，  多个参数可以用,隔开  
+    @XxlJob("demoJobHandler3")
+    public void demoJobHandler3() throws Exception {
+        // 获取参数
+        String param = XxlJobHelper.getJobParam();
+        // 多个参数用,隔开，获取每个参数
+        String[] methodParams = param.split(",");
+        // 使用for循环遍历数组并打印每个参数
+        for (int i = 0; i < methodParams.length; i++) {
+            System.out.println("数组元素111: " + methodParams[i]);
+        }
+    }
+```
+
+
+
+***springboot项目集成xxl-job***
+
+在已有的Spring项目中集成XXL-JOB，你需要按照以下步骤进行：
+
+1. **引入依赖**： 在你的Spring项目的`pom.xml`文件中，添加XXL-JOB的核心依赖。确保你使用的版本与你的项目兼容。
+
+   ```
+   <dependency>
+       <groupId>com.xuxueli</groupId>
+       <artifactId>xxl-job-core</artifactId>
+       <version>2.4.0</version> <!-- 使用适合你项目的版本 -->
+   </dependency>
+   ```
+
+2. **配置XXL-JOB**： 在你的`application.properties`或`application.yml`文件中，添加XXL-JOB的配置信息。这些配置信息包括调度中心的地址、执行器的名称、端口号等。
+
+   ```yml
+   # web port
+   server.port=9988
+   # no web
+   #spring.main.web-environment=false
+   
+   # log config
+   #logging.config=classpath:logback.xml
+   
+   
+   ### xxl-job admin address list, such as "http://address" or "http://address01,http://address02"  admin管理平台地址
+   xxl.job.admin.addresses=http://127.0.0.1:9090/xxl-job-admin
+   
+   ### xxl-job, access token
+   xxl.job.accessToken=default_token
+   
+   ### xxl-job executor appname       执行器名称，在执行器管理中配置
+   xxl.job.executor.appname=xxl-job-executor-sample-test      
+   ### xxl-job executor registry-address: default use address to registry , otherwise use ip:port if address is null
+   xxl.job.executor.address=
+   ### xxl-job executor server-info
+   xxl.job.executor.ip=
+   ### 执行器端口
+   xxl.job.executor.port=9989    
+   ### xxl-job executor log-path
+   xxl.job.executor.logpath=/data/applogs/xxl-job/jobhandler
+   ### xxl-job executor log-retention-days
+   xxl.job.executor.logretentiondays=30
+   ```
+
+3. **创建配置类**： 创建一个配置类来加载和设置XXL-JOB的配置。
+
+   ```java
+   @Configuration
+   public class XxlJobConfig {
+       @Value("${xxl.job.admin.addresses}")
+       private String adminAddresses;
+   
+       @Value("${xxl.job.accessToken}")
+       private String accessToken;
+   
+       @Value("${xxl.job.executor.appname}")
+       private String appName;
+   
+       @Value("${xxl.job.executor.ip}")
+       private String ip;
+   
+       @Value("${xxl.job.executor.port}")
+       private int port;
+   
+       @Value("${xxl.job.executor.logpath}")
+       private String logPath;
+   
+       @Value("${xxl.job.executor.logretentiondays}")
+       private int logRetentionDays;
+   
+       @Bean
+       public XxlJobSpringExecutor xxlJobExecutor() {
+           XxlJobSpringExecutor xxlJobSpringExecutor = new XxlJobSpringExecutor();
+           xxlJobSpringExecutor.setAdminAddresses(adminAddresses);
+           xxlJobSpringExecutor.setappname(appName);
+           xxlJobSpringExecutor.setIp(ip);
+           xxlJobSpringExecutor.setPort(port);
+           xxlJobSpringExecutor.setAccessToken(accessToken);
+           xxlJobSpringExecutor.setLogPath(logPath);
+           xxlJobSpringExecutor.setLogRetentionDays(logRetentionDays);
+           return xxlJobSpringExecutor;
+       }
+   }
+   ```
+
+4. **创建任务处理器**： 创建一个或多个任务处理器类，并使用`@XxlJob`注解来标记任务方法。这些方法将被XXL-JOB调度执行。
+
+   ```java
+   @Component
+   public class MyJobHandler {
+       @XxlJob("myJobHandler")
+       public ReturnT<String> myJobHandler(String param) throws Exception {
+           // 执行任务逻辑
+           System.out.println("执行任务：" + param);
+           // 返回任务执行结果
+           return ReturnT.SUCCESS;
+       }
+   }
+   ```
+
+5. **启动XXL-JOB执行器**： 确保你的Spring项目启动时，XXL-JOB的执行器也会随之启动。这通常在配置类中通过`@Bean`方法实现。
+
+6. **在XXL-JOB管理平台配置任务**： 在XXL-JOB的管理平台（调度中心）中，添加执行器并创建任务。指定任务的Cron表达式、路由策略等，并关联到你的任务处理器。
+
+7. **启动项目并验证**： 启动你的Spring项目，然后登录到XXL-JOB的管理平台，检查执行器是否已成功注册，并且可以开始配置和启动任务。
+
+以上步骤完成后，你的Spring项目应该已经成功集成了XXL-JOB，并且可以通过XXL-JOB的调度中心来管理和监控任务的执行。
 
 
 

@@ -11,6 +11,49 @@ typora-root-url: ..\.vuepress\public
 
 # 工作问题及解决方法
 
+## SEO 优化
+
+### meta标签  设置
+
+至少在 meta 设置 title ，description  ，keywords  等属性
+
+[【HTML】前端必须要知道的html中的meta标签，有哪些属性？_html meta属性-CSDN博客](https://blog.csdn.net/qq_38987146/article/details/125850144#:~:text=1 如果设置了 name 属性， meta 元素提供的是文档级别的元数据，应用于整个页面。 2 如果设置了,meta 元素是一个字符集声明，告诉文档使用哪种字符编码。 4 如果设置了 itemprop 属性， meta 元素提供用户定义的元数据。)
+
+搜索引擎抓取是自上而下进行的，把主要的关键性的内容放在前面，可以保证所抓取的内容更符合或代表网站的特征。
+
+### **向各大搜索引擎提交收录自己的站点**
+
+搜索引擎收录了你的网站后，会很大程度上提升网站的排名。下面是常见搜索引擎的收录入口：
+
+百度提交入口：https://ziyuan.baidu.com/linksubmit/url
+
+Google提交入口：http://www.google.com/addurl/?hl=zh-CN&continue=/addurl
+
+360提交入口：http://info.so.360.cn/site_submit.html
+
+搜狗提交入口：http://fankui.help.sogou.com/index.php/web/web/index?type=1
+
+必应提交入口：https://www.bing.com/toolbox/webmaster
+
+### 网页预渲染
+
+vue项目可以通过  prerender-spa-plugin  进行网页预渲染  （最好是静态页面）
+
+[chrisvfritz/prerender-spa-plugin: Prerenders static HTML in a single-page application. (github.com)](https://github.com/chrisvfritz/prerender-spa-plugin)
+
+[Vue使用prerender-spa-plugin进行网页预渲染 - 掘金 (juejin.cn)](https://juejin.cn/post/7059771777525743624)
+
+[Vue项目的SEO优化方案 - 掘金 (juejin.cn)](https://juejin.cn/post/7054108790529982501)
+
+[vue-cli 4.0 3.0预渲染最新完整版 使用prerender-spa-plugin-CSDN博客](https://blog.csdn.net/joy1793/article/details/111554179)
+
+### **其他**
+
+- 少用iframe：iframe中的内容是不会被抓取到的
+- 提高网站速度：这也是搜索引擎排序的一个重要指标
+- CDN 使用
+- 流量：访问你的网站的人越多，排名也会越靠前
+
 ## Node npm nvm
 
 ### node
@@ -1309,7 +1352,7 @@ export default {
 
 [解决 Element-ui中 选择器（Select）因options 数据量大导致渲染慢、页面卡顿的问题-阿里云开发者社区 (aliyun.com)](https://developer.aliyun.com/article/1086565)
 
-### Element-ui upload组件 上传文件类型限制
+### Element-ui upload组件 上传文件类型限制（文件名限制）
 
 [Element-ui upload组件 上传文件类型限制_el-upload默认支持的文件类型-CSDN博客](https://blog.csdn.net/qq_34707272/article/details/103895176)
 
@@ -1317,12 +1360,29 @@ export default {
 
 **注意事项：**不使用默认上传，使用手动上传时，beforeUpload 一定要返回 false,否则还是会调用默认的上传事件。
 
-```
+```js
 extType: "png,jpg,jpeg,doc,docx,xls,xlsx,pdf"   文件后缀名
 
 :before-upload="(file)=>beforeUpload(file,extType)"
 
+getFileNameWithoutExtension (fileName) {   //获取不带后缀的文件名
+  // 分割文件名字符串，以最后一个点为界
+  var parts = fileName.split('.')
+  // 如果文件名中有多个点，我们只取最后一个点之前的部分作为文件名
+  // 如果没有点，或者只有一个点（文件名以点开头），则直接返回整个文件名
+  return parts.length > 1 ? parts.slice(0, -1).join('.') : fileName
+},
+    
 beforeUpload (file, extType) {
+    //  文件名符合正则表达式可通过
+    const regex = /^[^\\n!@#$%^&*,.?\"{}|<>]+$/
+      if (regex.test(this.getFileNameWithoutExtension(file.name))) {
+       } else {
+        this.$message.error('文件名不能含有特殊字符')
+        return false
+       }
+    
+    
       const fileSuffix = file.name.substring(file.name.lastIndexOf('.') + 1)
       const whiteList = extType.split(',')
       if (whiteList.indexOf(fileSuffix) === -1) {
@@ -1358,6 +1418,8 @@ beforeUpload (file) {
 
 ## 时间操作：
 
+### js操作
+
 [JavaScript日期时间操作完整指南！ - 掘金 (juejin.cn)](https://juejin.cn/post/7254127644211822653#heading-30)
 
 可以使用 `newDate()` 来创建日期，传入的参数通常有4种常用的方式：
@@ -1387,6 +1449,12 @@ new Date()     // 获取当前时间
 const currentDate = new Date();
 const timestamp = currentDate.getTime();
 ```
+
+### 时间库
+
+[moment.js 与 day.js 日期库在项目中应用时，该如何选择 - 掘金 (juejin.cn)](https://juejin.cn/post/6922398807472750605)
+
+Day.js:推荐使用   [解析 · Day.js](https://day.js.org/docs/zh-CN/parse/parse)
 
 ### 比较时间
 
@@ -2547,3 +2615,25 @@ userInfo.password = sm2.get(userInfo.password.trim())
 userInfo.password ='04'+ sm2.get(userInfo.password.trim())  
 ```
 
+## 安全相关
+
+### WAF
+
+WAF（Web Application Firewall，网络应用防火墙）是一种专门设计来保护Web应用程序免受各种网络攻击的安全设备或服务。与传统的网络防火墙相比，WAF工作在应用层，这意味着它能够更深入地理解HTTP/HTTPS协议，从而提供更精细的控制和保护。
+
+WAF的主要功能包括：
+
+1. **流量过滤**：WAF可以监控和过滤进入Web应用程序的HTTP/HTTPS流量，识别并阻止恶意请求，如SQL注入、跨站脚本攻击（XSS）、跨站请求伪造（CSRF）等。
+2. **安全策略执行**：WAF内置了一系列的安全策略，这些策略基于OWASP（开放网络应用安全项目）等组织定义的攻击模式。WAF可以执行这些策略来防御已知的Web攻击。
+3. **自定义规则**：除了内置的规则，WAF还允许用户创建自定义规则，以适应特定的应用需求和安全策略。
+4. **安全审计**：WAF可以记录和分析Web应用程序的访问日志，帮助管理员识别潜在的安全威胁和异常行为。
+5. **应用交付**：WAF还可以提供应用交付功能，如负载均衡、内容缓存和压缩，以优化Web应用程序的性能。
+6. **防止DDoS攻击**：某些WAF解决方案还包括分布式拒绝服务（DDoS）攻击的防护功能。
+
+WAF的部署方式多样，可以是硬件设备、软件解决方案，也可以是基于云的服务。它可以部署在Web服务器之前，作为反向代理或透明代理，或者作为旁路监控系统。WAF的部署方式取决于组织的具体需求和网络架构。
+
+总的来说，WAF是Web安全领域的一个重要工具，它通过在应用层提供额外的安全层，帮助保护Web应用程序免受日益复杂的网络攻击。
+
+https://zhuanlan.zhihu.com/p/638553359
+
+雷池：  https://waf-ce.chaitin.cn/community      https://github.com/chaitin/safeline

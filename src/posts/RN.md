@@ -47,7 +47,9 @@ gradle-wrapper.properties 文件修改
 distributionUrl=https://mirrors.cloud.tencent.com/gradle/gradle-8.1.1-all.zip    使用国内镜像文件下载更快 
 ```
 
+## 移动端开发相关知识（了解）
 
+[H5 - 苏苏同学的专栏 - 掘金 (juejin.cn)](https://juejin.cn/column/7052955706885963790)
 
 ## 环境变量配置（根据自己路径配置）：
 
@@ -1205,6 +1207,8 @@ RN中的路由是通过React-Navigation来完成的
 
 [开始使用 |React 导航 --- Getting started | React Navigation](https://reactnavigation.org/docs/getting-started/)     [React Navigation 6.x 导航器 - 掘金 (juejin.cn)](https://juejin.cn/post/7009526375606386718)
 
+RN 之react-navigation：https://juejin.cn/post/7339780797392044071#heading-13
+
 ### 安装：安装部分最好跟着官网一步步来
 
 npm install --save react-navigation            npx expo install react-native-screens react-native-safe-area-context
@@ -2008,7 +2012,7 @@ eas.json修改：
 
 [创建开发版本 - Expo 中文网 (nodejs.cn)](https://expo.nodejs.cn/develop/development-builds/create-a-build/)
 
-**npx expo install expo-dev-client**
+**npx expo install expo-dev-client**   (暂不推荐使用)
 
 eas build --profile preview --platform all  打包（包括ios）
 

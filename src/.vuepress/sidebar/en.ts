@@ -141,7 +141,7 @@ export const enSidebar = sidebar({
           link: "bushu"
         },{
           text: "harmony",
-          icon: "edit",
+          icon: "",
           link: "harmony"
         }
       ]

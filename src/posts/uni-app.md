@@ -26,11 +26,19 @@ typora-root-url: ..\.vuepress\public
 
 [uniapp模板：新建一个uniapp项目，并加入基础化建设，uniapp开发全流程 - 掘金 (juejin.cn)](https://juejin.cn/post/7226731366535905317#heading-7)
 
+
+
+## 开发模板
+
+[unibest](https://github.com/codercup/unibest)    ： [起步 | unibest (codercup.github.io)](https://codercup.github.io/unibest-docs/guide/installation)    **由 uniapp + Vue3 + Ts + Vite4 + UnoCss + UniUI + VSCode 构建**
+
 ## 相关文章
 
 [简记账app--使用uni-app开发完整功能app - 掘金 (juejin.cn)](https://juejin.cn/post/7236354905492668473?searchId=20231107134553740B3EDD7BEDDC8856C0#heading-0)
 
 [【uniapp】十分钟带你封装uniapp的api请求 - 掘金 (juejin.cn)](https://juejin.cn/post/7249228528573694013?searchId=20231107134553740B3EDD7BEDDC8856C0#heading-14)
+
+[uni-app开发经验总结 - 掘金 (juejin.cn)](https://juejin.cn/post/7255855818595647546)
 
 ## 引入uview2.0
 
@@ -898,6 +906,18 @@ https://juejin.cn/post/7087789961490989070
 ## uniapp 仿微信朋友圈点击评论唤起软键盘并自定义输入框占位符
 
 [uniapp 仿微信朋友圈点击评论唤起软键盘并自定义输入框占位符_uniapp评论框和键盘-CSDN博客](https://blog.csdn.net/m0_58135258/article/details/132212889)
+
+
+
+## vue3开发模板
+
+[codercup/unibest: unibest - 最好用的 uniapp 开发模板。unibest 是由 uniapp + Vue3 + Ts + Vite4 + UnoCss + UniUI 驱动的跨端快速启动模板，使用 VS Code 开发，具有代码提示、自动格式化、统一配置、代码片段等功能，同时内置了大量平时开发常用的基本组件，开箱即用，让你编写 uniapp 拥有 best 体验。 (github.com)](https://github.com/codercup/unibest)
+
+## 发布
+
+### ssl校验
+
+[亚数信息-SSL/TLS安全评估报告 (myssl.com)](https://myssl.com/)
 
 ## uni-cloud云开发
 

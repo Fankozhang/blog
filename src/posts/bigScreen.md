@@ -449,9 +449,17 @@ dataZoom: [
 
 [echarts环形图自动轮播选中，中间显示数据，移入停止轮播_echarts环形图自动选中-CSDN博客](https://blog.csdn.net/weixin_44237806/article/details/117027396)
 
-## 可视化大屏开发及相关资源
+## 可视化大屏开发(图标)及相关资源
 
 http://www.datagear.tech/
+
+https://github.com/xiaopujun/light-chaser?tab=readme-ov-file
+
+
+
+## 参考示例：
+
+[vue3 + ts + svg + ECharts 实现双十一数据大屏 - 掘金 (juejin.cn)](https://juejin.cn/post/7305434729527181322#heading-8)
 
 ## Three.js
 
@@ -459,7 +467,11 @@ http://www.datagear.tech/
 
 学习视频线上文档： [Three.js中文网 (webgl3d.cn)](http://www.webgl3d.cn/) 
 
+[老陈打码 | 麒跃科技 (three3d.cn)](https://www.three3d.cn/threejs/01-开发环境搭建/01-前端3D可视化Three.js学习路线.html)           [麒跃科技_老陈打码-让学习更简单！ (cpengx.cn)](https://www.cpengx.cn/)
+
 官方文档： [创建一个场景 – three.js docs (threejs.org)](https://threejs.org/docs/index.html#manual/zh/introduction/Creating-a-scene) 
+
+电子书：[《探索three.js》 (discoverthreejs.com)](https://discoverthreejs.com/zh/)
 
 
 
@@ -497,6 +509,229 @@ http://www.datagear.tech/
 
 
 
+### 实现基础加载模型（代码示例）
+
+具体每一项的参数配置可以参考官方文档，进行自定义
+
+```vue
+<template>
+  <div>
+    <div id="simple" ref="simple"></div>
+  </div>
+</template>
+
+<script setup>
+import { ref, onMounted } from "vue";
+import * as THREE from "three";
+import panoramaImg2 from "@/assets/img/panorama/pImg5.png"; // 全景图（背景图）
+//引入轨道控制器（用来通过鼠标事件控制模型旋转、缩放、移动），没有这个需求可不引入
+import { OrbitControls } from "three/examples/jsm/controls/OrbitControls";
+// 引入gltf模型加载库GLTFLoader.js
+import { GLTFLoader } from "three/addons/loaders/GLTFLoader.js";
+
+    
+// 获取dom的ref
+let simple = ref(null);
+// 设置宽高
+const width = 800; //宽度
+const height = 800; //高度
+// 创建3D场景对象Scene
+const scene = new THREE.Scene();
+// AxesHelper：辅助观察的坐标系（红R、绿G、蓝B分别对应坐标系的x、y、z轴，对于three.js的3D坐标系默认y轴朝上。）
+const axesHelper = new THREE.AxesHelper(150);
+scene.add(axesHelper);
+// 创建渲染器对象
+const renderer = new THREE.WebGLRenderer({
+  antialias: true,
+  preserveDrawingBuffer: true, //保留图形缓冲区
+});
+console.log("查看当前屏幕设备像素比", window.devicePixelRatio);
+renderer.setPixelRatio(window.devicePixelRatio);
+renderer.setClearColor(0x000000, 0.2); // 设置背景颜色并启用透明度
+renderer.setSize(width, height); //设置three.js渲染区域的尺寸(像素px)
+
+// 创建相机
+const camera = new THREE.PerspectiveCamera(45, width / height, 1, 2000);
+camera.position.set(400, 400, 400);
+camera.lookAt(0, 0, 0); //坐标原点
+
+// 设置光源
+let lightColor = new THREE.Color(0xffffff);
+let ambient = new THREE.AmbientLight(lightColor); //环境光
+ambient.name = "环境光";
+scene.add(ambient);
+let directionalLight1 = new THREE.DirectionalLight(lightColor);
+directionalLight1.position.set(0, 0, 500);
+scene.add(directionalLight1); //平行光源添加到场景中
+let directionalLight2 = new THREE.DirectionalLight(lightColor);
+directionalLight2.position.set(0, 0, -500);
+scene.add(directionalLight2); //平行光源添加到场景中
+let directionalLight3 = new THREE.DirectionalLight(lightColor);
+directionalLight3.position.set(500, 0, 0);
+scene.add(directionalLight3); //平行光源添加到场景中
+let directionalLight4 = new THREE.DirectionalLight(lightColor);
+directionalLight4.position.set(-500, 0, 0);
+scene.add(directionalLight4); //平行光源添加到场景中
+let directionalLight5 = new THREE.DirectionalLight(lightColor);
+directionalLight5.position.set(0, 500, 0);
+scene.add(directionalLight5); //平行光源添加到场景中
+let directionalLight6 = new THREE.DirectionalLight(lightColor);
+directionalLight6.position.set(0, -500, 0);
+scene.add(directionalLight6); //平行光源添加到场景中
+
+//场景球体全景（背景，非必须）
+let geometry = new THREE.SphereGeometry(500, 100, 100);
+      let material = new THREE.MeshBasicMaterial({
+        map: new THREE.TextureLoader().load(panoramaImg2), //导入图片
+        color: 0xffffff,
+        side: THREE.BackSide,
+      });
+      let mesh = new THREE.Mesh(geometry, material);
+      scene.add(mesh);
+
+    // 渲染函数
+const render = () => {
+  renderer.render(scene, camera);
+//   mesh.rotateY(0.01); //（执行渲染前操作）这个代码实现每次渲染绕y轴旋转0.01弧度  
+  requestAnimationFrame(render);  //请求再次执行渲染函数render，渲染下一帧
+}
+
+// 轨道控制器
+const controls = new OrbitControls(camera, renderer.domElement);
+controls.target.set(100, 0, 0);
+controls.update(); //update()函数内会执行camera.lookAt(controls.targe)
+controls.addEventListener("change", () => {
+  renderer.render(scene, camera); //重新渲染
+  // 浏览器控制台查看相机位置变化
+  //  console.log('camera.position',camera.position);
+});
+    
+// 加载模型
+const loadModel = () => {
+  const loader = new GLTFLoader();
+  loader.load("model/导弹.glb", function (gltf) {
+    console.log("控制台查看加载gltf文件返回的对象结构", gltf);
+    console.log("gltf对象场景属性", gltf.scene);
+    // 返回的场景对象gltf.scene插入到threejs场景中
+    gltf.scene.scale.set(100, 100, 100); // 改变渲染的大小
+    // 改变模型渲染的位置
+    gltf.scene.rotation.set(0, 10, 10); // 改变模型渲染的旋转角度
+    scene.add(gltf.scene);
+
+    render(); //执行渲染操作
+  });
+};
+    
+// 创建一个立方体(网格模型)
+const getMod=()=>{
+     //创建一个长方体几何对象Geometry
+     const geometry = new THREE.BoxGeometry(50, 50, 50);
+     // 高光网格材质MeshPhongMaterial 模拟镜面反射，产生一个高光效果
+    const material = new THREE.MeshPhongMaterial({
+        color: '#23A9F2',
+        shininess: 20, //高光部分的亮度，默认30
+        specular: 0xff0000, //高光部分的颜色
+    });
+     // 两个参数分别为几何体geometry、材质material
+     const mesh1 = new THREE.Mesh(geometry, material); //网格模型对象Mesh
+    //设置网格模型在三维空间中的位置坐标，默认是坐标原点
+    mesh1.position.set(50, 50, 150);
+    scene.add(mesh1);
+
+}
+
+// 自定义加载函数
+const load = () => {
+  render(); // 执行一次渲染操作(增加了模型加载慢，会先显示背景色（非必要）)
+  loadModel();  //getMod()   // 加载模型(加载外部模型  和 创建的模型对象) 
+  document.getElementById("simple")?.appendChild(renderer.domElement);
+};
+
+onMounted(() => {
+  load();
+});
+</script>
+```
+
+### 模型的克隆（复制）
+
+#### 普通的克隆
+
+在Three.js中，复制一个模型对象通常意味着创建该对象的一个深拷贝，这样原始对象和新创建的对象在内存中是完全独立的。这可以通过使用`.clone()`方法来实现，该方法会递归地复制对象及其所有子对象。以下是一个基本的示例：
+
+```js
+// 假设你已经有了一个Three.js模型对象，名为 originalModel
+const originalModel = ...; // 你的模型对象
+
+// 使用.clone()方法创建一个深拷贝
+const clonedModel = originalModel.clone();
+
+// 现在 clonedModel 是 originalModel 的一个副本，它们在内存中是独立的
+// 你可以对 clonedModel 进行操作，而不会影响 originalModel
+```
+
+请注意，`.clone()`方法会复制模型的所有属性，包括材质、纹理、几何体等。如果你只想复制模型的几何体（Geometry）而不包括材质，你可以这样做：
+
+```js
+// 复制几何体
+const geometry = originalModel.geometry.clone();
+
+// 创建一个新的网格（Mesh）对象，使用复制的几何体
+const clonedMesh = new THREE.Mesh(geometry, originalModel.material);
+
+// 现在 clonedMesh 是一个具有原始几何体和材质的新模型对象
+```
+
+在这个例子中，我们首先复制了原始模型的几何体，然后创建了一个新的`Mesh`对象，它使用复制的几何体和原始模型的材质。这样，新创建的`Mesh`对象在几何体上与原始模型相同，但在材质和其他属性上是独立的。
+
+如果你需要复制整个模型，包括其在场景中的位置、旋转和缩放，那么使用`.clone()`方法是最简单的选择。如果你只想复制模型的某些部分，你可能需要手动创建新的模型对象并设置相应的属性。
+
+#### 带有骨架的克隆
+
+直接用 clone 方法来克隆带有骨架的模型对象，模型是散架的（例如人物模型），需要使用 骨架工具 的克隆方法才行。
+
+[SkeletonUtils – three.js docs (threejs.org)](https://threejs.org/docs/#examples/zh/utils/SkeletonUtils)
+
+```js
+import * as SkeletonUtils from 'three/addons/utils/SkeletonUtils.js';
+
+const model1 = SkeletonUtils.clone( gltf.scene );
+```
+
+
+
+### gsap动画（模型运动）
+
+具体的gsap属性可以去查询gsap的相关内容
+
+```js
+          // gltf.scene 是加载的模型 
+          const model1 = gltf.scene 
+
+         // 使用GSAP添加旋转动画
+          gsap.to(model1.rotation, {
+            x: 2 * Math.PI, // 绕X轴旋转360度
+            y: 0.5 * Math.PI, // 绕Y轴旋转180度
+            z: 0, // 绕Z轴不旋转
+            duration: 5, // 动画持续时间
+            repeat: -1, // 无限重复
+            yoyo: true, // 来回旋转
+            ease: 'power1.inOut' // 使用缓动效果
+          });
+			// 使用GSAP添加位置移动
+          gsap.to(model1.position, {
+            z:40
+          })
+          // 使用GSAP添加 大小变化
+          gsap.to(model1.scale, {
+            x: 40,
+            y: 40,
+            z:40
+          })
+```
+
+
+
 ### 问题及解决
 
 #### 贴图纹理渲染黑色：
@@ -526,6 +761,10 @@ gltf加载器方法`.load()`方法也是一个异步方法，注意 renderer.ren
 ```
 
 
+
+## 智慧城市开发
+
+up主：https://space.bilibili.com/690283346         太极开发者平台（配置要求高）： https://www.gbim.vip/#/home/dts-onLine
 
 ## Cesium
 

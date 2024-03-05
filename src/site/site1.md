@@ -88,13 +88,17 @@ tag:
 
 - [个人博客|沧沧凉凉的小站 (cclliang.com)](https://www.cclliang.com/)
 
--      [互联网 Java 工程师进阶知识完全扫盲 - Doocs 技术社区](https://doocs.github.io/advanced-java/#/?id=互联网-java-工程师进阶知识完全扫盲)
+- [互联网 Java 工程师进阶知识完全扫盲 - Doocs 技术社区](https://doocs.github.io/advanced-java/#/?id=互联网-java-工程师进阶知识完全扫盲)
+
+-      面试题： https://www.yuque.com/cuggz/interview/hswu8g
 
 
 
-## 软件聚合类网站
+## 软件聚合类网站（技术导航）
 
 [软件目录【23年11月最新】 (qq.com)](https://mp.weixin.qq.com/s/dE8Q4nk411zX6ulp1V6hyA)
+
+[独立开发者出海技术栈和工具集合 (chuhai.tools)](https://chuhai.tools/)
 
 ## css样式风格调试网站
 
@@ -187,7 +191,14 @@ tag:
 ## 开源项目
 
 - 支持多种文件(**docx、excel、pdf**)预览的vue组件库，支持vue2/3。   https://github.com/501351981/vue-office    
+
 - 拖拽  [vue-draggable-plus | vue-draggable-plus (alfred-skyblue.github.io)](https://alfred-skyblue.github.io/vue-draggable-plus/guide/)
+
+- Vue Fabric Editor     https://nihaojob.github.io/editorDoc/        https://github.com/nihaojob/vue-fabric-editor
+
+  快速构建图形编辑器
+
+- 
 
 
 
@@ -243,11 +254,15 @@ tag:
 
 ### 3d
 
+[2024年最新Three.js零基础入门教程（超详细） - 掘金 (juejin.cn)](https://juejin.cn/post/7334503381199880243#heading-0)
+
 [GitHub - mtsee/vr-hall: three.js 3D vr hall](https://github.com/mtsee/vr-hall)
 
 [Three.js 实现年会3D抽奖页面 (qq.com)](https://mp.weixin.qq.com/s/ezQpucdL93Kyyl8p1bYwLg)
 
 [基于 Vue3.0 + Three.js 实现炫酷3D网页 (qq.com)](https://mp.weixin.qq.com/s/G-VL1jUPmaKMJ3o2jIEyfA)
+
+[那些惊艳的 Three.js 项目 (qq.com)](https://mp.weixin.qq.com/s/BozHahNqE3kkPpqh9XljUw)
 
 ### css
 
@@ -255,7 +270,7 @@ tag:
 
 前端最全的5种换肤方案总结：[微信公众平台 (qq.com)](https://mp.weixin.qq.com/s/9Hv-KA-Ay_DRdGI-S_P4QQ)
 
-### js
+### js(动画库)
 
 [12个强大的 JavaScript 动画库，可帮助你提升用户体验 (qq.com)](https://mp.weixin.qq.com/s/AsaT9H8mhaJVmEpg9zLH8A)
 
@@ -266,6 +281,8 @@ tag:
 学习入门文章:https://juejin.cn/post/7018805943710253086
 
 ### vue
+
+vue相关的管理页面：[Vue-Admin - Vue-Admin](https://vue-admin.cn/)
 
 vue和react对比学习（详细的）：  [React - 苏苏同学的专栏 - 掘金 (juejin.cn)](https://juejin.cn/column/7052614061607321631)
 
@@ -279,7 +296,7 @@ vue和react对比学习（详细的）：  [React - 苏苏同学的专栏 - 掘�
 
 [7 个最常用的 Vue 3 UI 组件 (qq.com)](https://mp.weixin.qq.com/s/dXcypys7mpEA2T2HwC7ejQ)
 
-
+[学会这几个常用功能，给你的 vue3 项目加点餐！ - 掘金 (juejin.cn)](https://juejin.cn/post/7256975111562674233)
 
 ### React
 
@@ -357,7 +374,7 @@ Docker-compose 安装 Wordpress 博客  [Docker-compose 安装 Wordpress 博客 
 
 [我写了个工具，让CRUD开发效率提升100倍 - 掘金 (juejin.cn)](https://juejin.cn/post/7197237024972144697)
 
-
+[面试官：讲讲Spring-boot-starter-parent的作用和多模块项目搭建步骤 (qq.com)](https://mp.weixin.qq.com/s/JZV9ES2cQbPaXKs8Hom3cg)
 
 ### 低代码生成(可视化)
 
@@ -365,7 +382,9 @@ Docker-compose 安装 Wordpress 博客  [Docker-compose 安装 Wordpress 博客 
 
 mybatis-plus-generator-ui ：https://blog.csdn.net/afreon/article/details/129153154
 
+生成后台管理的前端页面   https://light2f.com/#/home    介绍：[一键生成任意前端项目 (qq.com)](https://mp.weixin.qq.com/s/AvHt7cfwnPUAw_4enkv_LA)
 
+[MagicalCoder低代码应用开发平台_企业级应用开发平台](http://www.magicalcoder.com/)
 
 ### 其他收藏
 

@@ -25,6 +25,8 @@ typora-root-url: ..\..\..\.vuepress\public
 
 ## 项目搭建
 
+快速生成项目：[Cloud Native App Initializer (aliyun.com)](https://start.aliyun.com/bootstrap.html)
+
 ### 创建父工程
 
 父工程一般只用于聚合，导入依赖等，不需要打成jar包，用 idea 创建一个spring项目，Type 选择 Maven POM ,

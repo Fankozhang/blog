@@ -239,15 +239,31 @@ B站直达：https://www.bilibili.com/video/BV1AP411s7D7
 
 ### myBatis
 
+官网：[mybatis – MyBatis 3 | 简介](https://mybatis.org/mybatis-3/zh_CN/index.html)             [MyBatis中文网](https://mybatis.net.cn/)
+
  [MyBatis 动态 SQL 最全教程，这样写 SQL 太爽了！ (qq.com)](https://mp.weixin.qq.com/s/jEGLpIA9HWOdN3WOq46K1g) 
 
 ### MyBatis-plus
+
+官网： [简介 | MyBatis-Plus (baomidou.com)](https://baomidou.com/pages/24112f/)
 
 [MyBatis-plus最详细的入门使用教程来了 (qq.com)](https://mp.weixin.qq.com/s/kKH0c2GTtd_c2Ptqh-zJbA)
 
 黑马视频：[day01-MybatisPlus - 飞书云文档 (feishu.cn)](https://b11et3un53m.feishu.cn/wiki/PsyawI04ei2FQykqfcPcmd7Dnsc)
 
 
+
+### mybatis-flex
+
+官网：https://mybatis-flex.com/zh/intro/what-is-mybatisflex.html      
+
+仓库：https://gitee.com/mybatis-flex/mybatis-flex#english--%E7%AE%80%E4%BD%93%E4%B8%AD%E6%96%87
+
+视频教程： https://www.bilibili.com/video/BV11h411A7cU/?spm_id_from=333.788
+
+和其他mybatis框架的区别：https://zhuanlan.zhihu.com/p/669378593
+
+基础使用：https://juejin.cn/post/7306192146768183311#heading-7
 
 ## mysql
 
@@ -325,6 +341,7 @@ MVSQL建表的经验有很多，下边列举一些：
 - 6、设置字段默认值，比如：状态、创建时间等。
 - 7、每个字段写清楚注释。
 - 8、注意字段的约束，比如：非空、唯一、主键等
+- 时间类型选择：https://blog.csdn.net/m0_48805880/article/details/126423801 （推荐优先使用 datetime ）
 
 ## 我的前后端分离测试项目
 
