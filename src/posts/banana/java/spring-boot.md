@@ -3333,7 +3333,7 @@ resources/template/index.html  (资源里面新建 index.html 文件)    th:text
 </html>
 ```
 
-controllser
+controller
 
 ```java
 @Controller
@@ -3369,6 +3369,10 @@ public class thymeController {
 字体文件放在  resources/static/font/simsun.ttf  位置 ，不加入字体文件导出pdf时会格式错误
 
  https://wwmj.lanzoue.com/iYBOx1a6cbab    密码:guv2 
+
+
+
+## 模板引擎（thymeleaf）
 
 
 

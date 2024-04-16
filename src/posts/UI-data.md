@@ -20,6 +20,8 @@ tag:
 
  `npm install element-china-area-data -S` 
 
+vue3和vue2有点区别，没有TextToCode方法，有codeToText方法
+
 ```javascript
 import { regionData,  provinceAndCityData,CodeToText,TextToCode} 
 from 'element-china-area-data'

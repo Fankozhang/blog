@@ -186,9 +186,11 @@ tag:
 
 - [APP喵-软件猫：阿喵软件阿喵分享 – 软件猫：优质APP软件资源分享下载站 (appmiu.com)](https://www.appmiu.com/)
 
+- https://www.exception.site/    破解编程软件，激活码
+
   
 
-## 开源项目
+## 开源项目（技术类）
 
 - 支持多种文件(**docx、excel、pdf**)预览的vue组件库，支持vue2/3。   https://github.com/501351981/vue-office    
 
@@ -263,6 +265,8 @@ tag:
 [基于 Vue3.0 + Three.js 实现炫酷3D网页 (qq.com)](https://mp.weixin.qq.com/s/G-VL1jUPmaKMJ3o2jIEyfA)
 
 [那些惊艳的 Three.js 项目 (qq.com)](https://mp.weixin.qq.com/s/BozHahNqE3kkPpqh9XljUw)
+
+[我的生活记录 - GhostCat (gcat.cc)   博客记录了一些 three.js的内容](https://gcat.cc/)
 
 ### css
 
@@ -376,7 +380,7 @@ Docker-compose 安装 Wordpress 博客  [Docker-compose 安装 Wordpress 博客 
 
 [面试官：讲讲Spring-boot-starter-parent的作用和多模块项目搭建步骤 (qq.com)](https://mp.weixin.qq.com/s/JZV9ES2cQbPaXKs8Hom3cg)
 
-### 低代码生成(可视化)
+### 低代码生成(可视化,快速开发)
 
 [自从用了这款代码生成工具，项目开发效率大大提高了！ (qq.com) ](https://mp.weixin.qq.com/s/KeI9lN0uyNU0_8wTYwBzwQ)        [业务代码生成器 - 猿猿工具 (utilsbox.cn)](https://utilsbox.cn/?app=bizcode)
 
@@ -386,13 +390,35 @@ mybatis-plus-generator-ui ：https://blog.csdn.net/afreon/article/details/129153
 
 [MagicalCoder低代码应用开发平台_企业级应用开发平台](http://www.magicalcoder.com/)
 
+[突然发现一个很炸裂的平台！ (qq.com)](https://mp.weixin.qq.com/s/Vc9wLJ10hAHi4EjqXnXimg)
+
+[业务代码生成器 - 猿猿工具 (utilsbox.cn)](https://utilsbox.cn/)    [写了个工具，让 CRUD 开发效率提升100倍，开源咯！ (qq.com)](https://mp.weixin.qq.com/s/V_v-gcXs_cLu23Iyc0Hw8w)
+
+## 
+
 ### 其他收藏
 
 b站的up主推荐：https://juejin.cn/post/7322401091237511222#heading-3
 
+
+
+## ai生成
+
+### 根据描述生成网站
+
+[Create a new Elemint (openui.fly.dev)](https://openui.fly.dev/ai/new)
+
+[v0 by Vercel       生成效果比较好](https://v0.dev/)
+
 ## 开源项目收藏（源码收藏，资源收藏）
 
 我的测试项目：[东方凝洛/我的测试仓库 - 码云 - 开源中国 (gitee.com)](https://gitee.com/fankozhang/my-testing-warehouse/tree/master)
+
+
+
+### CRMEB_Java电商系统
+
+[CRMEB_Java电商系统: Java商城 免费 开源 CRMEB商城JAVA版，SpringBoot + Maven + Swagger + Mybatis Plus + Redis + Uniapp +Vue+elementUI 包含移动端、小程序、PC后台、Api接口；有产品、用户、购物车、订单、积分、优惠券、营销、余额、权限、角色、系统设置、组合数据、可拖拉拽的form表单等模块，大量的减少了二开的成本。 (gitee.com)](https://gitee.com/ZhongBangKeJi/crmeb_java)
 
 
 
@@ -401,6 +427,12 @@ b站的up主推荐：https://juejin.cn/post/7322401091237511222#heading-3
 开源SpringBoot和Vue的企业级项目，代码很规范   https://smartadmin.vip/  **https://gitee.com/lab1024/smart-admin**
 
 [AbuCoder-RuoYi-Vue-uniapp-wx: 一直想做一款基于若依后台管理系统的微信小程序，最近比较闲了，所以想做个简单的东西。主要为了学习，走一遍整个过程，也是为像我这种小白提供些简单的学习内容。 这是一套前后端一起的脚手架，省去了好多需要写的东西，开箱即用 (gitee.com)](https://gitee.com/rahman/AbuCoder-RuoYi-Vue-uniapp-wx)
+
+
+
+
+
+[我开源了一套 RPC 框架，学爆它！ (qq.com)](https://mp.weixin.qq.com/s/lOm7k032II3gDG9xnEmpUg)
 
 
 
@@ -440,6 +472,8 @@ Github：[https://github.com/macrozheng/mall](https://github.com/macrozheng/mall
 前端项目`mall-app-web`地址：https://github.com/macrozheng/mall-app-web
 
 项目演示地址（将浏览器切换为手机模式效果更佳）：https://www.macrozheng.com/app/
+
+
 
 ### 无忧·企业文档
 

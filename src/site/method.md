@@ -1531,7 +1531,46 @@ export function handleTree(data, id, parentId, children) {
 
 ```
 
+### js树形数据查找父节点
 
+```js
+// 查找父节点 （id是查找的id, list是树形结构数据）
+const findP=(id:any, list = [], result = []) =>{
+      for (let i = 0; i < list.length; i += 1) {
+        // console.log('*******', list[i].id, '********')
+        const item = list[i]
+        // 找到目标
+        if (item.id === id) {
+          // console.log('找到了')
+          // 加入到结果中
+          result.push(item.id)
+          // 因为可能在第一层就找到了结果，直接返回当前结果
+          if (result.length === 1) return result
+          return true
+        }
+        // 如果存在下级节点，则继续遍历
+        if (item.children) {
+          // 预设本次是需要的节点并加入到最终结果result中
+          result.push(item.id)
+          const find = findP(id, item.children, result)
+          // 如果不是false则表示找到了，直接return，结束递归
+          if (find) {
+            return result
+          }
+          // 到这里，意味着本次并不是需要的节点，则在result中移除
+          result.pop()
+        }
+      }
+      // 如果都走到这儿了，也就是本轮遍历children没找到，将此次标记为false
+      return false
+    }
+```
+
+
+
+### js通过id匹配树形结构中的一条数据
+
+[js通过id匹配树形结构中的一条数据_js拿到id怎么匹配树数据的那一项-CSDN博客](https://blog.csdn.net/leile_wkle/article/details/107560651#:~:text=%40输入参数 id： 要查找数据对应的id %40输入参数 list： 要查询的树形结构数组 %40输出：返回该数据或null function,let res %3D list.find(item %3D> item.id %3D%3D id))
 
 ## bug类
 
@@ -2466,6 +2505,222 @@ npm i html2canvas
   </style>
 ```
 
+### 前端实现 批量下载pdf,生成zip文件
+
+npm install html2canvas         npm install  jspdf      npm install jszip      npm install file-saver --save
+
+导出按钮页面：
+
+```vue
+<template>
+  <div>
+    <div @click="moreExportData">批量下载</div>
+    <moreExport ref="moreExport" :list="list"></moreExport>
+  </div>
+</template>
+
+<script>
+import moreExport from "./moreExport.vue";
+export default {
+  data() {
+    return {
+      list: [],
+    };
+  },
+  components: {
+    moreExport,
+  },
+  methods: {
+    moreExportData() {
+      // 数组的每一项代表一条数据，最终会生成一个pdf文件
+      this.list = [
+        {
+          name: "张三",
+          sex: "男",
+          age: 19,
+        },
+        {
+          name: "李四",
+          sex: "男",
+          age: 19,
+        },
+      ];
+      // 打开弹框，触发导出pdf事件
+      const d = setTimeout(() => {
+        this.$refs.moreExport.dialogVisible = true;
+        this.$nextTick(() => {
+          this.$refs.moreExport.exportPDF();
+        });
+        clearTimeout(d);
+      }, 0);
+    },
+  },
+};
+</script>
+
+```
+
+导出内容弹框：moreExport.vue
+
+```vue
+
+<template>
+  <div>
+    <div v-if="dialogVisible" width="50%" style="position: absolute;top: -999999999px;left: -999999999px;">
+      <div>
+        <div v-for="(item, index) in list" :key="index" >
+            <!-- 样式大小需自己根据需要做修改，此处的样式就是导出后pdf展示的内容 -->
+            <div :id="'keyName'+index" style="flex-shrink: 0;width: 1000px;margin: 0 auto;transform-origin: top center;">
+                <div>姓名：{{item.name}}</div>
+                <div>性别：{{item.age}}</div>
+                <div>年龄：{{item.age}}</div>
+                <div>具体要导出的页面在这里循环展示出来</div>
+               
+            </div>
+          
+        </div>
+      </div>
+    </div>
+  </div>
+</template>
+
+<script>
+import html2canvas from 'html2canvas'
+import jsPDF from 'jspdf'
+import JSZip from 'jszip'
+import FileSaver from 'file-saver'
+export default {
+  props: ["list"],
+  data() {
+    return {
+        dialogVisible: false,
+        scale: 1,
+    }
+    
+  },
+  methods: {
+    exportPDF () {
+        // 导出pdf
+      this.scale = 1
+      const promises = []
+      const loading = this.$loading({
+        lock: true,
+        text: 'loading...',
+        spinner: 'el-icon-loading',
+        background: 'rgba(0, 0, 0, 0.7)'
+      })
+      this.$nextTick(async () => {
+        // let shareContent = document.body,//需要截图的包裹的（原生的）DOM 对象
+        for (let i = 0; i < this.list.length; i++) {
+          const key = 'keyName' + i
+          const newPdf = await this.scPdf(key, this.list[i])
+          promises.push(newPdf)
+
+          loading.setText(`正在生成第${i + 1}份文件`)
+          if (i === this.list.length - 1) {
+            this.zipChange(promises)
+            loading.close()
+          }
+        }
+      })
+    },
+    scPdf (key, item) {
+        console.log('scPdf', key, item)
+      var shareContent = document.getElementById(key)
+    // var shareContent = this.$refs[key]
+      return new Promise((resolve, reject) => {
+        setTimeout(async () => {
+          var _downDOM = shareContent
+          console.log('shareContent', shareContent)
+          let width = shareContent.offsetWidth // 获取dom 宽度
+          let height = shareContent.offsetHeight // 获取dom 高度
+          width = 1000
+          height = 512
+          const canvas = document.createElement('canvas') // 创建一个canvas节点
+          const scale = 1 / this.scale // 定义任意放大倍数 支持小数
+          canvas.width = width * scale // 定义canvas 宽度 * 缩放
+          canvas.height = height * scale // 定义canvas高度 *缩放
+          canvas.style.width = shareContent.clientWidth * scale + 'px'
+          canvas.style.height = shareContent.clientHeight * scale + 'px'
+          canvas.getContext('2d').scale(scale, scale) // 获取context,设置scale
+          // 导出之前先将滚动条置顶,不然会出现数据不全的现象
+          window.pageYOffset = 0
+          document.documentElement.scrollTop = 0
+          document.body.scrollTop = 0
+          await html2canvas(_downDOM, {
+            useCORS: true,
+            scale: 4, // 按比例增加分辨率 (2=双倍).
+            dpi: window.devicePixelRatio * 4 // 设备像素比
+          }).then((canvas) => {
+            var contentWidth = canvas.width
+            var contentHeight = canvas.height
+            // console.log(contentWidth + '||' + contentHeight)
+            // 一页pdf显示html页面生成的canvas高度;
+            var pageHeight = (contentWidth / 592.28) * 841.89
+            // 未生成pdf的html页面高度
+            var leftHeight = contentHeight
+            // 页面偏移
+            var position = 0
+            // a4纸的尺寸[595.28,841.89]，html页面生成的canvas在pdf中图片的宽高
+            var imgWidth = 555.28
+            var imgHeight = (555.28 / contentWidth) * contentHeight
+            var pageData = new Image()
+            // 设置图片跨域访问
+            pageData.setAttribute('crossOrigin', 'Anonymous')
+            pageData = canvas.toDataURL('image/jpeg', 1.0)
+            var pdf = new jsPDF('', 'pt', 'a4')
+            // 有两个高度需要区分，一个是html页面的实际高度，和生成pdf的页面高度(841.89)
+            // 当内容未超过pdf一页显示的范围，无需分页
+            if (leftHeight < pageHeight) {
+              pdf.addImage(pageData, 'JPEG', 20, 80, imgWidth, imgHeight)
+            } else {
+              while (leftHeight > 0) {
+                pdf.addImage(pageData, 'JPEG', 20, position, imgWidth, imgHeight)
+                leftHeight -= pageHeight
+                position -= 841.89
+                // 避免添加空白页
+                if (leftHeight > 0) {
+                  pdf.addPage()
+                }
+              }
+            }
+            // 这里返回文件 用来处理多个下载 打包zip
+            resolve({ PDF: pdf, name: item.name })
+            // 直接单个pdf可直接调用下面方法
+            // pdf.save(name)
+          })
+        }, 1000)
+      })
+    },
+    zipChange (promises) {
+      Promise.all(promises).then(async (pdfs) => {
+        const zip = new JSZip()
+        promises.forEach(async (item, index) => {
+          const { PDF, name } = item
+          if (promises.length === 1) {
+            PDF.save(`${name}.pdf`)
+          } else {
+            await zip.file(`${name}.pdf`, PDF.output('blob'))
+          }
+        })
+        if (promises.length > 1) {
+          zip.generateAsync({ type: 'blob' }).then((content) => {
+            // 压缩文件的名
+            FileSaver.saveAs(content, '压缩文件的名' + '.zip')
+          })
+        }
+      })
+    },
+  },
+};
+</script>
+
+<style lang="less" scoped></style>
+
+```
+
+
+
 ## 前端调取摄像头
 
 ### 拍照
@@ -2637,3 +2892,7 @@ WAF的部署方式多样，可以是硬件设备、软件解决方案，也可�
 https://zhuanlan.zhihu.com/p/638553359
 
 雷池：  https://waf-ce.chaitin.cn/community      https://github.com/chaitin/safeline
+
+## ps修改图中文字
+
+[PS小白丨如何修改图片中的文字 - 知乎 (zhihu.com)](https://zhuanlan.zhihu.com/p/134102174)

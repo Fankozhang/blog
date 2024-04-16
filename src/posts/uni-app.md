@@ -80,6 +80,8 @@ scss复制代码/* uni.scss */
 
 [uni-app网络请求封装 (qq.com)](https://mp.weixin.qq.com/s/_HVuKltElr07_iIc6CTCGQ)
 
+[【uniapp】带你优雅的封装uniapp的request请求_uniapp 封装request请求-CSDN博客](https://blog.csdn.net/qq_36375343/article/details/136250792)
+
 ### 原生的uni.request发起请求
 
 main.js里面设置根地址
@@ -175,9 +177,179 @@ async getUserBaseInfo() {
 
 [uniapp uni.navigateTo传递（对象类型）参数_uniapp navigateto 传参-CSDN博客](https://blog.csdn.net/weixin_56650035/article/details/119058076)
 
+
+
+## scroll-view 滚动条隐藏
+
+app.vue增加样式
+
+```
+scroll-view ::-webkit-scrollbar {  
+	    display: none !important;  
+	    width: 0 !important;  
+	    height: 0 !important;  
+	    -webkit-appearance: none;  
+	    background: transparent;  
+	}
+	::-webkit-scrollbar{
+		  display: none;
+	}
+```
+
+
+
+## 自定义头部（头部固定，底下内容滚动）
+
+```vue
+<template>
+  <view class="main">
+    <view class="navbar_out">
+      <view style="position: absolute; top: 0; left: 0; right: 0; width: 100vw">
+        <image
+          src="/static/background.png"
+          mode="widthFix"
+          style="width: inherit"
+        />
+      </view>
+      <view
+        :style="{
+          paddingTop: statusBarHeight + 'px',
+          lineHeight: navBarHeight + 'px;',
+        }"
+      >
+        <view
+          style="
+            position: relative;
+            z-index: 100000;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+          "
+        >
+          <view style="flex: 1" @click="goBack">
+            <uni-icons type="left" size="20" :color="'#ffffff'"></uni-icons>
+            <span style="font-size: 30rpx; color: white; margin-left: 10rpx"
+              >返回</span
+            >
+          </view>
+          <view style="flex: 1; text-align: center; color: white"> 收藏 </view>
+          <view style="flex: 1"></view>
+        </view>
+      </view>
+    </view>
+    <view class="content" :style="{ top: navBarHeight - 10 + 'px' }">
+      <scroll-view
+        scroll-y="true"
+        class="scrollClass"
+        :style="[{ height: listHeight }]"
+        refresher-enabled="false"
+      >
+        <view class="basic-info-content-main">
+          自定义要展示的内容
+        </view>
+      </scroll-view>
+    </view>
+  </view>
+</template>
+
+<script>
+export default {
+  data() {
+    return {
+      listHeight: 0, //列表高度
+      statusBarHeight: 0,
+      navBarHeight: 0,
+    };
+  },
+  created() {
+    this.listHeight =
+      "calc(" +
+      "100vh" +
+      " - " +
+      (this.statusBarHeight + this.navBarHeight + 50) +
+      "px)";
+  },
+  onLoad() {
+    let that = this;
+    wx.getSystemInfo({
+      success(res) {
+        // 获取状态栏高度及是否是iOS设备
+        let nav = 48; // 默认为48px
+        // 判断是否是iOS
+        if (res.system.indexOf("iOS") > -1) {
+          nav = 44;
+        }
+        that.statusBarHeight = res.statusBarHeight;
+        that.navBarHeight = nav;
+      },
+    });
+  },
+  methods: {
+    goBack() {
+      uni.navigateBack();
+    }
+  },
+};
+</script>
+
+<style lang="less" scoped>
+.main {
+  
+}
+.navbar_out {
+  width: 750rpx;
+  height: 100vh;
+  opacity: 1;
+  background-image: url(/static/background.png);
+  background-repeat: no-repeat;
+  background-position-x: 0;
+  background-position-y: 0;
+  background-size: 100% auto;
+  padding: 0 32rpx;
+  background: #eef1f5;
+  box-sizing: border-box;
+  position: relative;
+}
+
+.scrollClass {
+  width: 100%;
+  position: relative;
+  padding: 0 32rpx;
+  padding-top: 132rpx;
+  box-sizing: border-box;
+  border-radius: 16rpx;
+}
+.content {
+  position: fixed;
+}
+
+.basic-info-content-main {
+  width: 686rpx;
+  padding: 32rpx;
+  background-color: white;
+  border-radius: 16rpx;
+  margin: 0 auto;
+  box-sizing: border-box;
+}
+</style>
+
+```
+
+
+
 ## 提示消息： 
 
 uni.$u.toast('校验通过')
+
+## 消息订阅发送
+
+[uniapp开发微信小程序实现微信订阅消息推送-JAVA版_哔哩哔哩_bilibili](https://www.bilibili.com/video/BV1yr4y1r73s/?spm_id_from=333.337.search-card.all.click&vd_source=f25f5a8d75a3a60d5a288f726803ec11)
+
+## 背景图片不显示
+
+[uniapp 页面添加背景图片不显示_uniapp 背景图片不显示-CSDN博客](https://blog.csdn.net/lfalt/article/details/130248933)
+
+图片大小大于 40kb 会显示出来空白，需要压缩到40kb以下就能展示出来了
 
 ## uniapp 高度铺满全屏的小技巧
 
@@ -259,6 +431,104 @@ uni.chooseFile({
 			}
 ```
 
+### 上传头像
+
+```
+             <view class="avatarPath" @click="onChooseAvatar('avatarPath')">
+                <image
+                  class="avatarPath"
+                  :src="avatarPath ? avatarPath : '/static/def_avtar.png'"
+                  mode="aspectFill"
+                ></image>
+              </view>
+```
+
+```js
+ onChooseAvatar(type) {
+      let that = this;
+      uni.showActionSheet({
+        itemList: ["查看", "上传"],
+        success: function (res) {
+          if (res.tapIndex == 0) {
+            if (!that[type]) {
+              uni.showToast({
+                title: "请先上传图片",
+                icon: "none",
+                duration: 1500,
+              });
+              return;
+            }
+            that.viewImage(type);
+          }
+          if (res.tapIndex == 1) {
+            uni.chooseMedia({
+              count: 1, //默认9
+              mediaType: ["image"],
+              sizeType: ["original", "compressed"], //可以指定是原图还是压缩图，默认二者都有
+              sourceType: ["album", "camera"], //从相册选择
+              success: (data) => {
+                uni.compressImage({
+                  src: data.tempFiles[0].tempFilePath, // 图片路径
+                  quality: 95, // 压缩质量
+                  success(ressss) {
+                    const blob = uni
+                      .getFileSystemManager()
+                      .readFileSync(ressss.tempFilePath, "binary");
+                    const twoMBInBytes = 2 * 1024 * 1024; // 2MB转换为字节数
+                    if (blob.length > twoMBInBytes) {
+                      uni.showToast({
+                        title: "图片大小不能超过2MB",
+                        icon: "none",
+                      });
+                    } else {
+                      uni.showLoading();
+                      uni.uploadFile({
+                        url: config.baseUrl + "system/ossBusiness/upload", // 仅为示例，非真实的接口地址
+                        filePath: ressss.tempFilePath,
+                        name: "file",
+                        header: {
+                          Authorization: "Bearer " + getToken(),
+                        },
+                        formData: {
+                          // user: 'test'
+                        },
+                        success: (uploadres) => {
+                          if (uploadres) {
+                            that.$nextTick(() => {
+                              that.$set(
+                                that,
+                                type,
+                                JSON.parse(uploadres.data).data.url
+                              );
+                              console.log(type);
+                              uni.hideLoading();
+                            });
+                          }
+                        },
+                        fail() {
+                          uni.showToast({
+                            title: "上传失败",
+                            icon: "none",
+                            duration: 1500,
+                          });
+                          uni.hideLoading();
+                        },
+                      });
+                    }
+                  },
+                });
+                return;
+              },
+            });
+          }
+        },
+        fail: function (res) {
+          // console.log(res.errMsg);
+        },
+      });
+    },
+```
+
 
 
 ## uniapp内打开一个url
@@ -306,6 +576,60 @@ go(url){
 ```
 
 如此，便可以实现在新页面打开url地址了。
+
+## button组件去掉默认样式，转变为灵活的view
+
+css
+
+```css
+button::after{
+ 	border: none;
+}
+button{
+	position: relative;
+	display: block;
+	margin-left: auto;
+	margin-right: auto;
+	padding-left: 0px;
+	padding-right: 0px;
+	box-sizing: border-box;
+	// font-size: 18px;
+	text-align: center;
+	text-decoration: none;
+	// line-height: 1;
+	line-height: 1.35;
+	// border-radius: 5px;
+	-webkit-tap-highlight-color: transparent;
+	overflow: hidden;
+	color: #000000;
+	background-color: #fff;
+	width: 100%;
+	height: 100%;
+	}
+```
+
+## 分享
+
+button  open-type="share" 实现分享  （通过上面的css去除button默认样式）
+
+```
+<button  open-type="share" type="default" class="custom-button"></button>
+```
+
+定义生命周期函数onShareAppMessage(),设置该页面的分享信息。与onLoad 等生命周期函数同级。根据自己需要自行配置。
+参考链接:   [分享 | uni-app官网 (dcloud.net.cn)](https://uniapp.dcloud.net.cn/api/plugins/share.html#onshareappmessage)
+
+```xml
+onShareAppMessage() {
+	return {
+		title: '分享的标题'
+		}
+}
+```
+
+
+
+[小程序-转发功能，使用button开放功能open-type="share"_button open-type="share-CSDN博客](https://blog.csdn.net/LzzMandy/article/details/104119751)
 
 ## uniapp打开pdf文件url看不见
 
