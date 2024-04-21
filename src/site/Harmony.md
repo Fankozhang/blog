@@ -16,7 +16,11 @@ typora-root-url: ..\.vuepress\public
 
 [前端卷鸿蒙？推荐 12 个 yyds 的开源鸿蒙实战项目 (qq.com)](https://mp.weixin.qq.com/s/LFvY152vujufw0UL3Oqp7A)
 
-视频教程：[启动项目到模拟器_哔哩哔哩_bilibili](https://www.bilibili.com/video/BV1kr421W7rV?p=1&vd_source=f25f5a8d75a3a60d5a288f726803ec11)
+视频教程：
+
+[黑马程序员HarmonyOS4+NEXT星河版入门到企业级实战教程，一套精通鸿蒙应用开发_哔哩哔哩_bilibili](https://www.bilibili.com/video/BV1Sa4y1Z7B1/?spm_id_from=333.337.search-card.all.click&vd_source=f25f5a8d75a3a60d5a288f726803ec11)
+
+[启动项目到模拟器_哔哩哔哩_bilibili](https://www.bilibili.com/video/BV1kr421W7rV?p=1&vd_source=f25f5a8d75a3a60d5a288f726803ec11)
 
 ## DevEco Studio 下载
 
@@ -41,7 +45,9 @@ entry/src/main/resources/zh_CN
  value的值就是应用名称的值
 ```
 
+## 入口组件
 
+![image-20240422001017407](/image-20240422001017407.png)
 
 ## 应用程序入口 UIAbility
 
