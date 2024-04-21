@@ -723,6 +723,10 @@ animation() {
 
 [Chill the lion (codepen.io)](https://codepen.io/Yakudoo/full/YXxmYR)
 
+[手撸一个星系，送给心爱的姑娘！（Three.js Shader 粒子系统实现） (qq.com)](https://mp.weixin.qq.com/s/UzipPrGXH4NxcM_N_7LuPw)
+
+
+
 
 
 [从零开始初尝Three.js【大量案例、简单入手】 - 掘金 (juejin.cn)](https://juejin.cn/post/6844904177345232903#heading-20)

@@ -90,7 +90,9 @@ tag:
 
 - [互联网 Java 工程师进阶知识完全扫盲 - Doocs 技术社区](https://doocs.github.io/advanced-java/#/?id=互联网-java-工程师进阶知识完全扫盲)
 
--      面试题： https://www.yuque.com/cuggz/interview/hswu8g
+- 面试题： https://www.yuque.com/cuggz/interview/hswu8g
+
+-      java进阶内容较多：[弟弟快看-教程，程序员编程资料站 | DDKK.COM](https://www.ddkk.com/)
 
 
 
@@ -480,6 +482,13 @@ Github：[https://github.com/macrozheng/mall](https://github.com/macrozheng/mall
 （可以搭建公司内部的文档平台，避免泄露）
 
 [JVS/jvs-knowledge-ui - 码云 - 开源中国 (gitee.com)](https://gitee.com/software-minister/jvs-knowledge-ui/tree/master/)
+
+
+
+### 音乐播放器：
+
+2、https://github.com/maotoumao/MusicFree
+1、https://github.com/naman14/Timber
 
 ### 其他编程资料
 

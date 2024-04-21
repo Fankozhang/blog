@@ -446,11 +446,15 @@ MINIO_SECRET_KEY ：密码（账号长度必须大于等于5，密码长度必�
 
 [Jenkins+Gitee+Docker+Ruoyi项目前后端分离部署-CSDN博客](https://blog.csdn.net/weixin_43976226/article/details/133039035)
 
+[使用Docker版Jenkins搭建流水线_ 这个视频演示和我下载的jenkins版本差不多](https://www.bilibili.com/video/BV1ds4y1k7QM/?spm_id_from=333.337.search-card.all.click&vd_source=f25f5a8d75a3a60d5a288f726803ec11)
+
 ### jenkens（docker安装）
 
  [使用 Docker 安装 Jenkins 并实现项目自动化部署-阿里云开发者社区 (aliyun.com)](https://developer.aliyun.com/article/892646) 
 
 [Docker 搭建 Jenkins 容器 (完整详细版)_docker jenkins-CSDN博客](https://blog.csdn.net/BThinker/article/details/124178670)
+
+[自动化部署基础架构_哔哩哔哩_bilibili](https://www.bilibili.com/video/BV1Da411G7s4?p=1&vd_source=f25f5a8d75a3a60d5a288f726803ec11)
 
 - 拉取镜像
 
@@ -462,7 +466,7 @@ MINIO_SECRET_KEY ：密码（账号长度必须大于等于5，密码长度必�
   # docker pull jenkinsci/blueocean:1.25.3       具体版本下载
   
   
-  #下载镜像
+  #下载镜像（推荐使用）
   docker pull jenkins/jenkins      // 这个镜像的插件大多正常下载，且自动下载汉化插件，个人推荐用这个
   ```
 
@@ -485,7 +489,7 @@ MINIO_SECRET_KEY ：密码（账号长度必须大于等于5，密码长度必�
 
 - docker ps 查看容器是否启动成功。
 
-- 查看 Jenkins 容器日志。      docker logs myjenkins       能够看到一个密码，可以记下来，登录jenkens网页的时候会用到
+- 查看 Jenkins 容器日志。      docker logs myjenkins       能够看到一个密码，可以记下来，登录jenkens网页的时候会用到(7abe59afbbd34dc4bf04c609a1e93d50)
 
 - 将 Jenkins 端口添加到防火墙。     （服务器安全组别忘了设置）
 
@@ -520,6 +524,11 @@ MINIO_SECRET_KEY ：密码（账号长度必须大于等于5，密码长度必�
   ```
   docker stop 容器ID
   docker start 容器ID
+  
+  
+  docker restart jenkins
+  
+  网址访问 ip+端口号+'/restart'
   ```
 
 - nginx 登录地址
@@ -536,6 +545,7 @@ MINIO_SECRET_KEY ：密码（账号长度必须大于等于5，密码长度必�
 
   - 安装插件：Manage Jenkins -> Manage Plugins -> Available -> Filter 中输入 Locale -> 勾选后点击 Install without restart
   - 设置中文：Manage Jenkins -> Configure System -> Default Language 中输入 `zh_CN` -> 勾选 Ignore browser preference and force this language to all users -> 点击 Save
+  - 插件  [Maven Integration](https://plugins.jenkins.io/maven-plugin)    maven构建工具       [Publish Over SSH](https://plugins.jenkins.io/publish-over-ssh)  上传工具
 
 ### Jenkins的基本配置与基本使用
 
@@ -592,3 +602,4 @@ yum安装如下：
 
 [Java开发者在Linux环境安装各类开发工具汇总_java linux安装常用软件-CSDN博客](https://blog.csdn.net/qq_38628046/article/details/123591295)
 
+yum install -y git

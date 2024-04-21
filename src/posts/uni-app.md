@@ -82,6 +82,8 @@ scss复制代码/* uni.scss */
 
 [【uniapp】带你优雅的封装uniapp的request请求_uniapp 封装request请求-CSDN博客](https://blog.csdn.net/qq_36375343/article/details/136250792)
 
+[uni-app 中的接口请求封装 - 掘金 (juejin.cn)  ts  内容较多](https://juejin.cn/post/7239923199609241658#heading-9)
+
 ### 原生的uni.request发起请求
 
 main.js里面设置根地址
@@ -111,6 +113,8 @@ uni.request({
 ```
 
  [( 对于封装微信小程序uni.request请求，支持自动携带token,可查看这篇文章](https://blog.csdn.net/Hi_Eleven/article/details/115858307) 
+
+
 
 ### **@escook/request-miniprogram**
 
@@ -531,51 +535,7 @@ uni.chooseFile({
 
 
 
-## uniapp内打开一个url
 
-在pc浏览器我一般是通过window,open()打开一个url地址的，在小程序，是会报错的，所以就得另找一个解决方法。以下是实现方法。
-
-建一个outUrl.vue的文件，文件内容如下：
-
-```
-<template>
-	<view>
-		<web-view :src="url"></web-view>
-	</view>
-</template>
-
-<script>
-	export default {
-		data() {
-			return {
-				url:''
-			}
-		},
-		onLoad(option){
-			this.url=option.url
-		},
-		methods: {
-			
-		}
-	}
-</script>
-
-<style>
-
-</style>
-```
-
-在打开页面的地方触发点击事件，跳转到outUrl的页面，并传入url。
-
-```
-go(url){
-    uni.navigateTo({
-        url:'./outPage?url='+url
-    })
-},
-```
-
-如此，便可以实现在新页面打开url地址了。
 
 ## button组件去掉默认样式，转变为灵活的view
 
@@ -631,7 +591,53 @@ onShareAppMessage() {
 
 [小程序-转发功能，使用button开放功能open-type="share"_button open-type="share-CSDN博客](https://blog.csdn.net/LzzMandy/article/details/104119751)
 
-## uniapp打开pdf文件url看不见
+## uniapp内打开一个url
+
+在pc浏览器我一般是通过window,open()打开一个url地址的，在小程序，是会报错的，所以就得另找一个解决方法。以下是实现方法。
+
+建一个outUrl.vue的文件，文件内容如下：
+
+```
+<template>
+	<view>
+		<web-view :src="url"></web-view>
+	</view>
+</template>
+
+<script>
+	export default {
+		data() {
+			return {
+				url:''
+			}
+		},
+		onLoad(option){
+			this.url=option.url
+		},
+		methods: {
+			
+		}
+	}
+</script>
+
+<style>
+
+</style>
+```
+
+在打开页面的地方触发点击事件，跳转到outUrl的页面，并传入url。
+
+```
+go(url){
+    uni.navigateTo({
+        url:'./outPage?url='+url
+    })
+},
+```
+
+如此，便可以实现在新页面打开url地址了。
+
+### uniapp打开pdf文件url看不见
 
 这种情况得要通过先下载文件，再预览的形式才能实现预览pdf文件
 
@@ -646,7 +652,7 @@ onShareAppMessage() {
 							console.log('filePath',filePath)
 							uni.navigateTo({
 							    // 到 web-view 页面查看
-								url:'/page_other/webView/webView?urls='+filePath
+								url:'/page_other/webView/webView?url='+filePath
 							})
 						}
 					}
@@ -654,7 +660,9 @@ onShareAppMessage() {
 			},
 ```
 
+### uniapp,实现下载文件(uni.downloadFile)，并保存到本地(uni.saveFile)，打开文件预览(uni.openDocument)
 
+https://blog.csdn.net/qq_40745143/article/details/107287300
 
 ## uniapp图片设置双指放大缩小
 
@@ -1152,11 +1160,272 @@ pages代表分包的页面文件路径（注意，有几个页面，就有几个
 </style>
 ```
 
-## 手机号验证码功能
+## 微信登陆
+
+### 手机号验证码功能
 
 https://juejin.cn/post/7087789961490989070
 
-## 微信登录
+### 微信手机号快捷登录
+
+手机号快捷登录，微信登录需要用户同意 用户协议，隐私协议等。
+
+ set1.png，set2.png用于用户是否勾选的图片的展示，自行选择
+
+```vue
+<template>
+	<view >		
+		<view class="login-input">		
+			<view v-if="selectShow">
+				<button open-type="getPhoneNumber" @getphonenumber="getPhoneNumber" class="login-btn ">手机号快捷登录</button>
+			</view>
+			<view v-else>
+				<button @click="getPhoneNumber" class="login-btn ">手机号快捷登录</button>
+			</view>
+			<view class="xieyiOut">
+                
+				<image src="/static/images/set1.png" alt="" class="xieyi_img" v-if="selectShow"
+					@click="btn_selectShow" />
+				<image src="/static/images/set2.png" alt="" class="xieyi_img" v-else @click="btn_selectShow" />
+				<view @click.stop="btn_selectShow">我已阅读并同意</view>
+				<view class="xieyi_btn" @click="handleUserAgrement()">用户协议
+				</view>
+				<!-- <view>和</view>
+				<view class="xieyi_btn" @click="handlePrivacy()">隐私政策</view> -->
+			</view>
+		</view>
+		<u-popup :round="10" :show="show" :closeOnClickOverlay="true" @close="closePopup" :closeable="true">
+			<view class="popup">
+				<view class="popup-title">
+					用户协议
+				</view>
+				<view class="popup-content">
+					欢迎使用！在使用我们产品和服务前，请您先阅读我们的<text class="yhxy"
+						@click="handleUserAgrement()">《用户协议》</text>
+                        <!-- 和<text
+						@click="handlePrivacy()" class="yszc">《隐私政策》</text> -->
+                        。
+                        我们将严格按照上述条款为您提供服务，竭力保护您的信息安全。
+				</view>
+				<view class="button-list">
+					<button class="button-info" @click="showToast">不同意</button>
+					<button open-type="getPhoneNumber" @getphonenumber="getPhoneNumber" data-type="yes" class="button-primary" :disabled="fangchong">同意并继续</button>
+				</view>
+			</view>
+		</u-popup>
+	
+	</view>
+</template>
+
+<script>
+	export default {
+		data() {
+			return {
+				type: true,
+				selectShow: false,
+				show: false,
+				fangchong: false
+			}
+		},
+		created() {
+
+			// this.getCode()
+		},
+		methods: {
+			
+			getPhoneNumber(e) {
+				if(e.target.dataset.type === 'yes'){
+					this.selectShow = true
+				}
+				if(this.selectShow){
+					this.show = false
+				}
+				if (!this.selectShow) {
+					this.show = true
+					return
+				}
+				if(this.fangchong){
+					return
+				}
+				wx.showLoading({
+					title: '正在登录，请稍后',
+					mask: true
+				})
+				const params = {
+					phoneCode: '',
+					xcxCode: ''
+				}
+				const that = this
+				if (e.target.errMsg == "getPhoneNumber:ok") {
+					this.fangchong = true
+					params.phoneCode = e.detail.code
+					uni.login({
+						provider: 'weixin',
+						success: function(loginRes) {
+							params.xcxCode = loginRes.code
+                             // 调用后台微信登录接口，返回token，对token进行处理
+							that.$store.dispatch('WXLogin', params).then((res) => {
+								that.$modal.closeLoading()
+								that.loginSuccess()
+							}).catch(() => {
+								let timeout = setTimeout(()=>{
+									uni.hideLoading()
+									that.fangchong = false
+									clearTimeout(timeout)
+								}, 1000)
+								console.log('123123')
+								uni.showToast({
+									title: '授权失败',
+									icon: 'none'
+								})
+							})
+						},
+						fail() {
+							let timeout = setTimeout(()=>{
+								uni.hideLoading()
+								that.fangchong = false
+								clearTimeout(timeout)
+							}, 1000)
+							console.log('授权失败登录页面')
+						}
+					});
+				}else{
+					uni.hideLoading()
+					// that.show = false
+				}
+			},
+			
+			btn_selectShow() {
+				this.selectShow = !this.selectShow;
+			},
+			// 隐私协议
+			handlePrivacy() {
+				uni.navigateTo({
+					url: '/page_other/privacyPolicy'
+				})
+			},
+			// 用户协议
+			handleUserAgrement() {
+				uni.navigateTo({
+					url: "/packageA/pages/xieyi/xieyi",
+				})
+			},
+			// 登录成功后，处理函数
+			loginSuccess(result) {
+				this.$store.dispatch("GetUserInfo").then((res) => {
+				uni.showToast({
+					title: `登录成功`,
+				});
+				uni.switchTab({
+					url: "../../../pages/my/my",
+					success: (res) => {
+						let page = getCurrentPages().pop();
+						if (page == undefined || page == null) return;
+						page.onLoad();
+					},
+				});
+			});
+			},
+			// 隐私协议关闭
+			closePopup() {
+				this.show = false
+			},
+			showToast() {
+				uni.showToast({
+					title:'很抱歉，我们无法为您提供服务，如需服务请先同意相关协议和条款。',
+					icon:'none',
+					duration: 2000
+				})
+			},
+		}
+	}
+</script>
+
+<style lang="scss">
+	page {
+		background-color: #f2f4f7;
+	}
+	
+	.login-btn {
+		margin-top: 20px;
+		height: 45px;
+		color: #FFFFFF;
+		letter-spacing: 10rpx;
+		font-weight: 900;
+		width: 548rpx;
+		height: 85rpx;
+		background: #4882D7;
+		box-shadow: 0rpx 6rpx 10rpx 0rpx #91B2E4;
+		border-radius: 18rpx;
+		display: flex;
+		align-items: center;
+		justify-content: center;
+	}
+
+	.xieyiOut {
+		display: flex;
+		align-items: center;
+		margin: 0 auto;
+		color: #999999;
+		font-size: 24rpx;
+		letter-spacing: 2rpx;
+		width: 600rpx;
+		justify-content: center;
+		padding: 40rpx 0;
+	}
+
+	.xieyi_img {
+		width: 28rpx;
+		height: 30rpx;
+		margin-right: 2rpx;
+	}
+
+	.xieyi_btn {
+		font-size: 24rpx;
+		color: #333333;
+		text-decoration: underline;
+	}
+	
+	
+	.popup {
+		padding: 40rpx;
+	}
+	.popup-title {
+		font-size: 44rpx;
+		margin-bottom: 15rpx;
+	}
+	.popup-content {
+		color: #606266;
+		font-size: 33rpx;
+		line-height: 1.8;
+		margin-bottom: 20rpx;
+	}
+	.button-list {
+		display: flex;
+	}
+	.button-info {
+		width: 50%;
+		font-size: 30rpx;
+		margin-right: 15rpx;
+		// border-radius: 25rpx;
+		color: #9a9a9a;
+	}
+	.button-primary {
+		width: 90%;
+		background: #4882D7;
+		color: #fff;
+		font-size: 30rpx;
+	}
+	.yhxy,
+	.yszc {
+		color: #4882D7;
+	}
+</style>
+```
+
+
+
+### 微信登录
 
 ```
 <button

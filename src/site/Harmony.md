@@ -16,11 +16,32 @@ typora-root-url: ..\.vuepress\public
 
 [前端卷鸿蒙？推荐 12 个 yyds 的开源鸿蒙实战项目 (qq.com)](https://mp.weixin.qq.com/s/LFvY152vujufw0UL3Oqp7A)
 
+视频教程：[启动项目到模拟器_哔哩哔哩_bilibili](https://www.bilibili.com/video/BV1kr421W7rV?p=1&vd_source=f25f5a8d75a3a60d5a288f726803ec11)
+
 ## DevEco Studio 下载
 
 网址：[HUAWEI DevEco Studio和SDK下载和升级 | 华为开发者联盟](https://developer.huawei.com/consumer/cn/deveco-studio/)
 
 安装教程：[工具简介-DevEco Studio使用指南-工具-HarmonyOS应用开发](https://developer.harmonyos.com/cn/docs/documentation/doc-guides-V3/deveco_overview-0000001053582387-V3?catalogVersion=V3)
+
+## 工程目录结构
+
+[HarmonyOS应用开发的工程目录结构_鸿蒙目录结构-CSDN博客](https://blog.csdn.net/weixin_40763897/article/details/135731357)
+
+## 修改应用名称（中文模式下）
+
+entry/src/main/resources/zh_CN 
+
+```
+{
+      "name": "EntryAbility_label",
+      "value": "我的newDemo"
+ }
+ 
+ value的值就是应用名称的值
+```
+
+
 
 ## 应用程序入口 UIAbility
 

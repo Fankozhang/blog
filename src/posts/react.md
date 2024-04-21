@@ -169,3 +169,53 @@ jsx组件内使用（先引入，再使用）
   <Button type="primary">Primary</Button>
 ```
 
+
+
+## next创建react项目
+
+[介绍 | Next.js 中文网 (nodejs.cn)](https://next.nodejs.cn/docs/#main-features)
+
+创建项目命令
+
+```bash
+npx create-next-app@latest
+```
+
+### 应用路由、页面路由
+
+应用路由属于较新的路由，这里使用的是应用路由。
+
+### "use client"
+
+next项目中使用  useState  需要在组件顶部加上  "use client";  
+
+在`app`目录下，Next.js默认使用 [Server Components](https://beta.nextjs.org/docs/rendering/server-and-client-components#server-components) ，
+
+您的组件或其父组件之一应该在顶部有 `"use client"`。这样，它就变成了 [Client Component](https://beta.nextjs.org/docs/rendering/server-and-client-components#client-components) ，一个“普通”的 React 组件
+
+[javascript - 您正在导入一个需要 useState 的组件。它仅在客户端组件中有效，但其父组件均未标记为 "use client" - IT工具网 (coder.work)](https://www.coder.work/article/7990955)
+
+### 页面跳转
+
+```jsx
+import Link from 'next/link'
+
+ <Link href="/about">about</Link>
+```
+
+```jsx
+'use client'
+
+import { useRouter } from 'next/navigation'
+
+export default function Page() {
+  const router = useRouter()
+
+  return (
+    <button type="button" onClick={() => router.push('/dashboard')}>
+      Dashboard
+    </button>
+  )
+}
+```
+

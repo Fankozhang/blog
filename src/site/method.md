@@ -2447,6 +2447,31 @@ export default {
 </style>
 ```
 
+#### 截取的div有滚动条时，需进行处理
+
+如果你正在使用`html2canvas`和`jsPDF`来导出PDF，你需要确保在调用`html2canvas`之前，所有的内容都能够被渲染。这可能需要你动态地调整容器的高度，宽度 或者滚动页面来确保所有内容都被渲染到Canvas上。
+
+```js
+// 假设你有一个需要导出的元素
+const element = document.getElementById('export-element');
+
+// 动态调整元素高度以确保所有内容可见
+element.style.height = 'auto';   // 设置导出元素的宽度或者高度
+element.style.overflow = 'hidden';
+
+// 使用html2canvas进行转换
+html2canvas(element).then(canvas => {
+  // 创建jsPDF实例并添加图片
+  const pdf = new jsPDF();
+  pdf.addImage(canvas.toDataURL('image/png'), 'PNG', 0, 0);
+  pdf.save('output.pdf');
+});
+
+// 恢复元素样式
+element.style.height = '';
+element.style.overflow = '';
+```
+
 
 
 ### Dom生成图片可以使用  html2canvas
@@ -2566,7 +2591,7 @@ export default {
 
 <template>
   <div>
-    <div v-if="dialogVisible" width="50%" style="position: absolute;top: -999999999px;left: -999999999px;">
+    <div v-if="dialogVisible" width="50%" >
       <div>
         <div v-for="(item, index) in list" :key="index" >
             <!-- 样式大小需自己根据需要做修改，此处的样式就是导出后pdf展示的内容 -->
@@ -2719,7 +2744,11 @@ export default {
 
 ```
 
+### 实现前端转 pdf 及 打印 加分页防止内容截断
 
+未测试是否能够防止内容截断
+
+https://blog.csdn.net/Sandy_zhi/article/details/108348654
 
 ## 前端调取摄像头
 
