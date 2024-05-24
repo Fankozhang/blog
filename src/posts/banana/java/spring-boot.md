@@ -445,7 +445,7 @@ mybatis-plus:
 
 新建 service/BookService  Interface
 
-```
+```java
 public interface BookService {
     Boolean save(Book book);
     Boolean update(Book book);
@@ -458,7 +458,7 @@ public interface BookService {
 
 service/Impl/ServiceImpl    class
 
-```
+```java
 // @Service 定义成业务层service的Bean
 @Service
 public class BookServiceImpl implements BookService {
@@ -501,7 +501,7 @@ public class BookServiceImpl implements BookService {
 
 测试：（和之前的数据层测试差不多）
 
-```
+```java
 @SpringBootTest
 public class BookServiceTest {
     // 业务层测试
@@ -580,6 +580,7 @@ public interface IbookService extends IService<Book> {
 service/Impl/ServiceImpl    class
 
 ```
+@Service("IbookService")
 public class BookServiceImpl extends ServiceImpl<BookDao, Book> implements IbookService {
 
 }
@@ -587,7 +588,7 @@ public class BookServiceImpl extends ServiceImpl<BookDao, Book> implements Ibook
 
 测试
 
-```
+```java
 @SpringBootTest
 public class BookServiceTest {
     // 业务层测试
@@ -646,7 +647,7 @@ public class BookServiceTest {
 ​       基于Restful进行表现层接口开发
 ​       使用Postman测试表现层接口功能
 
-1.基于Restfu1制作表现层接口
+1.基于Restful制作表现层接口
 		新增：POST
 		删除：DELETE
 		修改：PUT
@@ -697,6 +698,28 @@ public class BookController {
         IPage<Book> pages=new Page<Book>(currentPage,pageSize);
 
         return bookService.page(pages).getRecords();
+    }
+    
+    // 分页查询
+    @GetMapping("/pageList")     // BookQueryVo里面带有Book类属性 和 pageNum pageSize
+    public Result<IPage<Book>>  getPageBooks(BookQueryVo bookQueryVo) {
+        //IPage<Book> pages=new Page<>(bookQueryVo.getPageNum(),bookQueryVo.getPageSize());
+        IPage<Book> pages=new Page<>();
+        if(bookQueryVo.getPageNum() == null || bookQueryVo.getPageSize() == null){
+			// pageNum或者pageSize为空时，查询全部信息
+        }else{
+            pages.setCurrent(bookQueryVo.getPageNum());
+            pages.setSize(bookQueryVo.getPageSize());
+        }
+        
+        // 根据名称 模糊查询
+         LambdaQueryWrapper<Book> queryWrapper = new LambdaQueryWrapper<>();
+        queryWrapper.like(Objects.nonNull(bookQueryVo.getName()),Book::getName,bookQueryVo.getName());
+        
+        
+        IPage<Book> books=ibookService.page(pages);
+        return Result.success(books);
+
     }
 }
 ```
@@ -957,7 +980,7 @@ Mysql 启动报错解析：Starting MySQL.. ERROR! The server quit without updat
 
 （1）`cp -a /usr/local/mysql/support-files/mysql.server /etc/init.d/mysqld` 
 
-（2）赋予权限，使用`chmod +x /etc/rc.d/init.d/mysql`d命令；
+（2）赋予权限，使用`chmod +x /etc/rc.d/init.d/mysqld`命令；
 
 （3）使用`chkconfig --add mysqld`创建mysql服务。
 
@@ -1504,7 +1527,9 @@ public class ServerConfig {
 使用@Validated注解启用校验功能
 使用具体校验规则规范数据校验格式
 
+## 常用注解
 
+https://juejin.cn/post/7283516197486837779
 
 ## 测试
 
@@ -3372,7 +3397,7 @@ public class thymeController {
 
 
 
-## 模板引擎（thymeleaf）
+## 
 
 
 

@@ -28,6 +28,8 @@ typora-root-url: ..\.vuepress\public
 
 
 
+https://ask.dcloud.net.cn/docs/#//ask.dcloud.net.cn/article/88
+
 ## 开发模板
 
 [unibest](https://github.com/codercup/unibest)    ： [起步 | unibest (codercup.github.io)](https://codercup.github.io/unibest-docs/guide/installation)    **由 uniapp + Vue3 + Ts + Vite4 + UnoCss + UniUI + VSCode 构建**
@@ -83,6 +85,8 @@ scss复制代码/* uni.scss */
 [【uniapp】带你优雅的封装uniapp的request请求_uniapp 封装request请求-CSDN博客](https://blog.csdn.net/qq_36375343/article/details/136250792)
 
 [uni-app 中的接口请求封装 - 掘金 (juejin.cn)  ts  内容较多](https://juejin.cn/post/7239923199609241658#heading-9)
+
+
 
 ### 原生的uni.request发起请求
 
@@ -202,7 +206,114 @@ scroll-view ::-webkit-scrollbar {
 
 
 
-## 自定义头部（头部固定，底下内容滚动）
+## 自定义头部
+
+### 简单的固定头部页面
+
+```vue
+<template>
+	<view class="page">
+		<view class="top">
+			<view
+				class="statusBar"
+				:style="{ height: statusBarHeight + 'px' }"
+			></view>
+			<view class="nav" :style="{ height: navBarHeight + 'px' }">
+				<view class="nav-in">
+					<view style="flex: 1" @click="goBack">
+						<uni-icons
+							type="left"
+							size="20"
+							:color="black"
+						></uni-icons>
+						<span
+							style="
+								color: black;
+								margin-left: 10rpx;
+							"
+							>返回</span
+						>
+					</view>
+					<view style="flex: 1; text-align: center; color: black">
+						设置</view
+					>
+					<view style="flex: 1"></view>
+				</view>
+			</view>
+		</view>
+		<view class="content" :style="{ paddingTop: statusBarHeight+navBarHeight + 'px' }">
+			<view v-for="(item,index) in 20" :key="index">{{item}}</view>
+		</view>
+	</view>
+</template>
+<script>
+export default {
+	data() {
+		return {
+			statusBarHeight: "",
+			navBarHeight: "",
+		};
+	},
+	onLoad() {
+		let that = this;
+		wx.getSystemInfo({
+			success(res) {
+				// 获取状态栏高度及是否是iOS设备
+				let nav = 48; // 默认为48px
+				// 判断是否是iOS
+				if (res.system.indexOf("iOS") > -1) {
+					nav = 44;
+				}
+				that.statusBarHeight = res.statusBarHeight;   // 状态栏高度
+				that.navBarHeight = nav;        // navBar 栏高度
+			},
+		});
+	},
+	methods: {
+		goBack() {
+			uni.navigateBack({
+				delta: 1,
+			});
+		},
+	},
+};
+</script>
+<style lang="scss" scoped>
+.page {
+     height: 100%;
+	 background: #EEF2F4;
+}
+.top {
+	width: 100%;
+	position: fixed;
+	top: 0;
+	z-index: 100;
+	background: #ffffff;
+}
+.statusBar {
+	width: 100%;
+}
+.nav {
+	width: 100%;
+	display: flex;
+	align-items: center;
+	justify-content: center;
+}
+.nav-in {
+	width: 100%;
+	padding: 0 32rpx;
+	display: flex;
+	justify-content: space-between;
+	align-items: center;
+}
+.content{
+	width: 100%;
+	
+}
+</style>
+```
+
+### 头部固定，底下内容滚动(带背景图)
 
 ```vue
 <template>
@@ -231,7 +342,7 @@ scroll-view ::-webkit-scrollbar {
           "
         >
           <view style="flex: 1" @click="goBack">
-            <uni-icons type="left" size="20" :color="'#ffffff'"></uni-icons>
+            <uni-icons type="left" size="18" :color="'#ffffff'"></uni-icons>
             <span style="font-size: 30rpx; color: white; margin-left: 10rpx"
               >返回</span
             >
@@ -341,6 +452,8 @@ export default {
 
 
 
+
+
 ## 提示消息： 
 
 uni.$u.toast('校验通过')
@@ -378,6 +491,8 @@ uni-page-body,html,body{
 ```
 
 ## uniapp 上传文件
+
+### uni.chooseFile
 
 [uni.chooseFile(OBJECT) | uni-app官网 (dcloud.net.cn)](https://uniapp.dcloud.net.cn/api/media/file.html#wx-choosemessagefile)
 
@@ -448,7 +563,9 @@ uni.chooseFile({
 ```
 
 ```js
- onChooseAvatar(type) {
+avatarPath:'' 
+
+onChooseAvatar(type) {
       let that = this;
       uni.showActionSheet({
         itemList: ["查看", "上传"],
@@ -663,6 +780,8 @@ go(url){
 ### uniapp,实现下载文件(uni.downloadFile)，并保存到本地(uni.saveFile)，打开文件预览(uni.openDocument)
 
 https://blog.csdn.net/qq_40745143/article/details/107287300
+
+[uniapp预览文件（pdf、视频、音频、图片、xls、docx）效果demo（整理）-CSDN博客](https://blog.csdn.net/qq_38881495/article/details/130322639)
 
 ## uniapp图片设置双指放大缩小
 
@@ -968,6 +1087,38 @@ pages代表分包的页面文件路径（注意，有几个页面，就有几个
   }
 }
 ```
+
+## form 表单手机号校验
+
+```js
+phoneNumber: {
+					rules: [
+						{
+							required: true,
+							errorMessage: "手机号不能为空",
+						},
+						 {
+							validateFunction: function(rule, value, data, callback) {
+								let iphoneReg = (
+									/^(13[0-9]|14[1579]|15[0-3,5-9]|16[6]|17[0123456789]|18[0-9]|19[89])\d{8}$/
+								); //手机号码
+								if (!iphoneReg.test(value)) {
+									callback('手机号码格式不正确，请重新填写')
+								}
+							}
+						}
+					],
+				},
+```
+
+```js
+// 在 onReady 生命周期给表单绑定 验证规则
+onReady(){
+		this.$refs.valiForm.setRules(this.rule);
+	},
+```
+
+
 
 ## Uniapp中分页触底加载
 
@@ -1496,6 +1647,10 @@ https://juejin.cn/post/7087789961490989070
 	  },
 ```
 
+## 如何生成小程序的指定页面二维码？
+
+[如何生成小程序的指定页面二维码？ | 微信开放社区 (qq.com)](https://developers.weixin.qq.com/community/develop/article/doc/00064eb822816899e11d72c0551c13)
+
 ## uniapp 仿微信朋友圈点击评论唤起软键盘并自定义输入框占位符
 
 [uniapp 仿微信朋友圈点击评论唤起软键盘并自定义输入框占位符_uniapp评论框和键盘-CSDN博客](https://blog.csdn.net/m0_58135258/article/details/132212889)
@@ -1511,6 +1666,10 @@ https://juejin.cn/post/7087789961490989070
 ### ssl校验
 
 [亚数信息-SSL/TLS安全评估报告 (myssl.com)](https://myssl.com/)
+
+## 开发问题解决
+
+[uniapp开发微信小程序，我踩了大家都会踩的坑 - 掘金 (juejin.cn)](https://juejin.cn/post/7361688292351967259#heading-0)
 
 ## uni-cloud云开发
 

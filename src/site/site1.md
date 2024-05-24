@@ -92,7 +92,11 @@ tag:
 
 - 面试题： https://www.yuque.com/cuggz/interview/hswu8g
 
--      java进阶内容较多：[弟弟快看-教程，程序员编程资料站 | DDKK.COM](https://www.ddkk.com/)
+- java进阶内容较多：[弟弟快看-教程，程序员编程资料站 | DDKK.COM](https://www.ddkk.com/)
+
+- [芋道源码 —— 纯源码解析博客 (iocoder.cn)](https://www.iocoder.cn/)
+
+-      [首页 - 赛泰先生 - 博客天地 (altitude.xin)](https://www.altitude.xin/blog/home/#/)
 
 
 
@@ -378,9 +382,21 @@ Docker-compose 安装 Wordpress 博客  [Docker-compose 安装 Wordpress 博客 
 
 ### java
 
+[韩顺平_循序渐进学Java零基础【完整笔记】.pdf (gitee.com)](https://gitee.com/xuzebin/Java-hang/raw/master/韩顺平_循序渐进学Java零基础[完整笔记].pdf)
+
 [我写了个工具，让CRUD开发效率提升100倍 - 掘金 (juejin.cn)](https://juejin.cn/post/7197237024972144697)
 
 [面试官：讲讲Spring-boot-starter-parent的作用和多模块项目搭建步骤 (qq.com)](https://mp.weixin.qq.com/s/JZV9ES2cQbPaXKs8Hom3cg)
+
+深入理解高并发编程PDF
+链接:https://pan.baidu.com/s/17K2-pgQ2OgZ890YbEAVKPw?pwd=jyg5 
+提取码:jyg5
+
+
+
+####  WxJava - 微信开发 Java SDK
+
+[web-storage-cache: 对localStorage 和sessionStorage 进行了扩展，添加了超时时间，序列化方法 (gitee.com)](https://gitee.com/mirrors/web-storage-cache#get)
 
 ### 低代码生成(可视化,快速开发)
 
@@ -396,7 +412,9 @@ mybatis-plus-generator-ui ：https://blog.csdn.net/afreon/article/details/129153
 
 [业务代码生成器 - 猿猿工具 (utilsbox.cn)](https://utilsbox.cn/)    [写了个工具，让 CRUD 开发效率提升100倍，开源咯！ (qq.com)](https://mp.weixin.qq.com/s/V_v-gcXs_cLu23Iyc0Hw8w)
 
-## 
+
+
+基于vue可视化拖拽编辑，移动端页面生成工具。:https://was666.gitee.io/as-editor-doc/
 
 ### 其他收藏
 
@@ -424,6 +442,30 @@ b站的up主推荐：https://juejin.cn/post/7322401091237511222#heading-3
 
 
 
+### 即时通讯系统IM
+
+源码能跑通，基本功能实现：[0项目介绍_哔哩哔哩_bilibili](https://www.bilibili.com/video/BV12v4y1j7dW?p=1&vd_source=f25f5a8d75a3a60d5a288f726803ec11)       [视频通话 netty webrtc websocket springboot uniapp: webrtc netty websocket (gitee.com)](https://gitee.com/kiyama/mushan-imv2#https://gitee.com/link?target=https%3A%2F%2Fwww.bilibili.com%2Fvideo%2FBV12v4y1j7dW%2F%3Fspm_id_from%3D333.1007.top_right_bar_window_default_collection.content.click%26vd_source%3Dc6700092758092817e6a6463360a3597)
+
+里面部分功能和代码（netty）可以结合 [01. 前言_哔哩哔哩_bilibili](https://www.bilibili.com/video/BV1CL411Y7pR?p=1&vd_source=f25f5a8d75a3a60d5a288f726803ec11)  的内容进行学习
+
+
+
+仿微信视频：[SpringBoot项目实战 EasyChat 仿微信 计算机毕业设计 简历项目 netty 聊天 项目经验(后端已完结)_哔哩哔哩_bilibili](https://www.bilibili.com/video/BV1zT42127kM/?spm_id_from=333.788.recommend_more_video.6&vd_source=f25f5a8d75a3a60d5a288f726803ec11)     [源码说明 - 飞书云文档 (feishu.cn)](https://e05z4goz0ip.feishu.cn/wiki/KWHRw2IO9iBLXXkOeMGc6bienTh)
+
+
+
+[21个精选开源免费的客服聊天、IM即时通讯系统，值得收藏 - 知乎 (zhihu.com)](https://zhuanlan.zhihu.com/p/679127015)
+
+
+
+[盒子IM: 盒子IM是一个仿微信的聊天工具。后端采用springboot+netty实现，web端使用vue，移动端使用uniapp，支持私聊、群聊、离线消息、发送图片、文件、语音、emoji表情、视频聊天等功能。 (gitee.com)](https://gitee.com/bluexsx/box-im): 可以学习
+
+
+
+### Vue3 + Pinia + Vite5 仿抖音
+
+https://github.com/zyronon/douyin
+
 ### smartadmin
 
 开源SpringBoot和Vue的企业级项目，代码很规范   https://smartadmin.vip/  **https://gitee.com/lab1024/smart-admin**
@@ -432,11 +474,18 @@ b站的up主推荐：https://juejin.cn/post/7322401091237511222#heading-3
 
 
 
+### WeBlog
+
+简单的博客项目：[WeBlog: 📗 Spring Boot + Vue 3.2 + Vite 4.3 前后端分离博客~ 感谢点个 Star 呀~ (gitee.com)](https://gitee.com/AllenJiang/WeBlog)
+
 
 
 [我开源了一套 RPC 框架，学爆它！ (qq.com)](https://mp.weixin.qq.com/s/lOm7k032II3gDG9xnEmpUg)
 
+### jeecg-boot
 
+SpringBoot大屏低代码开发平台源码地址：
+https://gitee.com/jeecg/jeecg-boot
 
 ### 若依 
 

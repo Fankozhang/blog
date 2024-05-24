@@ -12,6 +12,18 @@ typora-root-url: ..\..\..\.vuepress\public
 
 ctrl+o :  查看类中所有方法
 
+## idea热部署（加依赖）
+
+[idea中springboot项目热部署最完整有效的详细配置-阿里云开发者社区 (aliyun.com)](https://developer.aliyun.com/article/1410314)
+
+## JRebel热部署
+
+电脑中文路径的问题暂未解决
+
+[IDEA配置JRebel热部署（超级详细图文教程）-CSDN博客](https://blog.csdn.net/weixin_42694593/article/details/126448828)
+
+[### 捡个便宜 - 交朋友吧 ### (jpy.wang)](https://www.jpy.wang/page/jrebel.html)
+
 ## 输入 java 命令报错
 
  [(210条消息) 【已解决】Error: could not open `C:\Program Files\Java\jre1.8.0_121\lib\amd64\jvm.cfg‘_来老铁干了这碗代码的博客-CSDN博客](https://blog.csdn.net/weixin_43899069/article/details/115796539) 
@@ -222,6 +234,238 @@ dao不用引
 
 
 
+## 继承，多态
+
+以下是简单示例：
+
+```java
+    public class Animals {
+        private String name;
+        public void move(){
+            System.out.println("移动");
+        }
+        public void shout(){
+            System.out.println("叫");
+        }
+
+    }
+    public class Dog extends Animals {
+        @Override
+        public void shout(){
+            System.out.println("狗叫");
+        }
+        public void dogMouse() {
+            System.out.println("狗吃骨头");
+        }
+    }
+    public class Cat extends Animals {
+        @Override
+        public void shout(){
+            System.out.println("猫叫");
+        }
+        public void CatMouse() {
+            System.out.println("猫吃鱼");
+        }
+    }
+
+
+    @Test
+    void javaTest(){
+        // 下面展示的继承（Dog和Cat都继承Animals）
+        Dog dog =new Dog();
+        dog.move();
+        dog.dogMouse();
+        Cat cat =new Cat();
+        cat.move();
+        cat.CatMouse();
+        // 下面展示的多态(Dog和Cat都重写了父类的shout方法)
+        Animals dogs=new Dog();
+        dogs.shout();
+        Animals cats=new Cat();
+        cats.shout();
+
+    }
+```
+
+
+
+## 集合
+
+https://www.runoob.com/java/java-collections.html 
+
+https://www.bilibili.com/video/BV1fG4y1g76v/?spm_id_from=333.337.search-card.all.click&vd_source=f25f5a8d75a3a60d5a288f726803ec11
+
+[Collection 类关系图 | Java 全栈知识体系 (pdai.tech)](https://www.pdai.tech/md/java/collection/java-collection-all.html)
+
+
+
+Lst系列集合：添加的元素是有序、可重复、有索引
+
+Set系列集合：添加的元素是无序、不重复、无索引
+
+Collection是单列集合的祖宗接口，它的功能是全部单列集合都可以继承使用的。
+
+
+
+Java 中的集合（Collections）是一组用于存储和处理对象集合的类。Java 提供了多种集合接口和实现，主要分为两大类：`List`、`Set` 和 `Map`。以下是一些常用的集合操作 API 的列表，按照集合类型分类：
+
+### Collection 接口及主要实现类
+
+https://blog.csdn.net/xing123456jl/article/details/108044431
+
+Collection：单列集合类的根接口，用于存储一系列符合某种规则的元素，它有两个重要的子接口，分别是 java.util.List 与 java.util.Set。其中：
+
+List 的特点是有索引、存取有序、可重复。
+Set 的特点是无索引、存取无序（LinkedHashSet除外）、不可重复。
+
+常用方法
+
+```
+public boolean add(E e)：把给定的对象添加到当前集合中 。
+public void clear()：清空集合中所有的元素。
+public boolean remove(E e)：把给定的对象在当前集合中删除。
+public boolean contains(E e)：判断当前集合中是否包含给定的对象。
+public boolean isEmpty()：判断当前集合是否为空。
+public int size()：返回集合中元素的个数。
+public Object[] toArray()：把集合中的元素，存储到数组中。
+```
+
+注意：contains 细节：底层是依赖equals方法进行判断是否存在的。
+所以，如果集合中存储的是自定义对象，也想通过contains方法来判断是否包含，那么在javabean类中，一定要重写equals方法。
+
+
+
+#### 遍历
+
+https://blog.csdn.net/m0_51755061/article/details/115109771
+
+**迭代器遍历**
+
+Iterator迭代器接口
+（1）Iterator对象称为迭代器(设计模式的一种)，主要用于遍历 Collection 集合中的元素。
+（2） 集合对象每次调用iterator()方法都得到一个全新的迭代器对象，默认游标都在集合的第一个元素之前。
+1.1 主要方法
+（1）hasNext()：判断是否还有下一个元素。
+
+（2）next()：指针下移，将下移以后集合位置上的元素返回。
+
+（3）remove（）：内部定义了remove(),可以在遍历的时候，删除集合中的元素。此方法不同于集合直接调用remove()
+
+```java
+        // 创建集合并添加元素
+        Collection<String> list = new ArrayList<String>();
+        list.add("1");
+        list.add("2");
+        list.add("3");
+        // 获取迭代器对象,迭代器就好此是个箭头，默认指向集合的0索引处
+        Iterator<String> iterator=list.iterator();
+        //利用循环不断的去获取集合中的每一个元素
+        while (iterator.hasNext()){
+            //next方法的两件事情：获取元素并移动指针
+            String str=iterator.next();
+            System.out.println(str);
+        }
+
+        //迭代器的细节注意点：
+        //1.报错NoSuchElementException
+        //2,迭代器遍历完毕，指针不会复位
+        //3.循环中只能用一次next方法
+        //4,迭代器通历时，不能用集合的方法进行增加或者删除，如果实在要删除：那么可以用迭代器提供的remove方法进行删除。      
+```
+
+**增强for遍历**
+
+增强 for 的底层就是迭代器，为了简化迭代器的代码书写的。
+它是 JDK5 之后出现的，其内部原理就是一个 Iterator 迭代器
+所有的单列集合和数组才能用增强 for 进行遍历。
+
+```java
+        // 示例：s便是list里面的每一个数据        
+        for(String s:list){
+            System.out.println(s);
+        }
+
+        // 修改增强for 中的变量，不会改变集合中原本的数据。
+```
+
+**Lambda表达式遍历**
+
+```java
+ list.forEach(i-> System.out.println(i));
+```
+
+### List 接口常用操作
+
+- `add(E e)`: 向列表末尾添加一个元素。
+- `add(int index, E element)`: 在列表的指定位置插入一个元素。
+- `remove(int index)`: 删除列表中指定位置的元素。
+- `get(int index)`: 返回列表中指定位置的元素。
+- `set(int index, E element)`: 替换列表中指定位置的元素。
+- `size()`: 返回列表中的元素数量。
+- `clear()`: 移除列表中的所有元素。
+- `indexOf(Object o)`: 返回对象在列表中的第一次出现索引。
+- `lastIndexOf(Object o)`: 返回对象在列表中的最后一次出现索引。
+- `contains(Object o)`: 检查列表是否包含指定的元素。
+- `isEmpty()`: 检查列表是否为空。
+
+
+
+### Set 接口常用操作
+
+- `add(E e)`: 向集合添加一个元素。
+- `remove(Object o)`: 从集合中移除一个元素。
+- `contains(Object o)`: 检查集合是否包含指定的元素。
+- `size()`: 返回集合中的元素数量。
+- `clear()`: 移除集合中的所有元素。
+- `isEmpty()`: 检查集合是否为空。
+
+Set是集合体系中较为重要的接口，它具有单列存储的特点，即一次只能添加一个元素。它具有三大特点：
+**不可重复：当存入相同的数据时，重复的元素将会被自动去除，集合中不会有重复的值。**
+**存取顺序不一致：存入数据的顺序与输出数据的顺序不一定一致。**
+**没有带索引方法：无法使用普通for循环来遍历输出Set集合。**
+由于Set是一个接口，因此我们在创建Set对象时必须指定其实现类，其常用的实现类有HashSet和TreeSet。
+
+### Map 接口常用操作
+
+- `put(K key, V value)`: 将指定的值与此映射中的指定键关联。
+- `get(Object key)`: 返回指定键所映射的值。
+- `remove(Object key)`: 从映射中移除指定键的映射关系。
+- `keySet()`: 返回映射中包含的键的 Set 视图。
+- `values()`: 返回映射中包含的值的 Collection 视图。
+- `entrySet()`: 返回映射中包含的键值映射关系的 Set 视图。
+- `size()`: 返回映射中键值映射的数量。
+- `clear()`: 移除映射中的所有键值映射。
+- `isEmpty()`: 检查映射是否为空。
+
+
+
+Map接口是一个键值对的集合，它继承自Collection接口中的size()和isEmpty()等方法，同时还提供了根据键查找值的方法，以及添加、删除和更新键值对的方法。在Java中，Map接口有几个常见的实现类，每个实现类都具有不同的性能和用途。
+
+HashMap：基于哈希表实现，具有快速的查找和插入操作，适用于需要快速查找键值对的场景。
+TreeMap：基于红黑树实现，可以对键进行排序，并提供了一系列与排序相关的方法，适用于需要对键进行排序的场景。
+LinkedHashMap：基于哈希表和链表实现，保持键值对的插入顺序，适用于需要保持插入顺序的场景。
+
+### Collections 类常用静态方法
+
+- `sort(List<?> list)`: 根据元素的自然顺序对列表进行升序排序。
+- `binarySearch(List<? extends Comparable> list, Object key)`: 在列表中二分查找指定的对象。
+- `max(Collection<? extends T> coll)`: 返回给定集合中的最大元素。
+- `min(Collection<? extends T> coll)`: 返回给定集合中的最小元素。
+- `shuffle(List<?> list)`: 随机打乱列表中的元素顺序。
+- `fill(List<?> list, Object obj)`: 使用指定的元素填充列表。
+
+### Iterator 接口常用操作
+
+- `next()`: 返回迭代的下一个元素。
+- `hasNext()`: 检查是否存在下一个元素。
+- `remove()`: 从迭代器所连接的集合中移除当前的元素。
+
+这些是 Java 集合框架中一些基本的操作。实际上，Java 集合框架非常丰富，包含了更多的接口和实现，以及一些高级特性，比如线程安全的集合类、队列、栈等。如果你需要更详细的信息，建议查阅 Java 官方文档或相关书籍。
+
+
+
+
+
 ## java SSM框架
 
 决定看ssm框架视频， [【尚硅谷】SSM框架全套教程，MyBatis+Spring+SpringMVC+SSM整合一套通关_哔哩哔哩_bilibili](https://www.bilibili.com/video/BV1Ya411S7aT/?spm_id_from=333.337.search-card.all.click&vd_source=f25f5a8d75a3a60d5a288f726803ec11) 。
@@ -250,6 +494,10 @@ B站直达：https://www.bilibili.com/video/BV1AP411s7D7
 [MyBatis-plus最详细的入门使用教程来了 (qq.com)](https://mp.weixin.qq.com/s/kKH0c2GTtd_c2Ptqh-zJbA)
 
 黑马视频：[day01-MybatisPlus - 飞书云文档 (feishu.cn)](https://b11et3un53m.feishu.cn/wiki/PsyawI04ei2FQykqfcPcmd7Dnsc)
+
+
+
+[MybatisPlus - 2小时入门 (ydlclass.com)](https://www.ydlclass.com/doc21xnv/java/third/framework/7、mybatis_plus/#_6-逆向工程-代码生成器)
 
 
 

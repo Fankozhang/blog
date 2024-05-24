@@ -139,6 +139,8 @@ nginx使用：https://juejin.cn/post/7112826654291918855#heading-1
 
 [三年前端还不会配置Nginx？刷完这篇就够了 - 掘金 (juejin.cn)](https://juejin.cn/post/7270153705877241890)
 
+[Nginx 常用配置与命令，必收藏~~ (qq.com)](https://mp.weixin.qq.com/s/FNfQjLmBPd_1DB136nkOzg)
+
 ### 安装虚拟机，linux, nginx
 
 装上centos7 linux。在Linux上安装 nginx 我参考了如下两篇文章
@@ -788,6 +790,12 @@ exec 是在容器中打开新的终端，并且可以启动新的进程 用exit�
 
 `cat 文件名.tar | docker import - 镜像用户/镜像名:镜像版本号`
 
+```
+
+docker run -p 9002:80 --name nginx -v /home/nginx/conf/nginx.conf:/etc/nginx/nginx.conf -v /home/nginx/conf/conf.d:/etc/nginx/conf.d -v /home/nginx/log:/var/log/nginx -v /home/nginx/html:/usr/share/nginx/html -d nginx:latest
+
+```
+
 
 
 ### **Docker镜像commit操作**
@@ -1319,7 +1327,7 @@ CMD /bin/bash
 
  [Docker + Nginx 部署 Vue 项目 - 知乎 (zhihu.com)](https://zhuanlan.zhihu.com/p/345622879)  
 
-
+Docker安装Nginx并且部署Vue项目超详细:https://blog.csdn.net/qq_45502336/article/details/118698218
 
 
 

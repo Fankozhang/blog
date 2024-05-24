@@ -362,6 +362,10 @@ Web server failed to start. Port 8080 was already in use.
 
 [Docker部署SpringBoot +Vue项目流程详解（含域名 + HTTPS）_docker部署vue的前端项目-CSDN博客](https://blog.csdn.net/weixin_46594796/article/details/133962200)
 
+### docker 安装 nginx
+
+实测可用：https://blog.csdn.net/BThinker/article/details/123507820
+
 ## Minio
 
 ### linux 安装Minio
