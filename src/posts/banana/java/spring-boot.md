@@ -2108,6 +2108,10 @@ public class RedisCache {
 
  [(230条消息) RedisTemplate使用最详解（一）--- opsForValue()_opsforvalue().set_学习中啊哈哈的博客-CSDN博客](https://blog.csdn.net/weixin_43658899/article/details/121062760) 
 
+##### RedisUtils工具类配置
+
+[【RedisUtils工具类专题】SpringBoot中RedisUtils工具类配置及直接使用_springboot redisutils.getobject-CSDN博客](https://blog.csdn.net/qq_53641150/article/details/124180922)
+
 ##### redis使用（手机号获取验证码）
 
 ```java
@@ -2988,7 +2992,25 @@ reggie:
   path: D:\img\
 ```
 
+## websocket
 
+[在 Spring Boot 中整合、使用 WebSocket - spring 中文网 (springdoc.cn)](https://springdoc.cn/spring-boot-websocket/)
+
+简易简介：[传统@ServerEndpoint方式开发WebSocket应用和SpringBoot构建WebSocket应用程序-CSDN博客](https://blog.csdn.net/java_mindmap/article/details/105898152)
+
+- 全双工通信：WebSocket协议支持服务器和客户端之间的全双工通信，客户端和服务器可以同时发送消息。
+- 持久连接：WebSocket连接一旦建立，将持续保持打开状态，直到客户端或服务器关闭连接。
+- 跨域通信：WebSocket协议支持跨域通信，允许不同域的服务器与客户端建立连接。
+
+### 依赖
+
+```xml
+    <!-- Spring Boot WebSocket依赖 -->
+    <dependency>
+        <groupId>org.springframework.boot</groupId>
+        <artifactId>spring-boot-starter-websocket</artifactId>
+    </dependency>
+```
 
 
 
@@ -3149,6 +3171,132 @@ public class UserController {
 ```
 
  [(228条消息) 使用springBoot实现token校验_springboot 校验token_秃头小陈~的博客-CSDN博客](https://blog.csdn.net/qq_41450736/article/details/113523308) 
+
+
+
+## 验证码生成
+
+### easy-captcha
+
+[EasyCaptcha: Java图形验证码，支持gif、中文、算术等类型，可用于Java Web、JavaSE等项目。 (gitee.com)](https://gitee.com/ele-admin/EasyCaptcha)
+
+[Java应用开发必备：使用 easy-captcha 组件生成验证码的详细介绍_easy-captcha介绍-CSDN博客](https://blog.csdn.net/C_AJing/article/details/138232714)
+
+依赖：
+
+```
+<!--easy-captcha组件的依赖-->
+		<dependency>
+			<groupId>com.github.whvcse</groupId>
+			<artifactId>easy-captcha</artifactId>
+			<version>1.6.2</version>
+		</dependency>
+```
+
+
+
+```java
+//验证码
+@RestController
+@RequestMapping("/captcha")
+@Slf4j
+@Api(tags = "验证码")
+public class CaptchaController {
+    String REDIS_KEY="key01";
+    /**
+     * 生成验证码
+     *
+     * @param request
+    @param response
+     * @throws IOException
+     */
+    @GetMapping("/getCaptcha")
+    @ApiOperation("生成验证码")
+    public Result captcha(HttpServletRequest request, HttpServletResponse response) throws IOException {
+        // 使用这一行代码就可以生成验证码了
+        //CaptchaUtil.out(request, response);
+
+        // 设置请求头为输出图片类型
+        response.setContentType("image/gif");
+        response.setHeader("Pragma", "No-cache");
+        response.setHeader("Cache-Control", "no-cache");
+        response.setDateHeader("Expires", 0);
+
+        SpecCaptcha specCaptcha = new SpecCaptcha(130, 48, 5);  // 设置验证码，根据需要增加参数
+        String verCode = specCaptcha.text().toLowerCase();   // 获取验证码的字符
+        System.out.println(verCode);
+        RedisUtils02.set(REDIS_KEY,specCaptcha.text().toLowerCase());   // redis存入验证码的值
+        //CaptchaUtil.out(specCaptcha, request, response);    // 返回验证码
+        //specCaptcha.out(response.getOutputStream()); // 输出图片流
+
+        return Result.success(specCaptcha.toBase64());   // 返回base64格式,前端展示出图片
+    }
+
+    @ResponseBody
+    @PostMapping("/checkCaptcha")
+    @ApiOperation("验证验证码")
+    public Result<Object> login( String verCode){
+        // 获取redis中的验证码
+        String sessionCode = (String) RedisUtils02.get(REDIS_KEY);   // redis获取验证码的值
+        System.out.println(sessionCode+'-'+verCode);
+        // 判断验证码
+        if (verCode==null || !sessionCode.equals(verCode.trim().toLowerCase())) {
+            return Result.success("验证码错误");
+        }
+        return Result.success("验证码正确");
+    }
+}
+```
+
+RedisUtils02 的封装查看：[【RedisUtils工具类专题】SpringBoot中RedisUtils工具类配置及直接使用_springboot redisutils.getobject-CSDN博客](https://blog.csdn.net/qq_53641150/article/details/124180922)
+
+前端获取验证码展示
+
+```vue
+<template>
+  <div>
+    <div style="display: flex; margin-top: 20px">
+      <div>
+        <img ref="imgRef" :src="imgSrc" @click="getTheCaptcha()" />
+      </div>
+      <div>
+        <el-input
+          v-model="captchaInput"
+          placeholder="请输入验证码"
+          style="width: 200px; margin: 0 20px"
+        ></el-input>
+        <el-button @click="checkIt()">验证</el-button>
+        <span style="margin-left: 20px">{{ checkResult }}</span>
+      </div>
+    </div>
+    minio
+  </div>
+</template>
+
+<script setup>
+import { getCaptcha, checkCaptcha } from "@/api/captcha.js";
+import { ref, onMounted } from "vue";
+onMounted(() => {
+  getTheCaptcha();
+});
+let imgSrc = ref(null);
+let captchaInput = ref(null);
+let checkResult = ref("");
+const getTheCaptcha = () => {
+  getCaptcha().then((res) => {
+    console.log(res);
+    imgSrc.value = res.data;
+  });
+};
+const checkIt = () => {
+  checkCaptcha({ verCode: captchaInput.value }).then((res) => {
+    checkResult.value = res.data;
+  });
+};
+</script>
+<style scoped lang="less"></style>
+
+```
 
 
 
@@ -3387,6 +3535,8 @@ public class thymeController {
 
  [整合thymeleaf 实现模板文件转word打印_springboot导出word纸张大小-CSDN博客](https://blog.csdn.net/HXNLYW/article/details/106330927) 
 
+
+
 ### 整合FlyingSaucer + thymeleaf 实现模板文件转pdf打印
 
  [《SpringBoot2.0 实战》系列-整合FlyingSaucer + thymeleaf 实现模板文件转pdf打印-CSDN博客](https://blog.csdn.net/HXNLYW/article/details/104478142) 
@@ -3397,9 +3547,148 @@ public class thymeController {
 
 
 
+## Freemarker模板引擎
+
+### 导出--生成Word文档
+
+https://blog.csdn.net/weixin_41367523/article/details/106944130
+
+实测可用：[freemarker+springboot实现word生成下载（导出Word） - 钱有学 - 博客园 (cnblogs.com)](https://www.cnblogs.com/qianyx/articles/17347347.html)
+
+**导入依赖：**
+
+```
+       <dependency>
+			<groupId>org.freemarker</groupId>
+			<artifactId>freemarker</artifactId>
+			<version>2.3.31</version>
+		</dependency>
+```
+
+**设置ftl模板：**
+
+在word文档中创建模板，包括占位符的设置，创建完成后导出为 xml 后缀名的文件，  在springBoot项目的 resources/templates 目录下放入 xml 文件并改后缀名为 ftl 。如此模板文件设置完成。
+
+**向模板填充数据并导出**
+
+```java
+@Slf4j
+@RestController
+@RequestMapping("/freeMarker")
+@Api(tags = "freeMarker 相关")
+public class FreeMarkerController {
+    @Autowired
+    private Configuration configuration;
+
+    @GetMapping("/get")   // 直接填入数据，生成文档返回给前端 (简易实现),不用工具类，减少代码
+    public  void outPut(HttpServletResponse response) throws IOException {
+        try {
+            //返回word文档
+            String fileName ="文件";
+            response.setCharacterEncoding("UTF-8");
+            response.addHeader("Content-Disposition", fileName+".pdf");
+
+            //获取apiDoc所需要的数据
+            Map<String, Object> dataModel = new HashMap<>();
+            dataModel.put("name","张三");
+            dataModel.put("age",14);
+
+            //加载模板
+            Template template = configuration.getTemplate("modelFreeMarker.ftl", "utf-8");
+            //渲染模板
+            template.process(dataModel, response.getWriter());
+            //response的Writer不需要我们手动关，tomcat会帮我们关的
+        } catch (Exception e) {
+            log.error("导出word异常：", e);
+        }
+
+    }
+
+
+    @GetMapping("/getFreeMarker2")  // 配置工具类实现
+    public ResponseEntity<byte[]> exportMinutesMeeting() throws Exception {
+        // 生成模板文件数据
+        Map<String,Object> dataMap = new HashMap<>();
+        dataMap.put("name","张三");
+        dataMap.put("age",14);
+
+        ByteArrayOutputStream outputStream = new ByteArrayOutputStream();
+        FreeMarkerUtil.generateWord(dataMap,outputStream);
+
+        HttpHeaders headers = new HttpHeaders();
+        //Content-Disposition的作用：告知浏览器以何种方式显示响应返回的文件，用浏览器打开还是以附件的形式下载到本地保存
+        //attachment表示以附件方式下载   inline表示在线打开   "Content-Disposition: inline; filename=文件名.mp3"
+        // filename表示文件的默认名称，因为网络传输只支持URL编码，因此需要将文件名URL编码后进行传输,前端收到后需要反编码才能获取到真正的名称
+        String fileName = "12345678"+".doc";
+        headers.add("Content-Disposition", "attachment;filename=" + URLEncoder.encode(fileName, "UTF-8"));
+        headers.add("Content-Length", "" + outputStream.toByteArray().length);
+        headers.setContentType(MediaType.APPLICATION_OCTET_STREAM);
+        // 将文件内容和头部信息封装到响应实体中并返回
+        return new ResponseEntity<>(outputStream.toByteArray(), headers, HttpStatus.OK);
+    }
+}
+
+```
+
+```java
+/**
+ * 模板word导出，工具类
+ */
+public class FreeMarkerUtil {
+    public static void generateWord(Map<String, Object> dataMap, OutputStream outputStream) throws Exception {
+        // 获取当前项目路径
+        //String projectPath = System.getProperty("user.dir");
+        String projectPath = "E:\\\\qian-study\\\\我的前后端分离测试项目\\\\my-testing-warehouse\\\\my-qian-hou\\\\test";
+        // 设置FreeMarker的版本和编码格式
+        Configuration configuration = new Configuration(new Version("2.3.31"));
+        configuration.setDefaultEncoding("UTF-8");
+
+        // 设置FreeMarker生成Word文档所需要的模板的路径
+        configuration.setDirectoryForTemplateLoading(new File(projectPath+"\\src\\main\\resources\\templates"));
+        // 设置FreeMarker生成Word文档所需要的模板
+        Template t = configuration.getTemplate("modelFreeMarker.ftl", "UTF-8");
+        //FreeMarker使用Word模板和数据生成Word文档
+        Writer out = new BufferedWriter(new OutputStreamWriter(outputStream, "UTF-8"));
+        t.process(dataMap, out);
+        out.flush();
+    }
+}
+```
+
+**前端接口获取后导出 docx 文件**
+
+```js
+const getTheFreeMarkerPdf=()=>{
+  getFreeMarkerWord().then(res=>{
+    const content = res;
+    const blob = new Blob([content]);
+    console.log(blob)
+    const fileName = "a" + ".docx"; // 自定义下载文件的名字，根据不同文件类型跟换后缀名
+    if ("download" in document.createElement("a")) {
+      // 非IE下载
+      const elink = document.createElement("a");
+      elink.download = fileName;
+      elink.style.display = "none";
+      elink.href = URL.createObjectURL(blob);
+      document.body.appendChild(elink);
+      elink.click();
+      URL.revokeObjectURL(elink.href); // 释放URL 对象
+      document.body.removeChild(elink);
+    }
+  })
+  
+}
+```
+
+## Poi-tl  Word模板引擎
+
+文档：[Poi-tl Documentation (deepoove.com)](http://deepoove.com/poi-tl/)
+
+使用参考：[poi-tl的使用（通俗易懂，全面，内含动态表格实现 ！）-CSDN博客](https://blog.csdn.net/s_156/article/details/138315722)
+
+
+
 ## 
-
-
 
 ## 文件相关
 

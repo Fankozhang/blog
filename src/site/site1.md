@@ -392,8 +392,6 @@ Docker-compose 安装 Wordpress 博客  [Docker-compose 安装 Wordpress 博客 
 链接:https://pan.baidu.com/s/17K2-pgQ2OgZ890YbEAVKPw?pwd=jyg5 
 提取码:jyg5
 
-
-
 ####  WxJava - 微信开发 Java SDK
 
 [web-storage-cache: 对localStorage 和sessionStorage 进行了扩展，添加了超时时间，序列化方法 (gitee.com)](https://gitee.com/mirrors/web-storage-cache#get)
@@ -415,6 +413,18 @@ mybatis-plus-generator-ui ：https://blog.csdn.net/afreon/article/details/129153
 
 
 基于vue可视化拖拽编辑，移动端页面生成工具。:https://was666.gitee.io/as-editor-doc/
+
+
+
+#### 简易的java模板代码生成
+
+https://b23.tv/A2l40Th 
+
+github：https://github.com/lenve/generate_code
+
+Gitee：https://gitee.com/lenve/generate_code
+
+
 
 ### 其他收藏
 

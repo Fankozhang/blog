@@ -464,7 +464,396 @@ LinkedHashMap：基于哈希表和链表实现，保持键值对的插入顺序�
 
 
 
+## java调用外部接口
 
+[SpringBoot 调用外部接口的三种方式 (qq.com)](https://mp.weixin.qq.com/s/c7y65TKJ76eFnzmxtfMMXg)
+
+
+
+[JAVA调用第三方接口的GET/POST/PUT请求方式_java put请求-CSDN博客](https://blog.csdn.net/qq_45726836/article/details/131412678)
+
+[Java发送Http请求（HttpClient）-阿里云开发者社区 (aliyun.com)](https://developer.aliyun.com/article/1135538)
+
+[服务远程调用指南（RestTemplate、HttpClient）-阿里云开发者社区 (aliyun.com)](https://developer.aliyun.com/article/1157258#slide-9)
+
+### HttpClient(字符串转成对象)
+
+依赖：
+
+```xml
+        <dependency>
+			<groupId>org.apache.httpcomponents</groupId>
+			<artifactId>httpclient</artifactId>
+			<version>4.5.2</version>
+		</dependency>
+		<dependency>
+			<groupId>org.apache.httpcomponents</groupId>
+			<artifactId>httpclient-cache</artifactId>
+			<version>4.5.2</version>
+		</dependency>
+		<dependency>
+			<groupId>org.apache.httpcomponents</groupId>
+			<artifactId>httpmime</artifactId>
+			<version>4.5.2</version>
+		</dependency>
+		<!-- alibaba的fastjson -->
+		<dependency>
+			<groupId>com.alibaba</groupId>
+			<artifactId>fastjson</artifactId>
+			<version>1.2.80</version>
+		</dependency>
+```
+
+HttpClient方法封装：
+
+```java
+package com.example.mytest.test.Util;
+
+import com.alibaba.fastjson.JSON;
+import lombok.extern.slf4j.Slf4j;
+import org.apache.commons.lang3.StringUtils;
+import org.apache.http.Consts;
+import org.apache.http.HttpResponse;
+import org.apache.http.NameValuePair;
+import org.apache.http.client.HttpClient;
+import org.apache.http.client.config.RequestConfig;
+import org.apache.http.client.entity.UrlEncodedFormEntity;
+import org.apache.http.client.methods.HttpGet;
+import org.apache.http.client.methods.HttpPost;
+import org.apache.http.entity.StringEntity;
+import org.apache.http.impl.client.HttpClients;
+import org.apache.http.impl.conn.PoolingHttpClientConnectionManager;
+import org.apache.http.message.BasicNameValuePair;
+import org.apache.http.util.EntityUtils;
+import org.slf4j.Logger;
+
+import java.net.URI;
+import java.nio.charset.StandardCharsets;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Map;
+
+@Slf4j
+public class HttpClientUtil {
+    public static final String APPLICATION_JSON_VALUE = "application/json";
+    private static final Logger logger = log;
+    private static final Integer CONN_TIME_OUT = 3000;// 超时时间豪秒
+    private static final Integer SOCKET_TIME_OUT = 10000;
+    /** 每个路由的最大请求数，默认2 */
+    private static final Integer DEFAULT_MAX_PER_ROUTE = 40;
+    /** 最大连接数，默认20 */
+    private static final Integer MAX_TOTAL = 400;
+
+    private static HttpClient httpClient;
+
+    static {
+        // 请求配置
+        RequestConfig requestConfig = RequestConfig.custom()
+                .setConnectTimeout(CONN_TIME_OUT)
+                .setConnectionRequestTimeout(CONN_TIME_OUT)
+                .setSocketTimeout(SOCKET_TIME_OUT)
+                .build();
+
+        // 管理 http连接池
+        PoolingHttpClientConnectionManager cm = new PoolingHttpClientConnectionManager();
+        cm.setDefaultMaxPerRoute(DEFAULT_MAX_PER_ROUTE);
+        cm.setMaxTotal(MAX_TOTAL);
+
+        httpClient = HttpClients.custom()
+                .setConnectionManager(cm)
+                .setDefaultRequestConfig(requestConfig)
+                .build();
+    }
+
+    /**
+     * Get请求
+     */
+    public static String requestGet(String url, Map<String, String> paramsMap) throws Exception {
+        //logger.info("GET request  url:{} params:{}", url, paramsMap);
+        Long start = System.currentTimeMillis();
+
+        List<NameValuePair> params = initParams(paramsMap);
+        // Get请求
+        HttpGet httpGet = new HttpGet(url);
+
+        try {
+            // 设置参数
+            String str = EntityUtils.toString(new UrlEncodedFormEntity(params, StandardCharsets.UTF_8));
+            String uriStr = StringUtils.isEmpty(str) ?
+                    httpGet.getURI().toString() : httpGet.getURI().toString() + "?" + str;
+            httpGet.setURI(new URI(uriStr));
+            // 发送请求
+            HttpResponse response = httpClient.execute(httpGet);
+
+            //logger.info("GET request  url:{} response:{} time:{}",
+            //        url, response, System.currentTimeMillis() - start);
+
+            // 获取返回数据
+            return getSuccessRetFromResp(response, url, JSON.toJSONString(paramsMap));
+        } finally {
+            // 必须释放连接，不然连接用完后会阻塞
+            httpGet.releaseConnection();
+        }
+    }
+
+    /**
+     * Post请求，Map格式数据
+     */
+    public static String requestPost(String url, Map<String, String> paramsMap) throws Exception {
+        logger.info("POST request  url:{} params:{}", url, paramsMap);
+        Long start = System.currentTimeMillis();
+
+        List<NameValuePair> params = initParams(paramsMap);
+
+        HttpPost httpPost = new HttpPost(url);
+
+        try {
+            httpPost.setEntity(new UrlEncodedFormEntity(params, Consts.UTF_8));
+
+            HttpResponse response = httpClient.execute(httpPost);
+
+            logger.info("POST request  url:{} response:{}  time:{}",
+                    url, response, System.currentTimeMillis() - start);
+
+            String retStr = getSuccessRetFromResp(response, url, JSON.toJSONString(paramsMap));
+
+            return retStr;
+        } finally {
+            httpPost.releaseConnection();
+        }
+    }
+
+    /**
+     * Post请求，json格式数据
+     *
+     */
+    public static String requestPostJsonStr(String url, String json) throws Exception {
+        logger.info("POST request  url:{} params:{}", url, json);
+        long start = System.currentTimeMillis();
+
+        HttpPost httpPost = new HttpPost(url);
+
+        try {
+            StringEntity entity = new StringEntity(json, Consts.UTF_8);
+            entity.setContentType(APPLICATION_JSON_VALUE);
+            httpPost.setEntity(entity);
+
+            HttpResponse response = httpClient.execute(httpPost);
+
+            logger.info("POST request  url:{} response:{}  time:{}",
+                    url, response, System.currentTimeMillis() - start);
+
+            return getSuccessRetFromResp(response, url, json);
+        } finally {
+            // 资源释放
+            httpPost.releaseConnection();
+        }
+
+    }
+
+    /**
+     * post Object格式数据
+     */
+    public static String requestPostJson(String url, Object obj) throws Exception {
+        String params = JSON.toJSONString(obj);
+        return requestPostJsonStr(url, params);
+    }
+
+    private static String getSuccessRetFromResp(HttpResponse response, String url, String params) throws Exception {
+        String retStr = "";
+        // 检验状态码，如果成功接收数据
+        int code = response.getStatusLine().getStatusCode();
+
+        if (code == 200) {
+            retStr = EntityUtils.toString(response.getEntity(), Consts.UTF_8);
+        } else {
+            throw new RuntimeException(String.format("Http request error:%s, url:%s, params:%s", response, url, params));
+        }
+
+        //logger.info("Http request retStr:{}. url:{}", retStr, url);
+        return retStr;
+    }
+
+    private static List<NameValuePair> initParams(Map<String, String> paramsMap) {
+        List<NameValuePair> params = new ArrayList<NameValuePair>();
+        if (paramsMap == null) {
+            return params;
+        }
+
+        for (Map.Entry<String, String> entry : paramsMap.entrySet()) {
+            params.add(new BasicNameValuePair(entry.getKey(), entry.getValue()));
+        }
+
+        return params;
+    }
+}
+
+```
+
+get方法获取数据测试：
+
+```java
+    @Data
+    public class HttpClientModel {
+        private String name;
+        private Integer age;
+    }
+
+    @Data
+    public class HttpClientModelObj {
+        // 变量名要和接口返回的变量名一致
+        private String type;
+        private List<HttpClientModel> data;
+    }    
+
+   @Test
+    void testHttpClient() throws Exception {
+        // 接口返回数组
+        String url="http://127.0.0.1:3000/";
+        Map<String, String> map=new HashMap<String, String>();
+        String s=HttpClientUtil.requestGet(url,map );
+        System.out.println(s);    // 接口返回数据的字符串：[{"name":"张三","age":14},{"name":"李四","age":14}]
+
+        List<HttpClientModel> list =new ArrayList<HttpClientModel>(); //创建一个变量接收数据，实体类型要和返回的数据相同
+        list=JSONObject.parseArray(s,HttpClientModel.class);   //字符串转换成JSON格式,并转换成实体类模型，(是对象用 parseObject 方法)
+        list.stream().forEach(item->{
+            System.out.print(item.getName());  // 张三  李四
+        });
+    }
+
+   @Test
+    void testHttpClientObj() throws Exception {
+        // 接口返回对象
+        String url="http://127.0.0.1:3000/list";
+        Map<String, String> map=new HashMap<String, String>();
+        String s=HttpClientUtil.requestGet(url,map );
+        System.out.println(s);  // 接口返回数据的字符串：{"type":"people","data":[{"name":"张三","age":14},{"name":"李四","age":14}]}
+        HttpClientModelObj httpClientModelObj=new HttpClientModelObj();  // 创建一个对象用于接收返回的数据，要求类型一致
+        httpClientModelObj=JSONObject.parseObject(s, HttpClientModelObj.class);
+        System.out.println(httpClientModelObj);
+        // {"type":"people","data":[{"name":"张三","age":14},{"name":"李四","age":14}]}
+        System.out.println(httpClientModelObj.getType());
+        // HttpClientModelObj(type=people, data=[HttpClientModel(name=张三, age=14), HttpClientModel(name=李四, age=14)])
+        System.out.println(httpClientModelObj.getData());
+        // [HttpClientModel(name=张三, age=14), HttpClientModel(name=李四, age=14)]
+    }
+
+
+   
+```
+
+
+
+
+
+
+
+## File
+
+https://blog.csdn.net/qq_21484461/article/details/132913531
+
+### File类
+
+`java.io.File`类是Java标准库中用于表示文件和目录的类。它提供了一组方法，使您能够创建、删除、重命名、复制文件或目录，以及查询文件和目录的属性。`File`类的实例可以表示文件系统中的文件或目录的路径，而不必实际操作文件系统。
+
+### 创建File对象
+
+File对象既可以代表文件、也可以代表文件夹。
+Fil封装的对象仅仅是一个路径名，这个路径可以是存在的，也允许是不存在的。
+
+```java
+        //  使用文件路径字符串创建(绝对路径)
+        String filePath="E:\\qian-study\\我的前后端分离测试项目\\my-testing-warehouse\\testFile.txt";
+        File file = new File(filePath);
+        System.out.println(file.length());
+        // 相对路径（重点） 不带盘符，默认是直接去工程下寻找文件的(项目根目录不能有错)
+        String filePath2="src\\main\\resources\\file\\testFile.txt";
+        File file2 = new File(filePath2);
+        System.out.println(file2.length());
+
+
+        //  使用父目录和子目录创建
+        File parentDir = new File("E:\\qian-study\\我的前后端分离测试项目\\my-testing-warehouse");
+        String childFileName = "testFile.txt";
+        File file3 = new File(parentDir, childFileName);
+```
+
+- **当前工作目录**：在Java中，当前工作目录通常是启动Java虚拟机时的工作目录。你可以使用`System.getProperty("user.dir")`来获取当前工作目录的路径。
+
+### File对象操作方法
+
+挺详细的：https://blog.csdn.net/qq_21484461/article/details/132913531
+
+https://www.runoob.com/java/java-file.html
+
+https://www.jianshu.com/p/204a828531e8
+
+java中的File类提供了许多常用的方法，用于操作文件和目录。下面是一些常用的File类方法：
+
+**文件和目录的创建、删除和重命名**：`createNewFile()`、`delete()`、`renameTo(File dest)`。
+
+**检查文件或目录是否存在**：`exists()`。
+
+**获取文件或目录的属性**：如`length()`（大小）、`lastModified()`（最后修改时间）。
+
+**列出目录内容**：`list()`、`listFiles()`。
+
+**检查是文件还是目录**：`isFile()`、`isDirectory()`。
+
+**创建和删除目录**：`mkdir()`、`mkdirs()`。
+
+### 遍历目录，列出目录下的文件和子目录
+
+#### 只列出直接的子文件和子目录
+
+要列出目录下的文件和子目录，可以使用`list()`方法和`listFiles()`方法。`list()`方法返回一个字符串数组，包含目录下的所有文件和子目录的名称。`listFiles()`方法返回一个`File`数组，包含目录下的所有文件和子目录的`File`对象。
+
+```java
+        // 只列出直接的子文件和子目录
+        File dir=new File("src\\main\\resources\\file");
+
+        String[] children = dir.list();
+        if (children != null) {
+            for (String child : children) {
+                System.out.println(child);
+            }
+        }
+
+        File[] childFiles = dir.listFiles();
+        if (childFiles != null) {
+            for (File childFile : childFiles) {
+                System.out.println(childFile.getName());
+            }
+        }
+```
+
+#### 递归遍历子目录
+
+如果目录下还有子目录，您可能需要递归地遍历整个目录树。
+
+```java
+File dir=new File("src\\main\\resources\\file");
+ // 调用方法开始遍历
+listFilesAndDirs(dir);
+
+public static void listFilesAndDirs(File dir) {
+        File[] childFiles = dir.listFiles();
+        if (childFiles != null) {
+            for (File childFile : childFiles) {
+                if (childFile.isDirectory()) {
+                    System.out.println("目录：" + childFile.getName());
+                    listFilesAndDirs(childFile); // 递归遍历子目录
+                } else {
+                    System.out.println("文件：" + childFile.getName());
+                }
+            }
+        }
+    }
+```
+
+
+
+## IO流
 
 ## java SSM框架
 

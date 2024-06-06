@@ -753,6 +753,18 @@ https://antv.antgroup.com/
 
 [使用three.js搭建3d隧道监测-1 - 掘金 (juejin.cn)](https://juejin.cn/post/7273987266523136056)
 
+在这里我们使用npm进行依赖安装
+
+```coffeescript
+npm install three
+```
+
+由于我们使用的是[typeScript](https://so.csdn.net/so/search?q=typeScript&spm=1001.2101.3001.7020)，所以我们可能还需要安装它的类型,方便我们对类型定义
+
+```coffeescript
+npm install @types/three
+```
+
 ### 实现基础加载模型（代码示例）
 
 具体每一项的参数配置可以参考官方文档，进行自定义

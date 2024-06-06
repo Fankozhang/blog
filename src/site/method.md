@@ -66,6 +66,8 @@ vue项目可以通过  prerender-spa-plugin  进行网页预渲染  （最好是
 
 npm 淘宝镜像下载：  npm install --registry=http://registry.npmmirror.com
 
+npm install  --registry=https://registry.npm.taobao.org
+
 ### nvm
 
 node版本过高，vue项目运行时报错 ： Error: error:0308010C:digital envelope routines::unsupported
@@ -130,6 +132,10 @@ nvm uninstall <version>
 nvm uninstall 16.20.0
 ```
 
+### nvm报错，淘宝镜像更换
+
+https://blog.csdn.net/qq_48546536/article/details/135947405
+
 ### 多个项目复用node_modules (没用过)
 
 [多个项目复用node_modules_node_module 可以多个项目共用一个吗-CSDN博客](https://blog.csdn.net/weixin_42863883/article/details/134835441)
@@ -172,6 +178,18 @@ new Router({
 ## Git操作
 
 [Git 常用基本命令使用详细大全_git 命令-CSDN博客](https://blog.csdn.net/qtiao/article/details/97783243)
+
+### git 回退到之前提交的版本
+
+[「git」GitLab代码回滚到某个节点 本地+远程 - 简书 (jianshu.com)](https://www.jianshu.com/p/17e37d399099)
+
+注意：先将现在的代码克隆一份到新的分支，再将现在分支的代码回退到之前的版本，回退代码参照如下：
+
+```undefined
+git reset --hard  {commitId}
+```
+
+commitId 可以到 git 的历史里面去找。
 
 ## vscode
 
@@ -232,6 +250,33 @@ cd 到需要清空的文件夹父目录 ，控制台输入    `rimraf  ‘要删
 ```
 rimraf node_modules
 ```
+
+### ts项目爆红解决
+
+####  'xx'is declared but never read.
+
+ts项目定义未使用，编辑器爆红
+修改 tsconfig.json 文件的"compilerOptions"选项为false。
+
+```
+"compilerOptions": {
+    "noUnusedLocals": false, /* 检查未使用的变量 */
+    "noUnusedParameters": false,/* 检查未使用的函数参数 */
+}
+```
+
+#### Cannot find module ‘vue‘.
+
+给 tsconfig.app.json 中的 compilerOptions里添加
+“moduleResolution”: “Node”
+
+```
+"compilerOptions": {
+     "moduleResolution": "Node",
+}
+```
+
+
 
 ## 提升开发效率
 
@@ -2137,6 +2182,15 @@ methods:{
 }
 ```
 
+时间格式化：
+
+```
+format="yyyy-MM-DD HH:mm:ss"
+valueFormat="yyyy-MM-DD HH:mm:ss"
+```
+
+
+
 ### ant design vue  表格隔行变色
 
 ```
@@ -2327,7 +2381,11 @@ export default {
 </script>
 ```
 
+### antd table跨页多选获取全部selectedRows
 
+[antd table跨页多选简单实现获取全部selectedRows - 掘金 (juejin.cn)](https://juejin.cn/post/7240023332267065401)
+
+[ant design vue跨页实现表格多选_ant design vue table 分页多选-CSDN博客](https://blog.csdn.net/a793304663/article/details/134332821)
 
 ## 内网穿透
 
