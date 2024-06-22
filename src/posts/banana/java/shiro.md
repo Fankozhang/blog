@@ -38,6 +38,10 @@ typora-root-url: ..\..\..\.vuepress\public
 
  [Shiro之注解篇_shiro常用注解-CSDN博客](https://blog.csdn.net/qq_43654581/article/details/120776947) 
 
+
+
+[这可能是最全的Shiro入门（整合SSM）-腾讯云开发者社区-腾讯云 (tencent.com)](https://cloud.tencent.com/developer/article/1980553)
+
 ## Shiro的三大功能
 
 Shiro有三大核心组件，即`Subject`、`SecurityManager` 和 `Realm`

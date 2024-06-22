@@ -16,6 +16,10 @@ typora-root-url: ..\..\..\.vuepress\public
 
 纯净的springBoot示例项目：[刘潇/springboot-pure - 码云 - 开源中国 (gitee.com)](https://gitee.com/click33/springboot-pure)
 
+
+
+[Sa-token基本使用教程（全网最详细！！！）-CSDN博客](https://blog.csdn.net/Xixi0864/article/details/137650195)
+
 ## sa-token依赖
 
 注：如果你使用的是 SpringBoot 3.x，只需要将 `sa-token-spring-boot-starter` 修改为 `sa-token-spring-boot3-starter` 即可。

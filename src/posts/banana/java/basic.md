@@ -855,6 +855,53 @@ public static void listFilesAndDirs(File dir) {
 
 ## IO流
 
+参考：https://blog.csdn.net/qq_44715943/article/details/116501936
+
+### 什么是IO流
+
+- I : **Input**
+- O : **Output**
+
+通过IO可以完成硬盘文件的**读和写**。
+
+
+
+**流的分类：**
+
+- **`输入流、输出流`**
+- **`字节流、字符流`**
+
+
+
+- 字节流
+
+1. java.io.**InputStream** 字节输入流
+2. java.io.**OutputStream** 字节输出流
+
+- 字符流
+
+1. java.io.**Reader** 字符输入流
+2. java.io.**Writer** 字符输出流
+
+
+
+**注意：**
+
+四大家族的首领都是抽象类。(abstract class)
+所有的流都实现了：  java.io.Closeable接口，都是可关闭的，都有 close() 方法。
+流是一个管道，这个是内存和硬盘之间的通道，用完之后一定要关闭，不然会耗费(占用)很多资源。养成好习惯，用完流一定要关闭。
+
+所有的 输出流 都实现了：  java.io.Flushable接口，都是可刷新的，都有 flush() 方法。
+养成一个好习惯，输出流在最终输出之后，一定要记得flush()刷新一下。这个刷新表示将通道/管道当中剩余未输出的数据强行输出完（清空管道！）刷新的作用就是清空管道。
+
+ps：如果没有flush()可能会导致丢失数据。
+
+在java中只要“类名”以 Stream 结尾的都是字节流。以“ Reader/Writer ”结尾的都是字符流。
+
+
+
+
+
 ## java SSM框架
 
 决定看ssm框架视频， [【尚硅谷】SSM框架全套教程，MyBatis+Spring+SpringMVC+SSM整合一套通关_哔哩哔哩_bilibili](https://www.bilibili.com/video/BV1Ya411S7aT/?spm_id_from=333.337.search-card.all.click&vd_source=f25f5a8d75a3a60d5a288f726803ec11) 。
@@ -869,6 +916,10 @@ B站直达：https://www.bilibili.com/video/BV1AP411s7D7
 阿里云盘：https://www.aliyundrive.com/s/SGmyMwGpsZv（教程配套资料请从百度网盘下载）
 
 资料 ： [教案 · 东方凝洛/尚硅谷ssm-springboot-2023视频资料 - 码云 - 开源中国 (gitee.com)](https://gitee.com/fankozhang/ssm/tree/master/教案) 
+
+
+
+
 
 ### myBatis
 
@@ -979,6 +1030,18 @@ MVSQL建表的经验有很多，下边列举一些：
 - 7、每个字段写清楚注释。
 - 8、注意字段的约束，比如：非空、唯一、主键等
 - 时间类型选择：https://blog.csdn.net/m0_48805880/article/details/126423801 （推荐优先使用 datetime ）
+
+### 表关系（一对多、多对多...）
+
+[MySQL表设计思路（一对多、多对多...）_mysql一对多表设计-CSDN博客](https://blog.csdn.net/llg___/article/details/129739613)
+
+参考：[Kimi.ai - 帮你看更大的世界 (moonshot.cn)](https://kimi.moonshot.cn/chat/cph77irdf0j3kuq0dhsg)
+
+### 数据库设计参考
+
+[学生成绩管理系统数据库设计--MySQL_学生成绩管理数据库-CSDN博客](https://blog.csdn.net/Artificial_idiots/article/details/106830628)
+
+[点餐系统数据库设计--SQL Server_数据库学生信息管理系统项目立项书-CSDN博客](https://blog.csdn.net/Artificial_idiots/article/details/122960029)
 
 ## 我的前后端分离测试项目
 

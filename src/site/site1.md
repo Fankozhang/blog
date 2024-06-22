@@ -100,11 +100,15 @@ tag:
 
 
 
-## 软件聚合类网站（技术导航）
+## 软件网站聚合类网站（技术导航）
 
 [软件目录【23年11月最新】 (qq.com)](https://mp.weixin.qq.com/s/dE8Q4nk411zX6ulp1V6hyA)
 
 [独立开发者出海技术栈和工具集合 (chuhai.tools)](https://chuhai.tools/)
+
+
+
+https://download.csdn.net/download/weixin_44385486/86427996
 
 ## css样式风格调试网站
 
@@ -206,7 +210,6 @@ tag:
 
   快速构建图形编辑器
 
-- 
 
 
 
@@ -408,7 +411,7 @@ mybatis-plus-generator-ui ：https://blog.csdn.net/afreon/article/details/129153
 
 [突然发现一个很炸裂的平台！ (qq.com)](https://mp.weixin.qq.com/s/Vc9wLJ10hAHi4EjqXnXimg)
 
-[业务代码生成器 - 猿猿工具 (utilsbox.cn)](https://utilsbox.cn/)    [写了个工具，让 CRUD 开发效率提升100倍，开源咯！ (qq.com)](https://mp.weixin.qq.com/s/V_v-gcXs_cLu23Iyc0Hw8w)
+[业务代码生成器 - 猿猿工具 (utilsbox.cn)](https://utilsbox.cn/)       [写了个工具，让 CRUD 开发效率提升100倍，开源咯！ (qq.com)](https://mp.weixin.qq.com/s/V_v-gcXs_cLu23Iyc0Hw8w)
 
 
 
@@ -416,7 +419,7 @@ mybatis-plus-generator-ui ：https://blog.csdn.net/afreon/article/details/129153
 
 
 
-#### 简易的java模板代码生成
+#### 简易的java模板代码生成(实测能生成)
 
 https://b23.tv/A2l40Th 
 
@@ -471,6 +474,8 @@ b站的up主推荐：https://juejin.cn/post/7322401091237511222#heading-3
 [盒子IM: 盒子IM是一个仿微信的聊天工具。后端采用springboot+netty实现，web端使用vue，移动端使用uniapp，支持私聊、群聊、离线消息、发送图片、文件、语音、emoji表情、视频聊天等功能。 (gitee.com)](https://gitee.com/bluexsx/box-im): 可以学习
 
 
+
+匿名在线即时聊天室：https://gitee.com/howcode/aq-chat#https://gitee.com/howcode/aq-chat-server
 
 ### Vue3 + Pinia + Vite5 仿抖音
 

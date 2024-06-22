@@ -68,6 +68,16 @@ npm 淘宝镜像下载：  npm install --registry=http://registry.npmmirror.com
 
 npm install  --registry=https://registry.npm.taobao.org
 
+
+
+搜索是否存在该依赖包:
+
+```
+npm search element-ui   
+```
+
+
+
 ### nvm
 
 node版本过高，vue项目运行时报错 ： Error: error:0308010C:digital envelope routines::unsupported
@@ -227,6 +237,8 @@ commitId 可以到 git 的历史里面去找。
 
 https://blog.csdn.net/qq_39606853/article/details/122192555
 
+git fetch
+
 ### vscode代码爆红
 
 可以尝试切换编辑器右下角的  LF 和 CRLF     切换文件类型的检测
@@ -275,6 +287,26 @@ ts项目定义未使用，编辑器爆红
      "moduleResolution": "Node",
 }
 ```
+
+#### 无法找到模块 " ***.vue"的声明文件
+
+https://segmentfault.com/q/1010000040178399
+
+在你的全局类型定义文件中, 添加以下内容,  例如：vite-env.d.ts
+
+```ts
+declare module '*.vue' {
+  import type { DefineComponent } from 'vue'
+  const component: DefineComponent<{}, {}, any>
+  export default component
+}
+```
+
+
+
+#### Module ‘“xx.vue“‘ has no default export.Vetur(1192)
+
+禁用 vetur 插件并重启 vscode 项目
 
 
 
@@ -372,6 +404,16 @@ if ('download' in document.createElement('a')) { // 非IE下载
 对于其他的文件下载的内容可参考如下文章：
 
  [前端文件下载的正确打开方式 (qq.com)](https://mp.weixin.qq.com/s/vZiP2ULrLRtqShDJ9u1n2A) 
+
+### 后端返回图片文档流展示
+
+[前端接收数据流实现图片预览效果--ajax 请求二进制流 图片 文件 XMLHttpRequest 请求并处理二进制流数据_前端接受图片流-CSDN博客](https://blog.csdn.net/CSDN_bare/article/details/114839798)
+
+```
+ let src = window.URL.createObjectURL(res)   //将查出的数据转换为图片路径
+```
+
+
 
 ### 根据url下载文件，并设置文件名
 
@@ -537,7 +579,11 @@ import VueOfficePdf from '@vue-office/pdf'
 </script>
 ```
 
+### vue-file-viewer
 
+**（支持格式：pptx,docx,xlsx,pdf,mp4,纯文本和图片）**
+
+https://home.me7.cn/file-viewer-doc/index.html#/start
 
 ## 表单（校验）(生成器)
 
@@ -1932,7 +1978,9 @@ https://dafrok.github.io/vue-baidu-map/#/zh/index
 
 https://www.cnblogs.com/spaortMan/p/13932126.html
 
-VUE BAIDU MAP
+vue-jsonp:  [vue-jsonp - npm (npmjs.com)](https://www.npmjs.com/package/vue-jsonp)
+
+### VUE BAIDU MAP(vue2)
 
 ```
 npm install vue-baidu-map --save
@@ -1982,7 +2030,7 @@ Vue.use(VueJsonp)
 
 返回值里   json.result.location是一个包含坐标系的对象
 
-```
+```js
 //mapCenter: "",
 //mapCenterAddress: { lat: "123", lng: "123" },
 
@@ -2010,6 +2058,71 @@ Vue.use(VueJsonp)
         this.typeMap()
    }
 ```
+
+### Vue3 Baidu Map Gl(vue3)
+
+https://yue1123.github.io/vue3-baidu-map-gl/
+
+npm install vue3-baidu-map-gl      npm install vue-jsonp
+
+main.ts  引入组件
+
+```js
+import baiduMap from "vue3-baidu-map-gl";
+
+const app = createApp(App);
+app.use(baiduMap, {
+  ak: "ak",
+  plugins: ["TrackAnimation"],
+});
+```
+
+
+
+```vue
+<template>
+              <BMap
+                height="300px"
+                :center="mapCenterAddress"
+                enableScrollWheelZoom="true"
+                enableContinuousZoom="true"
+              >
+                <BMarker :position="mapCenterAddress" icon="simple_red" />
+              </BMap>
+</template>
+
+
+<script setup lang="ts">
+import { BCircle } from "vue3-baidu-map-gl";   //中心红点组件
+import { jsonp } from "vue-jsonp";
+onMounted(() => {
+  getAddress();
+});
+
+// 中心地址
+let mapCenter = ref("山东省济南市历城区汉峪金谷");
+// 中心地址坐标系
+let mapCenterAddress = ref({ lat: "", lng: "" });
+    
+const getAddress = () => {
+  jsonp("http://api.map.baidu.com/geocoding/v3/", {
+    address: mapCenter.value,
+    output: "json",
+    ak: "ak",
+    callback: "showLocation",
+  })
+    .then((json) => {
+      mapCenterAddress.value.lat = String(json.result.location.lat);
+      mapCenterAddress.value.lng = String(json.result.location.lng);
+    })
+    .catch((err) => {
+      console.log(err);
+    });
+};
+</script>
+```
+
+
 
 ## Vue实现微信扫码登录
 
@@ -2101,6 +2214,25 @@ router
 
 
 ## Ant Design of Vue
+
+### a-modal 弹框全屏显示
+
+```
+<a-modal class="check-modal" ></a-modal>
+
+<style lang="less">
+.check-modal {
+  .ant-modal {
+    top: 0px !important;
+    height: 100vh;
+  }
+  .ant-modal-content {
+    height: 100vh;
+    overflow: auto;
+  }
+}
+</style>
+```
 
 
 

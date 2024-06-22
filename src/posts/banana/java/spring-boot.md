@@ -841,6 +841,243 @@ public class ProjectExceptionAdvice {
 }
 ```
 
+## 接口参数获取
+
+[SpringBoot接收参数的8种方式_springboot 获取请求参数-CSDN博客](https://blog.csdn.net/qq_44627608/article/details/132425435)
+
+- [1. 直接把请求参数写在方法的形参中](https://blog.csdn.net/qq_44627608/article/details/132425435#1__5)
+
+```java
+    @RequestMapping("/fun1")
+    public Book fun1(String name, Long id){
+        log.info("{}  {}",id,name);
+    }
+```
+
+- [2. 封装一个bean直接来接收](https://blog.csdn.net/qq_44627608/article/details/132425435#2_bean_24)
+
+```java
+@RequestMapping("/fun2")
+    public Book fun2(Book book){
+        log.info("book={}",book);
+        return book;
+    }
+```
+
+- [3. 原生的HttpServletRequest接收](https://blog.csdn.net/qq_44627608/article/details/132425435#3_HttpServletRequest_46)
+
+```java
+@RequestMapping("/fun3")
+    public Book fun3(HttpServletRequest request){
+
+        log.info("{}  {}",request.getParameter("id"),request.getParameter("name"));
+        return new Book(Long.parseLong(request.getParameter("id")),request.getParameter("name"));
+
+    }
+    
+    //  key-value 类型
+    Map<String, String[]> map = request.getParameterMap();
+    //  路径参数
+    String pathInfo = request.getPathInfo();
+    //  body内容
+    ServletInputStream inputStream = request.getInputStream();
+```
+
+- [4. @PathVariable获取rest风格路径参数](https://blog.csdn.net/qq_44627608/article/details/132425435#4_PathVariablerest_74)
+
+```java
+@RequestMapping("/fun4/{id}/{name}")
+    public Book fun4(@PathVariable long id,@PathVariable String name){
+        log.info("{}  {}",id,name);
+        Book book=new Book(id, name);
+        return book;
+
+    }
+```
+
+- [5. @RequestParam绑定请求参数到方法形参](https://blog.csdn.net/qq_44627608/article/details/132425435#5_RequestParam_88)
+
+```java
+@RequestMapping("/fun6")
+    public Book fun6(@RequestParam("name") String name,
+                     @RequestParam("id") Long id){
+
+        log.info("{}  {}",id,name);
+        Book book=new Book(id, name);
+        return book;
+
+}
+
+当请求参数username或者password不存在时会有异常发生,可以通过设置属性required=false解决
+@RequestParam(value="username", required=false)
+```
+
+- [6. @RequestBody绑定请求参数到方法形参](https://blog.csdn.net/qq_44627608/article/details/132425435#6_RequestBody_111)
+
+```java
+@RequestMapping("/fun7")
+    public Book fun7(@RequestBody Book book){
+        log.info("book={}",book);
+        return book;
+
+    }
+```
+
+- [7. @RequestHeader  获取请求头内容](https://blog.csdn.net/qq_44627608/article/details/132425435#7_RequestHeader_127)
+
+```java
+// 方式1：获取单个header属性
+@RequestMapping("/geteHeader")
+public void getHeader(@RequestHeader("user-id") String userId){
+ 
+}
+//方式2：获取所有header属性
+@RequestMapping("/geteHeader")
+public void getHeader(@RequestHeader Map<String, String> headers){
+ 
+}
+//方式3 获取header对象
+@RequestMapping("/geteHeader")
+public void getHeader(@RequestHeader HttpHeaders headers){
+ 
+}
+```
+
+- [8. @CookieValue   ](https://blog.csdn.net/qq_44627608/article/details/132425435#8_CookieValue_150)
+
+```java
+//使用@CookieValue注解来获得指定的 Cookie 的值。
+
+@GetMapping("park/getCookie")
+    public String getCookieValue(@CookieValue("jid") String jId) {
+        System.out.println(jId);
+        return "success";
+    }
+```
+
+
+
+## 传递文件参数接收 ：
+
+[java后端如何接受文件流_mob649e8167c4a3的技术博客_51CTO博客](https://blog.51cto.com/u_16175513/9160128)
+
+[Java 后端接收MultipartFile类型文件接口（带参与不带参）_java接口接收文件-CSDN博客](https://blog.csdn.net/qq_41831842/article/details/113400483)  
+
+[SpringBoot 接口同时接收MultipartFile参数和结构体参数_springboot接收multipart参数-CSDN博客](https://blog.csdn.net/qingquanyingyue/article/details/115231109)
+
+```java
+@RestController
+@RequestMapping(value = "/files")
+@Api(tags = "文件")
+public class FileController {
+    @PostMapping("/upload")
+    @ApiOperation("文件上传 不带参数")
+    public String uploadFile(@RequestParam("file") MultipartFile file) {
+        try {
+            // 获取文件的原始名称
+            String fileName = file.getOriginalFilename();
+            // 指定文件保存的路径
+            String filePath = "/path/to/save/" + fileName;
+            System.out.println(fileName+" "+filePath);
+
+            //// 创建文件输出流
+            //FileOutputStream outputStream = new FileOutputStream(new File(filePath));
+            //// 将文件流写入文件输出流
+            //outputStream.write(file.getBytes());
+            //// 关闭文件输出流
+            //outputStream.close();
+
+            return "File uploaded successfully!";
+        } catch (Exception e) {
+            e.printStackTrace();
+            return "File upload failed!";
+        }
+    }
+
+    @PostMapping("/upload2")
+    @ApiOperation("文件上传2 带参数")
+    public String uploadFile2(@RequestBody Book book, @RequestParam("file") MultipartFile file) {
+        try {
+            // 获取文件的原始名称
+            String fileName = file.getOriginalFilename();
+            // 指定文件保存的路径
+            String filePath = "/path/to/save/" + fileName;
+            System.out.println(fileName+" "+filePath);
+            System.out.println(book.getId()+book.getName()+" "+book.getAuthor() );
+
+            return "File uploaded successfully!";
+        } catch (Exception e) {
+            e.printStackTrace();
+            return "File upload failed!";
+        }
+    }
+}
+```
+
+```js
+ <input type="file" @change="uploadFile" />
+ 
+ const uploadFile = (e) => {
+     
+     // fetch的get和post传参  https://blog.csdn.net/HansExploration/article/details/85044891
+     
+  let formData = new FormData();
+  // 除了文件不带参数的请求(文件放在请求体)
+  formData.append("file", e.target.files[0]);
+  let url = "http://127.0.0.1:8084/files/upload";
+  fetch(url, {
+    method: "POST",
+    body: formData,
+  })
+    .then((response) => response.text())
+    .then((result) => {
+      console.log(result);
+    })
+    .catch((error) => {
+      console.error(error);
+    });
+     
+
+  // 除了文件还有其它参数的请求，（文件放在请求体，query参数拼接到 url）
+  formData.append("file", e.target.files[0]);
+  let url2 = "http://127.0.0.1:8084/files/upload2";
+  let params = {
+    id: "1",
+    name: "书名",
+    author: "张三",
+  };
+  if (params) {
+    let paramsArray = [];
+    //拼接参数
+    Object.keys(params).forEach((key) =>
+      paramsArray.push(key + "=" + params[key])
+    );
+    if (url2.search(/\?/) === -1) {
+      url2 += "?" + paramsArray.join("&");
+    } else {
+      url2 += "&" + paramsArray.join("&");
+    }
+  }
+  fetch(url2, {
+    method: "POST",
+    body: formData,
+  })
+    .then((response) => response.text())
+    .then((result) => {
+      console.log(result);
+    })
+    .catch((error) => {
+      console.error(error);
+    });
+};
+```
+
+
+
+## 同时传递参数和文件的多种方式
+
+[spring boot项目同时传递参数和文件的多种方式_springboot接收文件和其他参数-CSDN博客](https://blog.csdn.net/Vampire_1122/article/details/127686225)
+
 ## 打包
 
 打开maven面板， 先clean,在点击package打包（点击 Toggle 'Skip Tests'Mode 跳过测试过程，提示不安全）
@@ -2665,6 +2902,8 @@ SpringBoot:提供了缓存技术，方便缓存使用
 
 ### 定时任务
 
+在线 Cron 表达式生成器：[http://cron.qqe2.com/open in new window](http://cron.qqe2.com/) 。
+
 [Java 定时任务详解 | JavaGuide](https://javaguide.cn/system-design/schedule-task.html#redis)
 
 市面上流行的定时任务技术：Quartz ，Spring Task
@@ -2676,6 +2915,42 @@ springboot整合Quartz
 工作明细（JobDetail):用于描述定时工作相关的信息
 触发器(Trigger):用于描述触发工作的规则，通常使用cron表达式定义调度规则
 调度器(Scheduler):描述了工作明细与触发器的对应关系
+
+#### [Spring Task ](https://javaguide.cn/system-design/schedule-task.html#spring-task)  只支持单机
+
+参考：[【开发篇】十五、Spring Task实现定时任务_基于spring task实现定时任务-CSDN博客](https://blog.csdn.net/llg___/article/details/133578754)
+
+在入口函数加上 `@EnableScheduling `开启[定时任务](https://so.csdn.net/so/search?q=定时任务&spm=1001.2101.3001.7020)功能
+
+```java
+@SpringBootApplication
+@MapperScan(value = "com.example.*.mapper*")
+@EnableScheduling
+public class TestApplication {
+
+	public static void main(String[] args) {
+		System.out.println("我的测试项目启动了");
+		SpringApplication.run(TestApplication.class, args);
+	}
+}
+```
+
+通过`@Scheduled`注解方式自定义定时任务
+
+```java
+@Component
+public class ScheduledBean {    
+
+	@Scheduled(cron = "0/5 * * * * ?")    
+	public void printLog(){  
+	      
+		System.out.println(Thread.currentThread().getName()+":run...");  
+		 
+	}
+}
+```
+
+
 
 #### xxl-job
 
@@ -2863,6 +3138,10 @@ xxl.job.executor.port=9999
 以上步骤完成后，你的Spring项目应该已经成功集成了XXL-JOB，并且可以通过XXL-JOB的调度中心来管理和监控任务的执行。
 
 
+
+#### PowerJob
+
+[PowerJob](http://www.powerjob.tech/index.html)
 
 ## springBoot 项目常用maven配置
 
@@ -3465,7 +3744,9 @@ RabbitMQ一共四种交换机，如下所示：
 
 
 
+## Excel 导入导出
 
+[关于Easyexcel | Easy Excel 官网 (alibaba.com)](https://easyexcel.opensource.alibaba.com/docs/current/)
 
 
 
@@ -3568,6 +3849,10 @@ https://blog.csdn.net/weixin_41367523/article/details/106944130
 **设置ftl模板：**
 
 在word文档中创建模板，包括占位符的设置，创建完成后导出为 xml 后缀名的文件，  在springBoot项目的 resources/templates 目录下放入 xml 文件并改后缀名为 ftl 。如此模板文件设置完成。
+
+**idea里面 ftl 文档格式化**
+
+
 
 **向模板填充数据并导出**
 
@@ -3679,6 +3964,149 @@ const getTheFreeMarkerPdf=()=>{
   
 }
 ```
+
+
+
+### 根据 freemarker 模板填充数据，并保存到本地文件夹
+
+参考：Gitee：https://gitee.com/lenve/generate_code
+
+**模板：**
+
+BookFreeMarkerOut.txt.ftl     （txt模板）
+
+```
+${id}
+${name}
+${author}
+```
+
+
+
+freeMarkerTest.doc.ftl        （doc模板，可以按照之前的方式生成）
+
+填充处内容和txt模板填充处内容相同
+
+
+
+**实体类**
+
+```java
+@Data
+@TableName("book")
+@ApiModel(value = "书本信息")
+public class Book {
+    @ApiModelProperty(value = "主键id")
+    private Long id;
+    @ApiModelProperty(value = "书本名")
+    private String  name;
+    @ApiModelProperty(value = "作者")
+    private String  author;
+}
+```
+
+
+
+**实现代码**
+
+```java
+package com.example.mytest.test.controller;
+
+import com.example.mytest.test.entity.Book;
+import freemarker.cache.ClassTemplateLoader;
+import freemarker.template.Configuration;
+import freemarker.template.Template;
+import freemarker.template.TemplateException;
+import io.swagger.annotations.Api;
+import lombok.extern.slf4j.Slf4j;
+import org.springframework.web.bind.annotation.*;
+
+import javax.servlet.http.HttpServletRequest;
+import java.io.File;
+import java.io.FileOutputStream;
+import java.io.IOException;
+import java.io.OutputStreamWriter;
+import java.util.ArrayList;
+import java.util.List;
+
+/**
+ * @author 张帆
+ * @version 1.0
+ * Create by 2024/6/19 17:19
+ */
+
+@Slf4j
+@RestController
+@RequestMapping("/freeMarkerOut")
+@Api(tags = "freeMarker 模板生成文件并保存")
+public class FreeMarkerOutClass {
+    // 配置信息
+    Configuration cfg = null;
+    {
+        cfg = new Configuration(Configuration.VERSION_2_3_30);
+        // 模板放在templates目录下面的
+        cfg.setTemplateLoader(new ClassTemplateLoader(FreeMarkerOutClass.class, "/templates"));
+        cfg.setDefaultEncoding("UTF-8");
+    }
+    @GetMapping("/generateCode")
+    public String generateCode( HttpServletRequest req) {
+        //  要使用的列表数据 （模板填充的数据，自行生成，或数据库获取）
+        List<Book> bookList =new ArrayList<>();
+        Book book=new Book();
+        book.setId(new Long(1));
+        book.setName("西游记");
+        book.setAuthor("吴承恩");
+        bookList.add(book);
+        // 模板填入数据后导出的文档存放在电脑的哪个位置
+        return generateCode(bookList,"E:\\前端开源项目\\java简易代码生成\\codeCave" );
+    }
+
+    public String generateCode(List<Book> bookList, String realPath){
+        try {
+            // 数据填充到哪个模板里面， 这里用了两个不同的模板，txt和doc的，都能生成成功
+            Template modelTemplate = cfg.getTemplate("BookFreeMarkerOut.txt.ftl");
+            Template modelTemplate2 = cfg.getTemplate("freeMarkerTest.doc.ftl");
+
+            for (Book book : bookList) {
+                // 循环列表数据，填充到模板中 （路径有需要的可以在做进一步修改）
+                String path = realPath;
+                // 选择生成到哪个模板里面，并详细一下文件生成后存放的目录位置。
+                generate(modelTemplate, book, path + "/BookFreeMarkerOut/");
+                generate(modelTemplate2, book, path + "/BookFreeMarkerOut/");
+
+            }
+
+            return "生成成功123";
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return "生成失败123";
+    }
+
+    private void generate(Template template, Book book, String path) throws IOException, TemplateException {
+        File folder = new File(path);
+        if (!folder.exists()) {
+            folder.mkdirs();
+        }
+        String fileName = path + "/" + book.getName() + template.getName().replace(".ftl", "").replace("Model", "");
+        FileOutputStream fos = new FileOutputStream(fileName);
+        OutputStreamWriter out = new OutputStreamWriter(fos);
+        template.process(book,out);
+        fos.close();
+        out.close();
+    }
+
+}
+
+```
+
+
+
+**最终实现的效果**
+
+E:\前端开源项目\java简易代码生成\codeCave\BookFreeMarkerOut  目录下生成  一个 txt 文件 和一个 doc 文件，  已经填充上数据（1，西游记，吴承恩）
+
+
 
 ## Poi-tl  Word模板引擎
 
