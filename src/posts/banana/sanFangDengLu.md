@@ -235,3 +235,6 @@ public class RestAuthController {
 // .scopes(AuthScopeUtils.getScopes(AuthGiteeScope.USER_INFO))   // 只需要勾选 USER_INFO 的权限
 ```
 
+## MaxKey单点登录
+
+[MaxKey概述 | MaxKey单点登录认证系统](https://www.maxkey.top/doc/docs/intro/)

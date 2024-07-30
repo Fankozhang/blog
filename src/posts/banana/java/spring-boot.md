@@ -4205,3 +4205,155 @@ MINIO_SECRET_KEY ：密码（账号长度必须大于等于5，密码长度必�
 ### DTO、BO、PO、VO
 
 https://juejin.cn/post/7334691453833166848
+
+
+
+## 工作流 flowable
+
+https://www.bilibili.com/video/BV1oQ4y1J76o?p=1&vd_source=f25f5a8d75a3a60d5a288f726803ec11
+
+flowable相关资料
+链接：https://pan.baidu.com/s/1RqIPTSrLiz1I_T6N41FGuA 
+提取码：boge
+
+### 部署 flowable-ui：
+
+[通过 Flowable-UI 来体验一把 Flowable 流程引擎 - 掘金 (juejin.cn)](https://juejin.cn/post/7156530891576049671#heading-0)
+
+https://juejin.cn/post/7156530891576049671#heading-14
+
+docker 部署   :         可参考：[Docker 安装Flowable-ui_docker flowable-CSDN博客](https://blog.csdn.net/li_wen_jin/article/details/131591300)
+
+```
+docker run -d --name flowableui -p 8086:8080 flowable/flowable-ui
+```
+
+访问：http://ip:8086/flowable-ui    默认账号密码：admin/test
+
+###  springboot项目集成 
+
+依赖：
+
+```xml
+        <dependency>
+			<groupId>org.flowable</groupId>
+			<artifactId>flowable-spring-boot-starter</artifactId>
+			<version>6.6.0</version>
+		</dependency>
+```
+
+application.yml  (除了数据库配置，在增加 flowable的相关配置)
+
+```yml
+flowable:
+  #关闭定时任务JOB
+  async-executor-activate: true
+  #将databaseSchemaUpdate设置为trUe。当FLowable发现库与数据库表结构不一致时，会自动将数据库表结构升级至新版本。
+  database-schema-update: true
+```
+
+此时运行springBoot项目，会在配置的数据库中生成 flowable 相关的表。
+
+Spring Boot 整合流程引擎 Flowable示例：https://juejin.cn/post/7098870076777955335
+
+### flowable示例
+
+https://juejin.cn/post/7104157337669238798
+
+Springboot整合Flowable并进行一个通用审批流程应用实践:https://blog.csdn.net/jxlhljh/article/details/124466268
+
+#### 部署
+
+流程引擎部署测试示例（没有配置数据库连接）：
+
+```java
+@Test
+    void deployFlow(){
+        //流程以擎的配置对象关联相关的数据源
+        ProcessEngineConfiguration processEngineConfiguration=new StandaloneProcessEngineConfiguration();
+        processEngineConfiguration.setJdbcUrl("jdbc:mysql://127.0.0.1:3306/test?serverTimezone=GMT%2B8&useUnicode=true&characterEncoding=utf-8&useSSL=false&allowPublicKeyRetrieval=true")
+                .setJdbcDriver("com.mysql.cj.jdbc.Driver")
+                .setJdbcUsername("root")
+                .setJdbcPassword("123456")
+                .setDatabaseSchemaUpdate(ProcessEngineConfiguration.DB_SCHEMA_UPDATE_TRUE);
+        //获取流程引擎对象
+        ProcessEngine processEngine=processEngineConfiguration.buildProcessEngine();
+        //部署流程需要茯取RepositoryService
+        RepositoryService reporsitoryService=processEngine.getRepositoryService();
+        Deployment deployment=reporsitoryService.createDeployment()
+                // 一次部署操作可以部署多个流程定义  （ClasspathResource是在 resources 里面的 bpmn 的文件路径）
+                .addClasspathResource("process/audit.bpmn20.xml")
+                .name("审核流程")
+                .deploy();  //部署的方法
+        System.out.println("deployment.getId"+deployment.getId());
+    }
+```
+
+流程引擎部署测试示例（配置了数据库连接，生成的id有区别）：
+
+```java
+    @Autowired
+    ProcessEngine processEngine;
+
+    @Test
+    void deployFlowBoot(){
+        System.out.println("---"+processEngine);
+        //部署流程需要茯取RepositoryService
+        RepositoryService reporsitoryService=processEngine.getRepositoryService();
+        Deployment deployment=reporsitoryService.createDeployment()
+                // 一次部署操作可以部署多个流程定义
+                .addClasspathResource("process/audit.bpmn20.xml")
+                .name("审核流程")
+                .deploy();  //部署的方法
+        System.out.println("deployment.getId"+deployment.getId());
+    }
+```
+
+#### 启动流程实例
+
+```java
+ // 启动流程实例
+    @Test
+    void start(){
+        RuntimeService runtimeService=processEngine.getRuntimeService();
+        // 在流程定义表中动态维护（部署时生成的，从数据库获取, 取 act_re_product表的 ID_）
+        String processId="audit:4:f58aba97-4bb8-11ef-9c8a-4c796e923980";
+        //我们创建流程图的时候自定义的。注意保证唯一
+        String processKey="audit";
+        // 根据流程定义ID启动流程实例
+        ProcessInstance processInstance= runtimeService.startProcessInstanceById(processId);
+
+    }
+```
+
+#### 查询待办信息
+
+```java
+ // 根据用户查询待办信息
+    @Test
+    void findFlow(){
+        TaskService taskService=processEngine.getTaskService();
+        List<Task> list= taskService.createTaskQuery()
+                .taskAssignee("zhangsan") // 指定查询的条件（这里是通过人名查出来）
+                .list();  //查出的任务列表
+        list.forEach(System.out::println);   // 打印出这个人的任务列表
+    }
+```
+
+#### 任务审批
+
+```java
+// 任务审批
+    @Test
+    void completeTast(){
+        TaskService taskService=processEngine.getTaskService();
+        // 完成任务（传任务Id）
+        taskService.complete("b2de895f-4bbf-11ef-93ea-4c796e923980");
+    }
+```
+
+
+
+## Camunda 流程引擎
+
+[SpringBoot 集成 Camunda 流程引擎，实现一套完整的业务流程 (qq.com)](https://mp.weixin.qq.com/s/1rH-2rAzTbn8bL-wi_dDfw)

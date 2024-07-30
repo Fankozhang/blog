@@ -11,6 +11,10 @@ typora-root-url: ..\.vuepress\publixi
 
 # 项目部署相关
 
+## Linux 服务器运维管理面板
+
+1Panel :  [在线安装 - 1Panel 文档](https://1panel.cn/docs/installation/online_installation/#1)
+
 ## 端口操作：
 
 https://blog.csdn.net/daocaokafei/article/details/115364111
@@ -263,6 +267,10 @@ sudo systemctl restart nginx
 sudo apt-get update
 
 sudo apt-get install [openjdk](https://so.csdn.net/so/search?q=openjdk&spm=1001.2101.3001.7020)-8-jdk
+
+
+
+centos :  yum install java-1.8.0-openjdk* -y
 ```
 
 
@@ -330,6 +338,14 @@ navicat链接mysql  报错 2003，具体可能的问题如下：
 
 至此，我的navicat已经可以正常连上服务器的  mysql，正常导入数据，
 
+
+
+
+
+centos:  [centos安装 mysql8.0 - 搜索 (bing.com)](https://cn.bing.com/search?pc=&q=centos安装 mysql8.0)
+
+
+
 ### redis安装
 
 [Redis-6.2.5 安装 Linux环境(单机)_redis6.2需要gcc什么般般-CSDN博客](https://gblfy.blog.csdn.net/article/details/114371657)
@@ -365,6 +381,126 @@ Web server failed to start. Port 8080 was already in use.
 ### docker 安装 nginx
 
 实测可用：https://blog.csdn.net/BThinker/article/details/123507820
+
+
+
+## vue项目跨域配置
+
+我部署的一个springBoot+vue的项目，用nginx部署后，一直请求不到，困扰了很长时间，最后发现是vue项目配置跨域不对的问题。
+
+vue.config.js  跨域配置参考如下：
+
+```
+// 可用
+  server: {
+    port: 80,
+    host: true,
+    open: true,
+    proxy: {
+      '/api': {
+        target: 'http://12.12.12.12:8084',
+        changeOrigin: true,
+        rewrite: (p) => p.replace(/^\/api/, '')
+      }
+    }
+  },
+```
+
+.env.local
+
+```
+配置跨域的请求路径
+
+VITE_APP_BASE_API = '/api'
+```
+
+axios请求 baseUrl配置
+
+```
+import axios from "axios";
+//  导出基准地址，原因： 其他地方不是通过 axios 发送请求的地方用上基准地址
+// export const baseURL='http://localhost:8084/api'  不能这麽用，部署后请求不到
+export const baseURL=import.meta.env.VITE_APP_BASE_API
+const instance=axios.create({
+    // axios 的一些配置，baseurl timeout 
+    baseURL,
+    timeout:5000
+})
+```
+
+部署后 nginx 配置
+
+```
+location /api/ {
+            proxy_set_header Host $http_host;
+            proxy_set_header X-Real-IP $remote_addr;
+            proxy_set_header REMOTE-HOST $remote_addr;
+            proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
+            proxy_pass http://12.12.12.12:8084/;
+        }
+```
+
+
+
+## java项目跨域配置，swagger资源映射
+
+WebMvcConfig.java
+
+```java
+@Slf4j
+@Configuration
+@EnableSwagger2
+@EnableKnife4j
+public class WebMvcConfig extends WebMvcConfigurationSupport {
+    //  解决跨域问题
+    @Override
+    public void addCorsMappings(CorsRegistry registry) {
+        registry.addMapping("/**") // 所有接口
+                .allowCredentials(true) // 是否发送 Cookie
+                .allowedOriginPatterns("*") // 支持域
+                .allowedMethods("GET", "POST", "PUT", "DELETE") // 支持方法
+                .allowedHeaders("*")
+                .exposedHeaders("*");
+    }
+
+    /**
+     * @param registry:
+     * @return void
+     * @author 张帆
+     * @description 设置资源映射，swagger访问
+     * @date 2023/6/3 17:11
+     */
+    @Override
+    protected void addResourceHandlers(ResourceHandlerRegistry registry) {
+        log.info("资源映射");
+        registry.addResourceHandler("doc.html").addResourceLocations("classpath:/META-INF/resources/");
+        registry.addResourceHandler("/webjars/**").addResourceLocations("classpath:/META-INF/resources/webjars/");      registry.addResourceHandler("/backend/**").addResourceLocations("classpath:/backend/");
+        registry.addResourceHandler("/front/**").addResourceLocations("classpath:/front/");
+    }
+
+    @Bean
+    public Docket createRestApi() {
+        // 文档类型
+        return new Docket(DocumentationType.SWAGGER_2)
+                .apiInfo(apiInfo())
+                .select()
+                .apis(RequestHandlerSelectors.basePackage("com.example.mytest.test.controller"))
+                .paths(PathSelectors.any())
+                .build();
+    }
+
+    private ApiInfo apiInfo() {
+        return new ApiInfoBuilder()
+                .title("mytest")
+                .version("1.0")
+                .description("mytest接口文档")
+                .build();
+    }
+
+}
+```
+
+
 
 ## Minio
 
@@ -607,3 +743,11 @@ yum安装如下：
 [Java开发者在Linux环境安装各类开发工具汇总_java linux安装常用软件-CSDN博客](https://blog.csdn.net/qq_38628046/article/details/123591295)
 
 yum install -y git
+
+
+
+## 线上文件路径
+
+/home/mysql    nginx  minio 
+
+jar包  /usr/local/app

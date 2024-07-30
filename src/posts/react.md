@@ -36,13 +36,19 @@ ReactPc项目讲义: https://www.yuque.com/fechaichai/tzzlh1
 
 https://juejin.cn/post/7240838046789812282?searchId=20240111164719A152F422F9A9C8A6FEFD#heading-11
 
+[企业级前端工程化配置指南](https://segmentfault.com/a/1190000044458156)https://segmentfault.com/a/1190000044458156#item-6
+
 ```
 npm init vite@latest
 ```
 
 按照vite创建项目流程，选择react配置即可创建react项目
 
-### 创建路由
+
+
+[一文搞定react-router-dom最新版V6路由的入门及使用_react-router-domv6-CSDN博客](https://blog.csdn.net/qq_38188228/article/details/136549361)
+
+### 创建路由(方法1)
 
 ```
 npm install react-router-dom
@@ -110,6 +116,8 @@ function About() {
 export default About
 ```
 
+### 路由参数获取
+
 Success.jsx  (获取参数)
 
 当路由和传参是以下路径时，用 useSearchParams 来获取参数
@@ -149,14 +157,54 @@ return (
 export default Success
 ```
 
+### 创建路由(方法2)
+
+参考：[浅析React Router V6 useRoutes的使用-CSDN博客](https://blog.csdn.net/ncgNCGg/article/details/122409089)
+
+```jsx
+import { BrowserRouter as Router, useRoutes } from 'react-router-dom';
+import About from './About';
+import Home from './Home';
+const MyRoutes = () => {
+	return useRoutes([
+		{
+			path: '/',
+			element: <Home />,
+		},
+		{
+			path: '/home',
+			element: <Home />,
+		},
+		{
+			path: '/about',
+			element: <About />
+		},
+	]);
+};
+function App() {
+	return (
+		<div>
+			<Router>
+				<MyRoutes />
+			</Router>
+		</div>
+	);
+}
+export default App;
+```
+
+
+
 ### 引入 ant design
+
+[在 Vite 中使用 - Ant Design (antgroup.com)](https://ant-design.antgroup.com/docs/react/use-with-vite-cn)
 
 ```
 npm install antd --save    /   yarn add antd     /  cnpm install antd --save
 ```
 
 ```
-引入 Antd的css(全局样式）没有引入样式，样式也存在（非必要项）
+引入 Antd的css(全局样式）  没有引入样式，样式也存在（非必要项）
 
 @import 'antd/dist/antd.css';
 ```
@@ -167,6 +215,21 @@ jsx组件内使用（先引入，再使用）
   import { Button } from 'antd';
   
   <Button type="primary">Primary</Button>
+```
+
+#### 组件中文配置
+
+App 组件外包裹一层  ConfigProvider
+
+```
+import { ConfigProvider } from 'antd';
+import zhCN from 'antd/es/locale/zh_CN';
+ 
+return (
+  <ConfigProvider locale={zhCN}>
+    <App />
+  </ConfigProvider>
+);
 ```
 
 
@@ -217,5 +280,735 @@ export default function Page() {
     </button>
   )
 }
+```
+
+## umi 创建项目
+
+https://umijs.org/docs/guides/getting-started
+
+
+
+## 组件
+
+### 图片展示
+
+```
+import imgUrl from './assets/MyLogo.jpg'
+
+<img src={imgUrl} style={{width:'100px',height:'100px'}}/>
+
+src里面直接写图片路径显示不出来
+```
+
+
+
+## 父组件调用子组件
+
+参考： [react v-18父组件调用子组件的方法和数据_react18 父组件调用子组件方法-CSDN博客](https://blog.csdn.net/QQ_Empire/article/details/135134779)
+
+###  常见问题：
+
+`Warning: Function components cannot be given refs. Attempts to access this ref will fail. Did you mean to use React.forwardRef()?`
+
+发生这种情况是因为默认情况下，React 不允许组件访问其他组件的 DOM 节点。甚至自己的子组件也不行！这是故意的。Refs 是一种脱围机制，应该谨慎使用。手动操作 **另一个** 组件的 DOM 节点会使你的代码更加脆弱。
+
+相反，**想要** 暴露其 DOM 节点的组件必须**选择**该行为。一个组件可以指定将它的 ref “转发”给一个子组件。下面是如何使用 `forwardRef` API：
+
+
+
+### 子组件
+
+[子组件](https://so.csdn.net/so/search?q=子组件&spm=1001.2101.3001.7020)     (通过useImperativeHandle() 抛出）
+
+```jsx
+import React, { useImperativeHandle } from "react";
+// 注意 props 和 ref 是通过 React.forwardRef 传递的
+// eslint-disable-next-line react/display-name
+const TestThing =React.forwardRef((props ,ref) => {
+    useImperativeHandle(
+        ref,
+        () => ({ num,setTheNum }) //父组件通过ref获取值，要在这里抛出
+      );
+    const [num, setNum] = useState(5)
+    const setTheNum=(addNum)=>{
+        setNum(num+addNum)
+    }
+    return (
+      <div ref={ref}>
+        {num}
+      </div>
+    )
+  })
+  
+  export default TestThing
+```
+
+
+
+### 父组件
+
+```jsx
+import { useRef } from 'react';
+import TestThing from './components/TestThing/index.jsx'
+function App () {
+  // ref 通过 ref 绑定子组件
+  const TestThingRef = useRef(null);
+
+  const clickComp=()=>{
+    // TestThingRef.current 获取子组件抛出的数据和方法
+    console.log(TestThingRef.current)  
+    TestThingRef.current.setTheNum(2)   
+  }
+ 
+  return (
+    <div className="App">
+         <div>
+        <TestThing ref={TestThingRef}></TestThing>
+        <button onClick={clickComp}>新增</button>
+      </div>
+    </div>
+  )
+}
+
+export default App
+```
+
+
+
+## redux使用
+
+[一文让你彻底弄懂Redux的基本原理以及其如何在React中使用！ - 掘金 (juejin.cn)](https://juejin.cn/post/7369211590364069899?searchId=20240715162256D9B73649BE5BC206FDD5)
+
+### 依赖下载
+
+> 在React中使用redux，官方建议安装两个其他插件 - Redux Toolkit 和 React-Redux
+
+1. `Redux Toolkit（RTK）`：官方推荐编写Redux逻辑的方式，是一套**工具**的集合集，简化书写方式
+2. `React-Redux` ：用来 链接 Redux 和 React 组件的**中间件**
+
+```
+npm install @reduxjs/toolkit react-redux
+```
+
+### store/modules/counterStore.js
+
+```js
+import { createSlice } from '@reduxjs/toolkit'
+
+const counter = createSlice({
+  // 模块名称独一无二
+  name: 'counter',
+  // 初始数据
+  initialState: {
+    count: 5
+  },
+  // 修改数据的同步方法
+  reducers: {
+    // 不传参修改
+    add (state) {
+      state.count++
+    },
+    //传参修改， action为一个对象 对象中有一个固定的属性叫做payload 为传递过来的参数
+    add2(state, action){
+        state.count=state.count+action.payload
+    }
+  }
+})
+
+const { add,add2 } = counter.actions
+const counterReducer = counter.reducer
+
+// 导出修改数据的函数
+export { add ,add2}
+// 导出reducer
+export default counterReducer
+```
+
+### store/index.js
+
+```js
+import { configureStore } from '@reduxjs/toolkit'
+
+import counterReducer from './modules/counterStore'
+
+export default configureStore({
+  reducer: {
+    // 注册子模块
+    counter: counterReducer
+  }
+})
+```
+
+
+
+### 入口文件中，通过Provider提供store数据
+
+```js
+import React from 'react'
+import ReactDOM from 'react-dom/client'
+import App from './App.jsx'
+import './index.css'
+
+// 导入store
+import store from './store'
+// 导入store提供组件Provider
+import { Provider } from 'react-redux'
+
+ReactDOM.createRoot(document.getElementById('root')).render(
+  // 提供store数据
+  <React.StrictMode>
+  <Provider store={store}>
+   
+      <App />
+   
+  </Provider>
+   </React.StrictMode>
+  
+)
+```
+
+
+
+### 页面使用数据，修改操作 App.js
+
+```jsx
+import { useSelector, useDispatch } from 'react-redux'
+import { add,add2 } from './store/modules/counterStore'
+
+function App () {
+  // 使用数据
+  const { count } = useSelector(state => state.counter)
+  // 修改数据
+  const dispatch = useDispatch()
+  const clickHandler = () => {
+    // 1. 生成action对象
+    const action = add()
+    // 2. 提交action进行数据更新
+    dispatch(action)
+  }
+  const clickHandler2=(num)=>{
+    console.log(num)
+    // 1. 生成action对象
+    const action2 = add2(num)
+    // 2. 提交action进行数据更新
+    dispatch(action2)
+  }
+  
+  return (
+    <div className="App">
+      {count}
+      {/* 不传参修改count的值 */}
+      <button onClick={clickHandler}>+</button>
+      {/* 传参修改count的值 */}
+      <button onClick={()=>{clickHandler2(3)}}>+3</button>
+    </div>
+  )
+}
+
+export default App
+```
+
+
+
+## axios
+
+[React 项目中引入 Axios | Axios 中文文档 (jsnoteclub.com)](https://jsnoteclub.com/axios/best-practices/react-axios/)
+
+```
+npm install axios
+```
+
+### 简易封装：request.js
+
+```js
+import axios from "axios"
+
+// 创建一个 Axios 实例
+const request = axios.create({
+  baseURL: "http://1.94.16.149:8084", // 设置基本URL
+  timeout: 5000, // 设置超时时间
+//   headers: { Authorization: "Bearer " + token } // 设置请求头
+})
+
+// 添加请求拦截器
+request.interceptors.request.use(
+  (config) => {
+    // 在发送请求之前做一些处理，比如添加loading效果
+    return config
+  },
+  (error) => {
+    // 对请求错误做些什么
+    return Promise.reject(error)
+  }
+)
+
+// 添加响应拦截器
+request.interceptors.response.use(
+  (response) => {
+    // 对响应数据做一些处理，比如解析响应结果
+    return response.data
+  },
+  (error) => {
+    // 对响应错误做些什么
+    return Promise.reject(error)
+  }
+)
+
+export default request
+```
+
+### 使用
+
+```jsx
+
+import {useState, useEffect } from 'react';
+import request from './utils/request.js';
+function App () {
+  const [responseData, setResponseData] = useState(null);
+  const [error, setError] = useState(null);
+  const getList=()=>{
+    request.get('/classes/page/list').then(res=>{
+      console.log(res.data.records)
+      setResponseData(res.data.records)
+    }).catch(error => {
+      // 处理错误
+      setError(error);
+    });
+  }
+
+  useEffect(() => {
+    getList()
+  }, []); // 添加依赖以确保只在组件挂载时发起请求
+  
+  return (
+    <div className="App">
+      <div>
+        {
+          responseData && responseData.map(item => (
+            <div key={item.id}>{item.className}-{item.classDesc}</div>
+          ))
+        }
+      </div>
+    </div>
+  )
+}
+
+export default App
+
+```
+
+## Hooks
+
+[React 内置 Hook – React 中文文档](https://zh-hans.react.dev/reference/react/hooks)
+
+[【React Hooks】掌握及对比常用的8个Hooks（优化及使用场景） - 掘金 (juejin.cn)](https://juejin.cn/post/6916317848386142216#heading-21)
+
+### useState
+
+```
+const [state, setState] = useState(initialState)                // initialState 初始值
+```
+
+修改对象&&数组的值： [React函数组件状态Hook—useState《进阶-对象&&数组》_react usestate 对象数组-CSDN博客](https://blog.csdn.net/qq_42696432/article/details/134444702)
+
+需要注意 setState 是异步操作
+
+
+
+### useRef
+
+#### 通过 ref 操作 DOM (参考父组件调用子组件)
+
+React 将会把 DOM 节点设置为 ref 对象的 `current` 属性。现在可以借助 ref 对象访问 `<input>` 的 DOM 节点
+
+```jsx
+import { useRef } from 'react';
+
+function MyComponent() {
+  const inputRef = useRef(null);
+  // ...
+  return <input ref={inputRef} />;
+}
+
+function handleClick() {
+    inputRef.current.focus();
+  }
+```
+
+#### 无法获取自定义组件的 ref 
+
+[useRef – React 中文文档](https://zh-hans.react.dev/reference/react/useRef#i-cant-get-a-ref-to-a-custom-component)
+
+默认情况下，自定义组件不会暴露它们内部 DOM 节点的 ref。
+
+需要将自定义组件包装在 [`forwardRef`](https://zh-hans.react.dev/reference/react/forwardRef) 里
+
+```jsx
+import { forwardRef } from 'react';
+
+const MyInput = forwardRef(({ value, onChange }, ref) => {
+  return (
+    <input
+      value={value}
+      onChange={onChange}
+      ref={ref}
+    />
+  );
+});
+
+export default MyInput;
+```
+
+
+
+### **useEffect**
+
+#### **1. 不添加依赖项**
+
+组件首次渲染执行一次，以及不管是哪个状态更改引起组件更新时都会重新执行
+
+```js
+useEffect(()=>{
+    console.log('副作用执行了')
+})
+```
+
+#### **2. 添加空数组**
+
+组件只在首次渲染时执行一次
+
+```js
+useEffect(()=>{
+	 console.log('副作用执行了')
+},[])
+```
+
+#### **3. 添加特定依赖项**
+
+副作用函数在首次渲染时执行，在依赖项发生变化时重新执行
+
+```js
+useEffect(() => {    
+        console.log('副作用执行了')  
+    }, [count])  
+```
+
+
+
+## 简易的增删改查示例
+
+可参考： https://gitee.com/kong_yiji_and_lavmi/react-ant-admin/blob/vite/src/pages/list/search.tsx
+
+https://blog.csdn.net/CuiCui_web/article/details/107108677
+
+### App.jsx 表格页
+
+```jsx
+import { useState, useEffect, useRef } from "react";
+import request from "./utils/request.js";    // 封装 axios 请求
+import { Button } from "antd";
+import AddOrUpdate from "./components/AddOrUpdate/index.jsx";
+import { Table ,Pagination,Input} from "antd";
+function App() {
+  const columns = [
+    {
+      title: "id",
+      dataIndex: "id",
+      key: "id",
+    },
+    {
+      title: "班级名",
+      dataIndex: "className",
+      key: "className",
+    },
+    {
+      title: "班级描述",
+      dataIndex: "classDesc",
+      key: "classDesc",
+    },
+    {
+      title: "操作",
+      key: "operation",
+      fixed: "right",
+      width: 100,
+      render: (_, record) => (
+        <>
+          <a
+            onClick={() => {
+              editIt(record);
+            }}
+          >
+            修改
+          </a>
+          <a
+            style={{ marginLeft: "10px" }}
+            onClick={() => {
+              delIt(record);
+            }}
+          >
+            删除
+          </a>
+        </>
+      ),
+    },
+  ];
+  const [queryParam,setQueryParam]=useState({
+    pageNum: 1,
+    pageSize: 5,
+  });
+  const [total,setTotal]=useState(0)
+  const [responseData, setResponseData] = useState(null);
+  const [error, setError] = useState(null);
+  const getList = () => {
+    request
+      .get("/classes/page/list",{params:queryParam})
+      .then((res) => {
+        // console.log(res.data.records);
+        setResponseData(res.data.records);
+        setTotal(res.data.total)
+      })
+      .catch((error) => {
+        // 处理错误
+        setError(error);
+      });
+  };
+  const pageChange=(page, pageSize)=>{
+    console.log(page,pageSize)
+    setQueryParam({
+      ...queryParam,
+      pageNum: page,
+      pageSize: pageSize,
+    })
+    // React的状态更新是异步的， 分页改变时，需要用 useEffect 来监听调用 getList 方法
+    // console.log(queryParam) 由于状态更新是异步的，此处打印的还是原来的值
+    // getList()
+  }
+  const search=()=>{
+    setQueryParam({
+      ...queryParam,
+      pageNum: 1,
+    })
+  }
+  const resetList=()=>{
+    setQueryParam({
+      pageNum: 1,
+      pageSize: 5,
+    })
+  }
+  useEffect(() => {
+    getList()
+  }, [queryParam]);
+
+  const [formTitle, setFormTitle] = useState("");
+  const editIt = (record) => {
+    console.log("editIt", record);
+    AddOrUpdateRef.current.setIsModalOpen(true);
+    AddOrUpdateRef.current.form.resetFields();
+    AddOrUpdateRef.current.form.setFieldsValue(record);
+    if (record.id) {
+      AddOrUpdateRef.current.setFormId(record.id);
+    }
+    setFormTitle("修改");
+  };
+  const addIt = () => {
+    AddOrUpdateRef.current.setIsModalOpen(true);
+    AddOrUpdateRef.current.form.resetFields();
+    AddOrUpdateRef.current.form.setFieldsValue({});
+    AddOrUpdateRef.current.setFormId("");
+    setFormTitle("新增");
+  };
+
+  const delIt = (record) => {
+    request.get(`/classes/del`, { params: { ids: record.id } }).then((res) => {
+      if (res.code == 200) {
+        getList();
+      }
+    });
+  };
+
+  useEffect(() => {
+    getList();
+  }, []); // 添加依赖以确保只在组件挂载时发起请求
+
+  const handleInputChange=(event) =>{
+    const { name, value } = event.target;
+    console.log("name",name,value)
+    setQueryParam(prevState => ({
+      ...prevState,
+      pageNum:1,
+      [name]: value
+    }));
+  }
+  // ref 通过 ref 绑定子组件
+  const AddOrUpdateRef = useRef(null);
+  return (
+    <div className="App">
+      <div>
+        <div>
+          <span>班级名：</span>
+          <Input placeholder="请输入班级名" name='className' allowClear={true}   value={queryParam.className} onChange={handleInputChange} style={{width:'200px'}}/>
+          <Button type="primary" onClick={search} style={{margin:'0 10px '}}>
+            查询
+          </Button>
+          <Button onClick={resetList}>
+            重置
+          </Button>
+        </div>
+        <div style={{margin:'10px 0'}}>
+          <Button type="primary" onClick={addIt}>
+            新增
+          </Button>
+        </div>
+        <div>
+          <Table
+            dataSource={responseData}
+            columns={columns}
+            rowKey={(record) => record.id}
+            pagination={false}
+            style={{marginBottom:'10px'}}
+          />
+          {/* 没有使用Table自带的分页器 */}
+           <Pagination showQuickJumper showSizeChanger current={queryParam.pageNum} pageSize={queryParam.pageSize}
+            total={total} onChange={pageChange}  showTotal={(total) => `共 ${total} 条`} />
+        </div>
+      </div>
+
+      <div>
+        <AddOrUpdate
+          ref={AddOrUpdateRef}
+          formTitle={formTitle}
+          onRefreshTable={getList}
+        ></AddOrUpdate>
+      </div>
+    </div>
+  );
+}
+
+export default App;
+
+```
+
+### AddOrUpdate.jsx  表单弹框
+
+```jsx
+import React, { useState, useImperativeHandle } from "react";
+import { Button, Modal, Form, Input} from "antd";
+import request from "../../utils/request";
+// 注意 props 和 ref 是通过 React.forwardRef 传递的
+// eslint-disable-next-line react/display-name
+const AddOrUpdate = React.forwardRef((props, ref) => {
+  useImperativeHandle(
+    ref,
+    () => ({ isModalOpen, setIsModalOpen, form, formId, setFormId }) 
+    //父组件通过ref获取值，要在这里抛出
+  );
+  const [isModalOpen, setIsModalOpen] = useState(false);
+  const [formId, setFormId] = useState("");
+  const [form] = Form.useForm();
+  const handleOk = () => {
+    setIsModalOpen(false);
+    console.log("form", form.getFieldsValue());
+  };
+  const handleCancel = () => {
+    setIsModalOpen(false);
+  };
+  const onFinish = (values) => {
+    console.log("finish", values);
+    console.log("formId", formId);
+    console.log("finishLast", { ...form.getFieldsValue(), id: formId });
+    if (formId) {
+      request
+        .post("/classes/edit", { ...form.getFieldsValue(), id: formId })
+        .then((res) => {
+          console.log(res.data);
+          if (res.code == 200) {
+            setIsModalOpen(false);
+            props.onRefreshTable();
+          }
+        });
+    } else {
+      request.post("/classes/add", form.getFieldsValue()).then((res) => {
+        console.log(res.data);
+        if (res.code == 200) {
+          setIsModalOpen(false);
+          props.onRefreshTable();
+        }
+      });
+    }
+  };
+  const layout = {
+    labelCol: {
+      span: 8,
+    },
+    wrapperCol: {
+      span: 16,
+    },
+  };
+  return (
+    <>
+      <Modal
+        title={props.formTitle}
+        open={isModalOpen}
+        onOk={handleOk}
+        onCancel={handleCancel}
+        autoComplete="off"
+        footer={null}
+      >
+        <Form
+          {...layout}
+          form={form}
+          name="control-hooks"
+          onFinish={onFinish}
+          style={{
+            maxWidth: 600,
+          }}
+        >
+          {/* <Form.Item
+            name="id"
+            label="id"
+            rules={[
+              {
+                required: true,
+              },
+            ]}
+          >
+            <Input />
+          </Form.Item> */}
+          <Form.Item
+            name="className"
+            label="班级名"
+            rules={[
+              {
+                required: true,
+                message: "班级名不能为空",
+              },
+            ]}
+          >
+            <Input />
+          </Form.Item>
+          <Form.Item name="classDesc" label="班级描述">
+            <Input />
+          </Form.Item>
+          <Form.Item
+            wrapperCol={{
+              offset: 8,
+              span: 16,
+            }}
+          >
+            <Button onClick={handleCancel} style={{marginRight:'10px'}}>
+              取消
+            </Button>
+            <Button type="primary" htmlType="submit">
+              保存
+            </Button>
+          </Form.Item>
+        </Form>
+      </Modal>
+    </>
+  );
+});
+
+export default AddOrUpdate;
+
 ```
 

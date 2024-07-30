@@ -30,6 +30,8 @@ typora-root-url: ..\.vuepress\public
 
 https://ask.dcloud.net.cn/docs/#//ask.dcloud.net.cn/article/88
 
+[Uni-app 有了这 10 个实用工具库，每个人都能独立开发项目 (qq.com) ](https://mp.weixin.qq.com/s/vU35vByG-mQzuepZ7qKn7Q)
+
 ## 开发模板
 
 [unibest](https://github.com/codercup/unibest)    ： [起步 | unibest (codercup.github.io)](https://codercup.github.io/unibest-docs/guide/installation)    **由 uniapp + Vue3 + Ts + Vite4 + UnoCss + UniUI + VSCode 构建**
@@ -489,6 +491,332 @@ uni-page-body,html,body{
      height: 100%;
 }
 ```
+
+## uniapp 搜索类似下拉组件封装
+
+### 封装
+
+```vue
+<template>
+	<view>
+		<view class="popupAll">
+			<view class="tabList dispalyF" v-if="!allCheckShow">
+				<scroll-view scroll-x style="white-space: nowrap;">
+					<view style="padding:0 32rpx;" class="rightView">
+						<view @click="getTopActive( newCkeckData[0],index)"
+							:class="index==newCkeckData[0].activeIndex?'popupItem-active tabItem rightView':'popupItem tabItem rightView'"
+							v-for="(item, index) in newCkeckData[0].data" :key="index"
+							style="display: inline-block; margin-right: 15rpx;">
+							{{item.dictLabel}}
+						</view>
+					</view>
+				</scroll-view>
+				<view class="tabrightBtnOut" @click="allCheckShowChange">
+					<image class="tabrightBtn" src="/static/images/rightBtn.png" mode=""></image>
+                    （展开）
+				</view>
+			</view>
+			<view class="popupListAll" v-if="allCheckShow">
+				<view class="popupList" v-for="(item,index) in newCkeckData" :key="index">
+					<view class="tabTitle">
+						{{item.name}}
+					</view>
+					<view class=" dispalyF " :style="[{position: 'sticky',top: '-2rpx',zIndex: 1,flexWrap: 'wrap'}] ">
+						<template>
+							<view @click="getActive(item,index,idx)"
+								:class="idx==item.activeIndex?'popupItem-active':'popupItem'"
+								style="margin-right: 20rpx;" v-for="(itm,idx) in item.data" :key="idx">
+								{{ itm.dictLabel }}
+							</view>
+						</template>
+					</view>
+				</view>
+				<view class="search_btn" @click="search">
+					查询
+				</view>
+				<view class="popupPic" @click="close">
+					<image class="" src="/static/images/popupPic.png" mode=""></image>
+                    （收起弹框）
+				</view>
+			</view>
+
+			<view class="gropo" v-if="allCheckShow"></view>
+		</view>
+	</view>
+</template>
+
+<script>
+	export default {
+		name: "popupList",
+		props: {
+
+			ckeckData: {
+				type: Array,
+				default: []
+			}
+		},
+		data() {
+			return {
+				newCkeckData: this.ckeckData,
+				allCheckShow: false,
+				params: '',
+				fijItem: '',
+				outData: []
+			};
+		},
+		watch: {
+			ckeckData(newVal) {
+				this.newCkeckData = newVal
+			},
+			allCheckShow(newVal) {
+				this.$parent.zctopShow = newVal
+			}
+		},
+		mounted() {
+			console.log(this.newCkeckData)
+		},
+		methods: {
+			allCheckShowChange() {
+				this.allCheckShow = !this.allCheckShow
+			},
+			search() {
+				this.allCheckShow = false
+				let param = []
+				this.newCkeckData.forEach((item, index) => {
+					if (item.data[item.activeIndex].dictLabel == '全部') {
+						this.$parent.queryParams[item.type] = ''
+					} else {
+						this.$parent.queryParams[item.type] = item.data[item.activeIndex].dictValue
+					}
+				})
+				let timeOut = setTimeout(()=>{
+					this.$parent.search()
+					clearTimeout(timeOut)
+				},0)
+			},
+			close() {
+				this.allCheckShow = false
+			},
+			getActive(item, index, idx) {
+				this.newCkeckData[index].activeIndex = idx
+			},
+			getTopActive(item, index) {
+				this.$set(this.newCkeckData[0],'activeIndex',index)
+				this.search()
+			}
+		}
+	}
+</script>
+
+<style lang="scss">
+	.dispalyF {
+		display: flex;
+		align-items: center;
+	}
+
+	.popupAll {
+		width: 100%;
+		position: relative;
+		background: #eef2f4;
+		z-index: 9;
+	}
+
+	.popupListAll {
+		background: #eef2f4;
+		position: absolute;
+		z-index: 99;
+		width: 100%;
+	}
+
+	.popupList {
+		background: #eef2f4;
+		margin: 0 32rpx;
+
+		.tabTitle {
+			font-family: Source Han Sans;
+			font-size: 24rpx;
+			color: #282828;
+			margin: 16rpx 0;
+		}
+
+		.popupItem {
+			padding: 10.5rpx 32rpx;
+			background: #fff;
+			border-radius: 4rpx;
+			font-family: Source Han Sans;
+			font-size: 24rpx;
+			font-feature-settings: "kern" on;
+			color: #282828;
+			margin-right: 15rpx;
+			flex-shrink: 0;
+			margin-bottom: 20rpx;
+		}
+
+		.popupItem-active {
+			padding: 10.5rpx 32rpx;
+			background: #91DDCD;
+			border-radius: 4rpx;
+			font-family: Source Han Sans;
+			font-size: 24rpx;
+			font-feature-settings: "kern" on;
+			font-weight: bold;
+			color: #087C65;
+			margin-right: 15rpx;
+			flex-shrink: 0;
+			margin-bottom: 20rpx;
+		}
+	}
+
+	.search_btn {
+		width: 686rpx;
+		height: 72rpx;
+		border-radius: 8rpx;
+		background: linear-gradient(96deg, #1AC89E 4%, #1590D4 99%);
+		text-align: center;
+		line-height: 72rpx;
+		font-family: Source Han Sans;
+		font-size: 28rpx;
+		font-weight: bold;
+		font-feature-settings: "kern" on;
+		color: #FFFFFF;
+		margin: 0 auto;
+		margin-top: 36rpx;
+	}
+
+	.popupPic {
+		width: 100%;
+		height: 78rpx;
+		display: flex;
+		align-items: center;
+		justify-content: center;
+	}
+
+	.popupPic>image {
+		width: 44rpx;
+		height: 34rpx;
+	}
+
+	.gropo {
+		position: fixed;
+		left: 0rpx;
+		top: 0rpx;
+		width: 100vw;
+		height: 100vh;
+		opacity: 0.6;
+		background: rgba(0, 0, 0, 0.23);
+	}
+
+	.tabList {
+		height: 120rpx;
+		position: relative;
+		overflow: hidden;
+		flex-wrap: nowrap;
+		width: 100%;
+		z-index: 9;
+		background: #eef2f4;
+
+		.tabItem {
+			padding: 10.5rpx 32rpx;
+			background: #fff;
+			border-radius: 4rpx;
+			font-family: Source Han Sans;
+			font-size: 24rpx;
+			font-feature-settings: "kern" on;
+			color: #282828;
+			margin-right: 15rpx;
+			flex-shrink: 0;
+		}
+
+		.tabrightBtnOut {
+			position: absolute;
+			right: 0;
+			width: 87rpx;
+			height: 56rpx;
+			background: #eef2f4;
+		}
+
+		.tabrightBtn {
+			position: absolute;
+			right: 36rpx;
+			top: 50%;
+			transform: translateY(-50%);
+			width: 32rpx;
+			height: 32rpx;
+			z-index: 99;
+		}
+
+		.popupItem {
+			padding: 10.5rpx 32rpx;
+			background: #fff;
+			border-radius: 4rpx;
+			font-family: Source Han Sans;
+			font-size: 24rpx;
+			font-feature-settings: "kern" on;
+			color: #282828;
+			margin-right: 15rpx;
+			flex-shrink: 0;
+			// margin-bottom: 20rpx;
+		}
+
+		.popupItem-active {
+			padding: 10.5rpx 32rpx;
+			background: #91DDCD;
+			border-radius: 4rpx;
+			font-family: Source Han Sans;
+			font-weight: bold;
+			font-size: 24rpx;
+			font-feature-settings: "kern" on;
+			color: #087C65;
+			margin-right: 15rpx;
+			flex-shrink: 0;
+			// margin-bottom: 20rpx;
+		}
+	}
+
+	.dispalyF {
+		display: flex;
+		align-items: center;
+	}
+
+	.rightView :last-child {
+		margin-right: 100rpx !important;
+	}
+</style>
+```
+
+### 使用
+
+```
+<PopupList :ckeckData="checkData" @searchCheck="search" ref="PopupList" />
+
+import PopupList from '@/components/PopupList.vue'
+
+
+checkData里面可以放入多个筛选配置条件
+checkData: [{
+					name: '岗位类型',   // 查询的内容名称
+					type: 'type',     // 对应的字段
+					data: [{            // data 里面是所有的检索项
+							dictLabel: '全部',
+							dictValue: ''
+						}, {
+							dictLabel: '就业岗位',
+							dictValue: 1
+						},
+						{
+							dictLabel: '实习岗位',
+							dictValue: 0
+						},
+					],
+					activeIndex: 0     // 默认选中的 
+				}],
+				
+search(){
+     // 触发搜索事件
+}
+```
+
+
 
 ## uniapp 上传文件
 

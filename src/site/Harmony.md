@@ -26,6 +26,8 @@ https://harmonyos-next.github.io/interview-handbook-project/guide/index.html
 
 [黑马程序员HarmonyOS4+NEXT星河版入门到企业级实战教程，一套精通鸿蒙应用开发_哔哩哔哩_bilibili](https://www.bilibili.com/video/BV1Sa4y1Z7B1/?spm_id_from=333.337.search-card.all.click&vd_source=f25f5a8d75a3a60d5a288f726803ec11)      [安装DevEcoStudio - 配套文档 (feishu.cn)](https://b11et3un53m.feishu.cn/wiki/LGprwXi1biC7TQkWPNDc45IXndh)
 
+[00-鸿蒙开发环境准备_哔哩哔哩_bilibili 黑马](https://www.bilibili.com/video/BV14t421W7pA?p=2&vd_source=f25f5a8d75a3a60d5a288f726803ec11)
+
 [启动项目到模拟器_哔哩哔哩_bilibili](https://www.bilibili.com/video/BV1kr421W7rV?p=1&vd_source=f25f5a8d75a3a60d5a288f726803ec11)
 
 
@@ -48,7 +50,7 @@ https://blog.csdn.net/viewinfinitely/category_12522845.html
 
 
 
-
+Next 开发文档 ：[应用开发导读-基础入门 | 华为开发者联盟 (huawei.com)](https://developer.huawei.com/consumer/cn/doc/harmonyos-guides-V5/application-dev-guide-V5)
 
 ## DevEco Studio 下载
 
@@ -696,8 +698,8 @@ struct NewPage {
          .margin(20)
          .fontSize(14)
          .fontColor(Color.Black)
-         .maxLength(9)    // 设置文本的最大输入字符数。
-         .textAlign(TextAlign.Start)   //设置输入文本在输入框中的对齐方式。 默认值：TextAlign.Start
+         .maxLength(9)                // 设置文本的最大输入字符数。
+         .textAlign(TextAlign.Start)   //    设置输入文本在输入框中的对齐方式。 默认值：TextAlign.Start
          .inputFilter('[a-z]', (e) => {      // 正则表达式，匹配表达式的输入允许显示
            console.log(JSON.stringify(e))
          })
@@ -759,7 +761,9 @@ module.json5  增加如下配置
     ],
 ```
 
+#### 鸿蒙的图标库（可下载svg图标）
 
+[HarmonyOS 主题图标库 | icon素材免费下载 | 华为开发者联盟 (huawei.com)](https://developer.huawei.com/consumer/cn/design/harmonyos-icon/)
 
 ### Video
 
@@ -927,9 +931,173 @@ struct NewPage {
 
 ```
 
+#### 重要使用方法
+
+onReachEnd(event: () => void)       列表到底末尾位置时触发。（可用于分页列表获取下一页数据）
+
+#### 一个网络获取数据渲染列表的示例：
+
+```ts
+
+import { getZphList } from "../api/zph"   // 获取列表数据的方法
+
+@Entry
+@Component
+struct Http {
+  @State list: any[] = []    
+  @State total: number = 0
+  @State queryParams: any = {
+    pageNum: 1,
+    pageSize: 10
+  }
+
+  getThelist() {
+    console.log("获取数据")
+    getZphList(this.queryParams).then(res => {
+      // 请求获取的数据 res.data
+      this.list = this.list.concat(res.data.rows)
+      this.total = res.data.total
+    }).catch(e => {
+      console.log("e", `${(JSON.stringify(e))}`)
+    }).finally(() => {
+      console.log("finally")
+    })
+  }
+
+  //组件展示前进行数据的一个请求
+  aboutToAppear() {
+    this.getThelist()
+  }
+
+  build() {
+    Row() {
+      Column() {
+        if (this.list.length > 0) {
+          List() {
+            ForEach(this.list, (item, index) => {
+              ListItem() {
+                Row() {
+                  Column() {
+                    Image(item.logoUrl) // 直接加载网络地址，请填写一个具体的网络图片地址,增加网络权限
+                      .width(200)
+                      .height(200)
+                    Text(item.name).fontSize(25).fontWeight(FontWeight.Bold).margin(10)
+
+                  }
+                  .width("95%")
+                  .backgroundColor(Color.White)
+                  .padding(10)
+                  .margin({ bottom: 5 })
+                  .justifyContent(FlexAlign.Center)
+                  .borderRadius(20)
+                  .borderWidth(2)
+                  .borderColor("#B9B9BB")
+                }
+
+              }.width("100%")
+            })
+            ListItem() {
+              Column() {
+                if (this.total <= this.list.length) {
+                  Text("——已经到底了——").fontSize(16).fontColor("#75777A").margin(20)
+                }
+              }.width('100%')
+
+            }
+          }.layoutWeight(1).padding({ top: 10, bottom: 10 })
+          .onReachEnd(() => { // 到底了触发（获取下一页数据）
+            if (this.list.length < this.total) {
+              this.queryParams.pageNum = this.queryParams.pageNum + 1
+              this.getThelist()
+            }
+          })
+        } else {
+          Text("——暂无列表数据——").fontSize(16).fontColor("#75777A").margin(20)
+        }
+      }
+      .width('100%')
+    }
+    .height('100%')
+    .alignItems(VerticalAlign.Top)
+  }
+}
+```
+
 
 
 ### Swiper(提供子组件滑动轮播显示的能力)
+
+如下展示了一个简易的短视频划动展示
+
+```ts
+class MyDataSource implements IDataSource {
+  private list: any[] = []
+  private listener: DataChangeListener
+
+  constructor(list: number[]) {
+    this.list = list
+  }
+
+  totalCount(): number {
+    return this.list.length
+  }
+
+  getData(index: number): any {
+    return this.list[index]
+  }
+
+  registerDataChangeListener(listener: DataChangeListener): void {
+    this.listener = listener
+  }
+
+  unregisterDataChangeListener() {
+  }
+}
+
+@Entry
+@Component
+struct SwiperPage {
+  private swiperController: SwiperController = new SwiperController()
+  private data: MyDataSource = new MyDataSource([])
+
+  aboutToAppear(): void {
+    let list = []
+    for (var i = 1; i <= 10; i++) {
+      // list.push(i.toString());
+      list.push({url:"http://1.94.16.149:9000/test/movie.mp4"})   // 视频网络地址
+    }
+    this.data = new MyDataSource(list)
+  }
+
+  build() {
+    Column({ space: 0 }) {
+      Swiper(this.swiperController) {
+        LazyForEach(this.data, (item: string) => {
+          // @ts-ignore
+          // Text(`${item.url.toString()}`).width('100%').height('100%').backgroundColor(0xAFEEEE).textAlign(TextAlign.Center).fontSize(30)
+          Video({
+            // @ts-ignore
+            src: $r('app.media.movie'),
+          }).width('100%').height("100%").autoPlay(true)
+        }, item => item)
+      }
+      .cachedCount(2)     // 设置预加载子组件个数。
+      .index(1)           // 设置当前在容器中显示的子组件的索引值。  默认值：0
+      // .autoPlay(true)   // 子组件是否自动播放。
+      .interval(4000)      // 使用自动播放时播放的时间
+      .indicator(false)   // 是否启用导航点指示器。
+      // .loop(true)      // 是否开启循环。
+      // .duration(1000)  // 子组件切换的动画时长，单位为毫秒。
+      .itemSpace(0)         // 设置子组件与子组件之间间隙。 默认 0
+      .vertical(true)       // 是否为纵向滑动 。  默认值：false
+      .curve(Curve.Linear)   // 动画曲线
+      .onChange((index: number) => {
+        console.info(index.toString())
+      })
+    }.width('100%')
+  }
+}
+```
 
 
 

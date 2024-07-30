@@ -150,6 +150,72 @@ https://blog.csdn.net/qq_48546536/article/details/135947405
 
 [多个项目复用node_modules_node_module 可以多个项目共用一个吗-CSDN博客](https://blog.csdn.net/weixin_42863883/article/details/134835441)
 
+### nrm(管理和切换 nrm 源)
+
+使用方法：
+
+1. **安装**：首先，需要在全局安装 nrm。在命令行中执行以下命令即可：
+
+```
+npm install -g nrm
+```
+
+1. **查看可用源**：你可以使用以下命令查看当前可用的源列表：
+
+```
+nrm ls
+```
+
+1. **切换源**：要切换到某个源，可以使用以下命令：
+
+```
+nrm use <源名称>
+```
+
+例如，要切换到 taobao 源，可以执行：
+
+```
+nrm use taobao
+```
+
+1. **测试源的速度**：你可以通过以下命令测试各个源的响应速度：
+
+```
+nrm test
+```
+
+1. **添加自定义源**：如果你有自定义的源，可以通过以下命令添加：
+
+```
+nrm add <源名称> <源地址>
+```
+
+例如，添加一个名为 myregistry 的自定义源：
+
+```
+nrm add myregistry http://myregistry.com/
+```
+
+1. **删除源**：如果要删除已添加的源，可以使用以下命令：
+
+```
+nrm del <源名称>
+```
+
+### yarn
+
+#### yarn install 报错  Expected version "0.4.x". Got "12.12.0"
+
+[yarn install时node版本不一致问题](https://segmentfault.com/a/1190000040164599)
+
+解决查看：[The engine “node“ is incompatible with this module. Expected version_commander@11.0.0: the engine "node" is incompatibl-CSDN博客](https://blog.csdn.net/qq_39352780/article/details/127262242)
+
+```
+yarn config set ignore-engines true
+```
+
+控制台运行上面的命令，重新 yarn install  ,依赖可以下载成功。
+
 ## 部署问题
 
 ### 一个nginx中通过不同的路由部署多个vue前端项目
@@ -262,6 +328,14 @@ cd 到需要清空的文件夹父目录 ，控制台输入    `rimraf  ‘要删
 ```
 rimraf node_modules
 ```
+
+快速删除 node_modules
+
+```
+rm -r -f node_modules
+```
+
+
 
 ### ts项目爆红解决
 
@@ -578,6 +652,12 @@ import VueOfficePdf from '@vue-office/pdf'
   }
 </script>
 ```
+
+#### 注意：本地运行正常，部署后报错
+
+****.defineComponent is not a function**   可能是vue版本问题,需要
+
+[常见问题 | vue-office (501351981.github.io)](https://501351981.github.io/vue-office/examples/docs/guide/faq.html#definecomponent-is-not-a-function)
 
 ### vue-file-viewer
 

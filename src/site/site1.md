@@ -96,7 +96,17 @@ tag:
 
 - [芋道源码 —— 纯源码解析博客 (iocoder.cn)](https://www.iocoder.cn/)
 
--      [首页 - 赛泰先生 - 博客天地 (altitude.xin)](https://www.altitude.xin/blog/home/#/)
+- [首页 - 赛泰先生 - 博客天地 (altitude.xin)](https://www.altitude.xin/blog/home/#/)
+
+- [逗比笔记 (doubibiji.com)](https://www.doubibiji.com/)
+
+- [WindrunnerMax (touchczy.top)](https://blog.touchczy.top/#/)
+
+- [前端面试指南 | H5前端面试百科 (html5.wiki)](https://interview.html5.wiki/)
+
+- [弟弟快看-教程，程序员编程资料站 | DDKK.COM](https://www.ddkk.com/)
+
+-      工具网站   https://juejin.cn/post/7369168265182134298#heading-23
 
 
 
@@ -283,6 +293,8 @@ https://download.csdn.net/download/weixin_44385486/86427996
 
 前端最全的5种换肤方案总结：[微信公众平台 (qq.com)](https://mp.weixin.qq.com/s/9Hv-KA-Ay_DRdGI-S_P4QQ)
 
+https://csscoco.com/
+
 ### js(动画库)
 
 [12个强大的 JavaScript 动画库，可帮助你提升用户体验 (qq.com)](https://mp.weixin.qq.com/s/AsaT9H8mhaJVmEpg9zLH8A)
@@ -320,6 +332,8 @@ vue和react对比学习（详细的）：  [React - 苏苏同学的专栏 - 掘�
 [使用 React18 + Vite + TypeScript 完成公司项目经验总结，学到了很多 - 掘金 (juejin.cn)](https://juejin.cn/post/7205842390842458149)
 
 [聊一聊 2024 年 React 生态系统 (qq.com)](https://mp.weixin.qq.com/s/h-RSl_4oHJwDM8XtJ2F02A)
+
+[React-admin-vite: 基于react+antd+vite的后台管理系统模板。 版本：react@18，antd@4，react-dom@18，react-redux@8.0，react-router-dom@6.3，react-scripts@5.0，axios....... 目前功能：登录鉴权，密码加密，菜单配置，404页面。 其他页面可自行删减 (gitee.com)](https://gitee.com/jiangsihan/react-admin-vite#https://jiangsihan.gitee.io/react-admin-vite-press)
 
 ### git
 
@@ -361,7 +375,7 @@ Docker-compose 安装 Wordpress 博客  [Docker-compose 安装 Wordpress 博客 
 
 [正确使用 acme.sh， 让你的网站永久免费使用 ssl 证书 👍 - 掘金 (juejin.cn)](https://juejin.cn/post/7308782851360292874)
 
-
+JPOM 部署[docker-compose | Jpom项目运维](https://jpom.top/pages/a06a94/#docker-compose)
 
 ### 汇总
 
@@ -417,7 +431,7 @@ mybatis-plus-generator-ui ：https://blog.csdn.net/afreon/article/details/129153
 
 基于vue可视化拖拽编辑，移动端页面生成工具。:https://was666.gitee.io/as-editor-doc/
 
-
+低代码后台管理系统（无需编写前端代码，未测试）[Erupt 通用数据管理框架](https://www.erupt.xyz/#!/)
 
 #### 简易的java模板代码生成(实测能生成)
 
@@ -428,6 +442,12 @@ github：https://github.com/lenve/generate_code
 Gitee：https://gitee.com/lenve/generate_code
 
 
+
+### web3
+
+[一个Web3开发的入门历程 - 掘金 (juejin.cn)](https://juejin.cn/post/7138072108516507661#heading-3)
+
+[GitHub - luzhenqian/web3-examples: 欢迎来到 Web3 世界，这里汇集了大量 Web3 示例项目和高质量学习资源。加入我们，和一百万开发者同行，一起探索并塑造未来世界的繁荣景象。立刻行动，开启您的 Web3 之旅！](https://github.com/luzhenqian/web3-examples)
 
 ### 其他收藏
 
@@ -476,6 +496,10 @@ b站的up主推荐：https://juejin.cn/post/7322401091237511222#heading-3
 
 
 匿名在线即时聊天室：https://gitee.com/howcode/aq-chat#https://gitee.com/howcode/aq-chat-server
+
+
+
+https://juejin.cn/post/7363103772145401868#heading-4
 
 ### Vue3 + Pinia + Vite5 仿抖音
 
