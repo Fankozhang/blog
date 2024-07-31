@@ -603,6 +603,8 @@ export default App
 
 [【React Hooks】掌握及对比常用的8个Hooks（优化及使用场景） - 掘金 (juejin.cn)](https://juejin.cn/post/6916317848386142216#heading-21)
 
+[一篇文章带你理解 React 中最“臭名昭著”的 useMemo 和 useCallback](https://juejin.cn/post/7165338403465068552)
+
 ### useState
 
 ```
@@ -691,6 +693,176 @@ useEffect(()=>{
 useEffect(() => {    
         console.log('副作用执行了')  
     }, [count])  
+```
+
+
+
+### useMemo(缓存值)
+
+[useMemo – React 中文文档](https://zh-hans.react.dev/reference/react/useMemo)
+
+[React中的useMemo和useCallback：它们的区别及应用场景_usememo usecallback 区别-CSDN博客](https://blog.csdn.net/alive_new/article/details/137477773)
+
+useMemo是一个Hook，它接受一个函数和一个依赖数组。它返回该函数的缓存结果，并且只有当依赖项发生改变时才会重新计算。
+
+主要用于优化性能
+
+```jsx
+import React, { useImperativeHandle, useMemo } from "react";
+// 注意 props 和 ref 是通过 React.forwardRef 传递的
+// eslint-disable-next-line react/display-name
+const TestThing = React.forwardRef((props, ref) => {
+  useImperativeHandle(
+    ref,
+    () => ({ num }) //父组件通过ref获取值，要在这里抛出
+  );
+  const [num, setNum] = useState(5)
+  const doubleNum = (num) => {
+    return num * 2
+  }
+  const cachedValue = useMemo(() => { return doubleNum(num) }, [num])
+  return (
+    <div>
+      <div ref={ref}>
+        {num}
+        <button onClick={()=>{setNum(num*2)}}>+</button>
+      </div>
+      <div>
+        <div>{cachedValue}</div>
+      </div>
+    </div>
+  )
+})
+```
+
+### useCallback(缓存函数)
+
+[useCallback – React 中文文档](https://zh-hans.react.dev/reference/react/useCallback#usecallback)
+
+ useCallback也是一个Hook，它接收一个函数和一个依赖数组。它返回一个缓存的函数，并且只有当依赖项发生改变时才会重新创建。
+
+```jsx
+import React, { useImperativeHandle } from "react";
+// 注意 props 和 ref 是通过 React.forwardRef 传递的
+// eslint-disable-next-line react/display-name
+const TestThing2 = React.forwardRef((props, ref) => {
+  useImperativeHandle(
+    ref,
+    () => ({ num }) //父组件通过ref获取值，要在这里抛出
+  );
+  const [num, setNum] = useState(5)
+  const doubleNum=useCallback((addNum)=>{setNum(addNum+num)},[num])
+  return (
+    <div>
+      <div ref={ref}>
+        {num}
+        <button onClick={()=>{doubleNum(5)}}>+</button>
+      </div>
+    </div>
+  )
+})
+export default TestThing2
+```
+
+
+
+useMemo和useCallback的主要区别在于它们缓存的对象类型不同。useMemo用于缓存值（可以是任何值，包括对象、函数等），而useCallback专门用于缓存函数。
+
+### useContext
+
+#### 使用示例：
+
+父组件 Home.jsx
+
+```jsx
+import React,{ useState,useContext } from "react";
+import TestThing from "./components/TestThing/index";
+
+export const ThingContext = React.createContext(123);  // 123是默认值
+const Home = () => {
+  const [num, setNum] = useState(10);
+  return (
+    <div >
+      <div
+        onClick={() => {
+          setNum(num * 2);
+        }}
+      >
+        {num}
+      </div>
+
+       {/* 子组件要修改值时，需要把修改数据的方法也通过value传递给后代 */}
+      <ThingContext.Provider value={{num,setNum}}>
+        <TestThing></TestThing>
+        <Asp></Asp>
+      </ThingContext.Provider>
+      
+    </div>
+  );
+};
+
+const Asp=()=>{
+    const {num,setNum}=useContext(ThingContext)
+    return (
+        <div onClick={()=>{setNum(num*2)}}>
+          {num}
+        </div>
+      )
+}
+
+export default Home;
+```
+
+子组件 TestThing.jsx
+
+```jsx
+import { useContext } from "react";
+import {ThingContext} from '../../Home.jsx'   // 从父组件获取的 createContext()
+
+// eslint-disable-next-line react/display-name
+const TestThing= (() => {
+  const {num,setNum}=useContext(ThingContext)
+ 
+  return (
+    <div onClick={()=>{setNum(num*2)}}>
+      {num}
+    </div>
+  )
+})
+export default TestThing
+```
+
+### useReducer
+
+```jsx
+import { useReducer } from 'react';
+function counterReducer(state, action) {
+    switch (action.type) {
+      case 'INCREMENT':
+        return { count: state.count + 1 };
+      case 'DECREMENT':
+        return { count: state.count - 1 };
+      case 'RESET':
+        return { count: 0 };
+      default:
+        throw new Error();
+    }
+  }
+
+function TestThing2() {
+  const [state, dispatch] = useReducer(counterReducer, { count: 0 });
+
+  return (
+    <>
+      <div>Count: {state.count}</div>
+      <button onClick={() => dispatch({ type: 'INCREMENT' })}>+</button>
+      <button onClick={() => dispatch({ type: 'DECREMENT' })}>-</button>
+      <button onClick={() => dispatch({ type: 'RESET' })}>Reset</button>
+    </>
+  );
+}
+
+export default TestThing2
 ```
 
 

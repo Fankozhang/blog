@@ -106,7 +106,9 @@ tag:
 
 - [弟弟快看-教程，程序员编程资料站 | DDKK.COM](https://www.ddkk.com/)
 
--      工具网站   https://juejin.cn/post/7369168265182134298#heading-23
+- 工具网站   https://juejin.cn/post/7369168265182134298#heading-23
+
+-      [二公子 · 语雀 内容挺多的  前端，后端，网络 (yuque.com)](https://www.yuque.com/ergz)
 
 
 
@@ -286,6 +288,8 @@ https://download.csdn.net/download/weixin_44385486/86427996
 [那些惊艳的 Three.js 项目 (qq.com)](https://mp.weixin.qq.com/s/BozHahNqE3kkPpqh9XljUw)
 
 [我的生活记录 - GhostCat (gcat.cc)   博客记录了一些 three.js的内容](https://gcat.cc/)
+
+[数字孪生系统中常用Three.js效果的实现原理 - 掘金 (juejin.cn)](https://juejin.cn/post/7279087330157379624#heading-0)
 
 ### css
 

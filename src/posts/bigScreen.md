@@ -753,6 +753,8 @@ https://antv.antgroup.com/
 
 [使用three.js搭建3d隧道监测-1 - 掘金 (juejin.cn)](https://juejin.cn/post/7273987266523136056)
 
+[【前端转3D】去不了夏威夷，那我就用three实现一个 (qq.com)](https://mp.weixin.qq.com/s/cx9QTisEFU5hqQRg1MVvKQ)
+
 在这里我们使用npm进行依赖安装
 
 ```coffeescript
