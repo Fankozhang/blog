@@ -505,6 +505,10 @@ b站的up主推荐：https://juejin.cn/post/7322401091237511222#heading-3
 
 https://juejin.cn/post/7363103772145401868#heading-4
 
+
+
+[MallChat: mallchat的后端项目，是一个既能购物又能聊天的电商系统。以互联网企业级开发规范的要求来实现它，电商该有的购物车，订单，支付，推荐，搜索，拉新，促活，推送，物流，客服，它都必须有。持续更新ing (gitee.com)](https://gitee.com/zhongzhibinbin/MallChat)
+
 ### Vue3 + Pinia + Vite5 仿抖音
 
 https://github.com/zyronon/douyin

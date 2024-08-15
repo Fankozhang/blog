@@ -358,6 +358,10 @@ pip安装第三方库报错pip._vendor.urllib3.exceptions.ReadTimeoutError: HTTP
 
  vscode下载的python包通常会存放在电脑的Python安装目录下的Lib/site-packages文件夹中。具体路径可能因操作系统和Python版本而异。 
 
+```
+pip install --index-url https://mirrors.aliyun.com/pypi/simple/ <package-name>    实测下载有效
+```
+
 
 
 ## Python数据和Json数据的相互转化
@@ -490,6 +494,7 @@ db.close()
 
 ```python
 import requests
+from bs4 import BeautifulSoup    # pip install requests beautifulsoup4
 
 # 目标url
 url = "https://www.baidu.com"
@@ -502,6 +507,20 @@ response.encoding='utf-8'  #设置编码格式
 print(response.text)
 print(response.content.decode()) # 注意这里！不设置编码格式时，推测出的编码字符集
 
+
+# 检查请求是否成功
+if response.status_code == 200:
+    # 解析HTML
+    soup = BeautifulSoup(response.text, 'html.parser')
+    # 提取数据
+    # 假设我们要找的是所有的段落<a>标签
+    paragraphs = soup.find_all('a')
+    # 打印每个段落的内容
+    for paragraph in paragraphs:
+        print(paragraph.get_text())
+else:
+    print(f"Failed to retrieve the page. Status code: {response.status_code}")
+    
 
 print(response.url)							# 打印响应的url
 print(response.status_code)					# 打印响应的状态码
@@ -547,7 +566,48 @@ response = requests.post(url,data=data,headers=headers)
 print(response.text)
 #如果返回的数据是json,可以直接resp.json()
 print(response.json())
+
+# 打印列表数据
+for item in response.json()['data']:
+    print(item)
 ```
+
+### 请求分页数据示例：
+
+```python
+import requests
+import time
+
+def fetch_and_print_page_data(base_url, params):
+    # url = f"{base_url}?page={page}"
+    # response = requests.get(url)
+    response = requests.get(base_url,params=params)
+    
+    if response.status_code == 200:
+        data = response.json()
+        for item in data['rows']:
+            print(item['name'])
+        print(params['pageNum'])
+    else:
+        print(f"Failed to retrieve page {params}: {response.status_code}")
+
+# 基础URL
+base_url = "https://example.com/list"
+
+# 初始页码
+params = {
+    'pageNum': 1,
+    'pageSize': 10
+}
+
+# 循环请求数据
+while True:
+    fetch_and_print_page_data(base_url, params)
+    params['pageNum']=params['pageNum']+1
+    time.sleep(1)  # 等待1秒
+```
+
+
 
 ### 上传文件
 
@@ -556,5 +616,109 @@ url = 'https://httpbin.org/post'
 files = {'file': open('image.png', 'rb')}
 response = requests.post(url, files=files)
 print(response.text)
+```
+
+## pandas数据处理
+
+[入门 — pandas 2.2.1 文档 - pandas 中文](https://pandas.ac.cn/docs/getting_started/index.html#getting-started)
+
+https://juejin.cn/post/7303924750655930383?searchId=202408101102496C05153C03052860F91A
+
+[pandas用法-全网最详细教程_pandas详细教程-CSDN博客](https://blog.csdn.net/Strive_For_Future/article/details/126710810)
+
+下载：
+
+```
+pip install pandas
+```
+
+### pandas 数据格式 Series  DataFrame
+
+```python
+import pandas as pd
+
+# 创建Series
+s = pd.Series([1, 3, 5, 6, '8'])
+print(s)   # 输出Series
+
+
+# DataFrame
+data = {
+    'Name': ['Tom', 'Nick', 'John', 'Tom'],
+    'Age': [20, 21, 19, 20],
+    'City': ['New York', 'London', 'Berlin', 'Paris']
+}
+df = pd.DataFrame(data)
+```
+
+### 读取 excel 文件数据
+
+```python
+import pandas as pd
+
+# 从Excel文件读取数据  (可能需要 pip install xlrd)
+dExcel = pd.read_excel('work.xls')
+# dExcel = pd.read_excel('work.xls',sheet_name='Sheet2')   有多个sheet页可以指定读取的 sheet 名称,不加这个参数读取第一个 sheet
+print(dExcel)
+print(dExcel.duplicated())   # 检测是否有重复值
+print(dExcel.drop_duplicates())   # 删除重复值
+
+# 读取所有工作表(所有sheet)    想要读取所有的sheet，可以将sheet_name设置为None，这样它会返回一个字典，其中键是sheet的名字，值是对应的DataFrame。
+all_sheets_data = pd.read_excel('work.xls', sheet_name=None)
+# 现在all_sheets_data是一个字典，每个键对应一个工作表的名字，值是一个DataFrame
+print('all_sheets_data',all_sheets_data)
+for sheet_name, data in all_sheets_data.items():
+    print(f"Data from {sheet_name}:")
+    print(data)
+    print("\n---\n")
+```
+
+### pandas如何将数据导出到excel
+
+```python
+import pandas as pd
+# DataFrame
+data = {
+    '姓名': ['Tom', 'Nick', 'John', 'Tom'],
+    '年龄': [20, 21, 19, 20],
+    '城市': ['New York', 'London', 'Berlin', 'Paris']
+}
+df = pd.DataFrame(data)
+
+# 指定输出文件名
+output_file = 'output.xlsx'
+# 使用openpyxl作为引擎      pip install  openpyxl
+with pd.ExcelWriter(output_file, engine='openpyxl') as writer:
+    df.to_excel(writer, sheet_name='Sheet1', index=False)
+    df.to_excel(writer, sheet_name='Sheet2', index=False)  #可以设置不同的数据存入不同的 sheet 表里
+    df.to_csv('output.csv', index=False)   # 可以将DataFrame保存为CSV文件
+    
+# 如果你想使用xlsxwriter作为引擎，可以这样：    pip install xlsxwriter
+# with pd.ExcelWriter(output_file, engine='xlsxwriter') as writer:
+#     df.to_excel(writer, sheet_name='Sheet1', index=False)
+```
+
+在这个例子中，我们使用`pd.ExcelWriter`来创建一个Excel文件的写入器，指定了输出文件的名称以及使用的引擎（这里是`openpyxl`）。然后，我们调用`df.to_excel`方法将DataFrame写入到Excel文件中，指定工作表的名称为'Sheet1'，并且不包含索引列（`index=False`）。
+
+如果你的DataFrame有多个，并且你想将它们写入同一个Excel文件的不同工作表中，可以多次调用`to_excel`方法，每次指定不同的工作表名称
+
+
+
+记得在完成所有写入操作后调用`writer.save()`或使用`with`语句来自动关闭文件。在上面的例子中，由于使用了`with`语句，所以不需要显式调用`save()`方法。
+
+### 读取 csv  文件
+
+```python
+import pandas as pd
+# 读取csv文件要设置编码格式，chardet可以用来获取文件编码，需要下载 pip install chardet
+import chardet
+# 读取文件并检测编码
+with open('work.csv', 'rb') as f:
+    result = chardet.detect(f.read())
+# 输出检测到的编码
+print("Detected encoding:", result['encoding'])
+# 通过文件编码读取 csv 文件的数据
+dCsv=pd.read_csv('work.csv',encoding=result['encoding'])
+print(dCsv)
 ```
 

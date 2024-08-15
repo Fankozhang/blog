@@ -2586,6 +2586,7 @@ export default {
     },
     pageSizeChange (current, size) {
       this.queryParams.pageSize = size
+        this.queryParams.pageNum=1
       this.getList()
     }
   }

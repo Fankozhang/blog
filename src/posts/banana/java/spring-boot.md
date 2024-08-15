@@ -4216,6 +4216,8 @@ flowable相关资料
 链接：https://pan.baidu.com/s/1RqIPTSrLiz1I_T6N41FGuA 
 提取码：boge
 
+存在gitee上了：https://gitee.com/fankozhang/blog-link-information/blob/master/flowable/01-Flowable%E5%9F%BA%E7%A1%80%E7%AF%87.md
+
 ### 部署 flowable-ui：
 
 [通过 Flowable-UI 来体验一把 Flowable 流程引擎 - 掘金 (juejin.cn)](https://juejin.cn/post/7156530891576049671#heading-0)
@@ -4347,10 +4349,229 @@ Springboot整合Flowable并进行一个通用审批流程应用实践:https://bl
     @Test
     void completeTast(){
         TaskService taskService=processEngine.getTaskService();
-        // 完成任务（传任务Id）
+        // 完成任务（传任务Id）  (act_ru_task表的ID_)
         taskService.complete("b2de895f-4bbf-11ef-93ea-4c796e923980");
     }
 ```
+
+#### 挂起和激活
+
+```java
+@Test
+    void supspendActivity(){
+        String processDefinitionId="audit:4:f58aba97-4bb8-11ef-9c8a-4c796e923980";
+        RepositoryService reporsitoryService=processEngine.getRepositoryService();
+        // 做流程的挂起和激活操作->针对的流程定义
+        ProcessDefinition processDefinition = reporsitoryService.createProcessDefinitionQuery()
+                .processDefinitionId(processDefinitionId)
+                .singleResult();
+        // 获取流程定义的状态
+        boolean suspended = processDefinition.isSuspended();
+        System.out.println("suspended = " + suspended);
+        if(suspended){
+            // 表示被挂起
+            System.out.println("激活流程定义");
+            reporsitoryService.activateProcessDefinitionById(processDefinitionId,true,null);
+        }else{
+            // 表示激活状态
+            System.out.println("挂起流程");
+            reporsitoryService.suspendProcessDefinitionById(processDefinitionId,true,null);
+        }
+    }
+```
+
+### 任务分配
+
+固定值：zhangsan，  lisi
+
+值表达式（UEL表达式占位）:  ${auditUser}  
+
+
+
+方法表达式:调用一个方法，可以带或不带参数。**当调用不带参数的方法时，要确保在方法名后添加空括号（以避免与值表达式混淆）。**传递的参数可以是字面值(literal value)，也可以是表达式，它们会被自动解析。
+
+示例：
+
+```
+${printer.print()}
+${myBean.getAssignee()}
+${myBean.addNewOrder('orderName')}
+${myBean.doSomething(myVar, execution)}
+```
+
+```java
+@Component
+public class Mybean {
+    public String getAssignee(){
+        return "wangwu";
+    }
+}
+```
+
+流程分配时的配置为： ${mybean.getAssignee()}
+
+#### 分配用户占位代码示例：
+
+流程审批：  开始-》zhangsan-》${myAudit}-》${mybean.getAssignee()}-》结束
+
+```java
+package com.example.mytest.test;
+
+import org.flowable.engine.ProcessEngine;
+import org.flowable.engine.RepositoryService;
+import org.flowable.engine.RuntimeService;
+import org.flowable.engine.TaskService;
+import org.flowable.engine.repository.Deployment;
+import org.flowable.engine.runtime.ProcessInstance;
+import org.flowable.task.api.Task;
+import org.junit.jupiter.api.Test;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.test.context.SpringBootTest;
+
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+
+@SpringBootTest
+public class FlowableExampleTest {
+    @Autowired
+    ProcessEngine processEngine;
+
+    @Autowired
+    RepositoryService reporsitoryService;
+    @Autowired
+    RuntimeService runtimeService;
+    @Autowired
+    TaskService taskService;
+
+    //    部署流程到数据库中
+    @Test
+    void deployFlowBoot(){
+        //部署流程需要茯取RepositoryService
+        Deployment deployment=reporsitoryService.createDeployment()
+                // 一次部署操作可以部署多个流程定义
+                .addClasspathResource("process/example.bpmn20.xml")
+                .name("审核流程示例")
+                .deploy();  //部署的方法
+        System.out.println("deployment.getId"+deployment.getId());
+    }
+
+    // 启动流程实例
+    @Test
+    void start(){
+        // 在流程定义表中动态维护（部署时生成的，从数据库获取, 取 act_re_product表的 ID_）
+        String processId="example:1:490a0b84-5077-11ef-91e0-4c796e923980";
+        //我们创建流程图的时候自定义的。注意保证唯一
+        String processKey="example";
+        // 根据流程定义ID启动流程实例
+        ProcessInstance processInstance= runtimeService.startProcessInstanceById(processId);
+
+    }
+    // 根据用户查询待办信息
+    @Test
+    void findFlow(){
+        List<Task> list= taskService.createTaskQuery()
+                .taskAssignee("zhangsan") // 指定查询的条件（这里是通过人名查出来）
+                .list();  //查出的任务列表
+        list.forEach(System.out::println);   // 打印出这个人的任务列表
+    }
+    // 任务审批
+    @Test
+    void completeTast(){
+        Map<String,Object> variables=new HashMap<>();
+        variables.put("myAudit","lisi");   // ${myAudit} 的占位值是 lisi
+        // 完成任务（传任务Id） 根据任务id绑定对应表达式的值 (act_ru_task表的ID_)
+        taskService.complete("4483f20d-5078-11ef-9fe5-4c796e923980",variables);
+        // 任务审批后，lisi 的任务会多一条数据
+    }
+
+    // 任务审批
+    @Test
+    void completeTast2(){
+        // 进入下一个流程，分配用户是   ${mybean.getAssignee()} 返回字符串 wangwu 
+        // 完成任务（传任务Id） 根据任务id绑定对应表达式的值 (act_ru_task表的ID_)
+        taskService.complete("da4e95eb-507a-11ef-b0c1-4c796e923980");
+        // 任务审批后，wangwu 的任务会多一条数据 
+    }
+
+}
+```
+
+#### 监听器分配示例
+
+开始 -》 用户 ：${myAudit1}   -》 任务监听器（create  com.example.mytest.test.listener.myFlowableExample2） -》 结束
+
+myFlowableExampleListener2.java     这个监听器设置了第二个节点审批人是 zhaoliu
+
+```java
+public class myFlowableExampleListener2 implements TaskListener {
+    @Override
+    public void notify(DelegateTask delegateTask) {
+        System.out.println("---->自定义的监听器执行了");
+
+        if(EVENTNAME_CREATE.equals(delegateTask.getEventName())){
+            // 表示是Task的创建事件被触发了
+            // 用户节点的创建 然后指认当前task审批人
+            delegateTask.setAssignee("zhaoliu");
+        }
+    }
+}
+```
+
+流程示例：
+
+```java
+@SpringBootTest
+public class FlowableExampleTest2 {
+    @Autowired
+    ProcessEngine processEngine;
+
+    @Autowired
+    RepositoryService reporsitoryService;
+    @Autowired
+    RuntimeService runtimeService;
+    @Autowired
+    TaskService taskService;
+
+    //    部署流程到数据库中
+    @Test
+    void deployFlowBoot(){
+        //部署流程需要茯取RepositoryService
+        Deployment deployment=reporsitoryService.createDeployment()
+                // 一次部署操作可以部署多个流程定义
+                .addClasspathResource("process/example2.bpmn20.xml")
+                .name("审核流程示例")
+                .deploy();  //部署的方法
+        System.out.println("deployment.getId"+deployment.getId());
+    }
+    // 启动流程实例（指定第一个占位的审批人）
+    @Test
+    void start(){
+        // 在流程定义表中动态维护（部署时生成的，从数据库获取, 取 act_re_product表的 ID_）
+        String processId="example2:1:16512cb0-50a1-11ef-ac9e-4c796e923980";
+        //我们创建流程图的时候自定义的。注意保证唯一
+        String processKey="example2";
+
+        Map<String,Object> variables=new HashMap<>();
+        variables.put("myAudit1","zhangsan");
+        // 根据流程定义ID启动流程实例
+        ProcessInstance processInstance= runtimeService.startProcessInstanceById(processId,variables);
+        // 启动流程实例，zhangsan 会生成一条任务
+
+    }
+
+    // 任务审批
+    @Test
+    void completeTast(){
+        // 完成任务（传任务Id） 根据任务id绑定对应表达式的值 (act_ru_task表的ID_)
+        taskService.complete("627df197-50ad-11ef-9490-4c796e923980"); //张三任务审批完成
+        // 任务审批后，zhaoliu 的任务会多一条数据，
+        // 虽然没有在流程配置审批人，但在任务监听器里面设置监听的审批人是 zhaoliu 了
+    }
+}
+```
+
+
 
 
 
