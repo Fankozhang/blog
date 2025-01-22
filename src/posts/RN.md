@@ -1784,6 +1784,10 @@ export default function App() {
 
 ```
 
+## Expo路由
+
+[Expo 路由简介 - Expo 中文网 (nodejs.cn)](https://expo.nodejs.cn/router/introduction/)
+
 ## 数据请求
 
 [访问网络 · React Native 中文网](https://reactnative.cn/docs/network#发起请求)
@@ -1893,6 +1897,8 @@ Expo 里面也有一些组件可供使用：[Reference - Expo Documentation](htt
 
 [RN 学习小记之使用 Expo 创建项目 - 掘金 (juejin.cn)](https://juejin.cn/post/7246694803814531133?from=search-suggest#heading-5)
 
+### 项目创建
+
 cnpm install --global expo-cli
 
 报错：This project is missing expo-updates. Please install it in order to publish an update.
@@ -1906,6 +1912,8 @@ npm install --global expo-cli
 ```
 
 初始化一个新的Expo应用:      此命令将为项目创建一个新目录，名称为： **StickerSmash**。
+
+node 版本最好 18 以上，版本如果太低，命令行运行可能报错
 
 ```
  npx create-expo-app StickerSmash    

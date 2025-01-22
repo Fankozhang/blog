@@ -473,11 +473,25 @@ b站的up主推荐：https://juejin.cn/post/7322401091237511222#heading-3
 
 
 
-### CRMEB_Java电商系统
+### vue react 后台管理模板
+
+#### 一个集成 React18+TS+Vite+Antd5 的全能中后台模板
+
+https://github.com/southliu/react-admin      在线体验：https://southliu.github.io
+
+
+
+
+
+### CRMEB_Java电商系统(功能多)
 
 [CRMEB_Java电商系统: Java商城 免费 开源 CRMEB商城JAVA版，SpringBoot + Maven + Swagger + Mybatis Plus + Redis + Uniapp +Vue+elementUI 包含移动端、小程序、PC后台、Api接口；有产品、用户、购物车、订单、积分、优惠券、营销、余额、权限、角色、系统设置、组合数据、可拖拉拽的form表单等模块，大量的减少了二开的成本。 (gitee.com)](https://gitee.com/ZhongBangKeJi/crmeb_java)
 
 
+
+### ShopXO企业级免费开源商城系统
+
+https://gitee.com/zongzhige/shopxo#https://gitee.com/link?target=https%3A%2F%2Fdoc.shopxo.net%2F
 
 ### 即时通讯系统IM
 
@@ -508,6 +522,8 @@ https://juejin.cn/post/7363103772145401868#heading-4
 
 
 [MallChat: mallchat的后端项目，是一个既能购物又能聊天的电商系统。以互联网企业级开发规范的要求来实现它，电商该有的购物车，订单，支付，推荐，搜索，拉新，促活，推送，物流，客服，它都必须有。持续更新ing (gitee.com)](https://gitee.com/zhongzhibinbin/MallChat)
+
+[MallChat运行  当年，我也被开源项目折腾麻了！ (qq.com)](https://mp.weixin.qq.com/s/ocdpSkesO0Rkg2Y6Rt83bw)
 
 ### Vue3 + Pinia + Vite5 仿抖音
 

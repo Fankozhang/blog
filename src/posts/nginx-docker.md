@@ -654,6 +654,10 @@ SIZE：镜像大小
 
 ####  搜索可用镜像， **拉取镜像** ，删除镜像
 
+下载镜像加速器配置查看：https://mp.weixin.qq.com/s/qaYtGUbBex3fiYkCHldoZA
+
+
+
 ```
 docker search redis            // 搜索redis相关的镜像
 docker search --limit 5 redis  // --limit : 只列出N个镜像，默认25个

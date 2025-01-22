@@ -685,13 +685,25 @@ animation() {
 
 ## Echarts GL
 
-
-
-## 数据可视化其他工具
-
-### antv G6
+## antv G6  4.8.21 版本
 
 https://antv.antgroup.com/
+
+[简介 | G6 (antv.vision)](https://g6-v4.antv.vision/manual/introduction)
+
+### 节点的连接点 anchorPoint
+
+[节点的连接点 anchorPoint | G6 (antv.vision)](https://g6-v4.antv.vision/manual/middle/elements/nodes/anchorpoint)
+
+###  antv g6 自定义节点用 dom 类型不显示 
+
+new G6.Graph()        加配置 renderer: 'svg',
+
+### antv g6 数据改变后，更新视图
+
+```
+this.graph.changeData(this.updatedData);    //updatedData是更新后的数据
+```
 
 ## Three.js
 

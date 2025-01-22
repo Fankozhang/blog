@@ -30,7 +30,9 @@ ReactPc项目讲义: https://www.yuque.com/fechaichai/tzzlh1
 
 我跟着视频写的源码放在了码云上了，项目大概写了一半。 [react_lianxi_jikeyuan: react练习项目-极客园 (gitee.com)](https://gitee.com/fankozhang/react_lianxi_jikeyuan) 
 
+## 项目创建
 
+轻松搞定Vite6+React19全家桶：https://juejin.cn/post/7453825145221644303
 
 ## vite创建react项目
 
@@ -232,11 +234,19 @@ return (
 );
 ```
 
+#### 修改antd组件内部样式
 
+https://juejin.cn/post/6943774663524745247
 
 ## next创建react项目
 
 [介绍 | Next.js 中文网 (nodejs.cn)](https://next.nodejs.cn/docs/#main-features)
+
+https://nextjscn.org/docs/app/building-your-application/routing/pages
+
+
+
+开源项目：https://blog.csdn.net/m0_37981569/article/details/144006475
 
 创建项目命令
 
@@ -282,9 +292,134 @@ export default function Page() {
 }
 ```
 
-## umi 创建项目
+### 引入 antd
+
+[在 Next.js 中使用 - Ant Design (antgroup.com)](https://ant-design.antgroup.com/docs/react/use-with-next-cn)
+
+## umi 创建 react 项目(umi命令前加pnpm)
 
 https://umijs.org/docs/guides/getting-started
+
+```
+pnpm dlx create-umi@latest
+
+依次按步骤选择需要的模板
+
+pnpm run dev
+```
+
+启动项目之前，可以再安装一些依赖
+
+```
+pnpm i @umijs/plugins -D
+
+pnpm i antd @ant-design/pro-components -S      antdesign 的相关依赖安装后就可以直接使用
+```
+
+### Tailwind CSS 配置生成器
+
+```
+umi g tailwindcss       运行命令后可以直接使用Tailwind CSS
+```
+
+### umi-request 封装使用
+
+https://github.com/umijs/umi-request/blob/master/README_zh-CN.md
+
+下载依赖
+
+```
+pnpm install umi-request --save
+```
+
+request 封装
+
+```js
+
+import { notification } from 'antd';
+import { history } from 'umi';
+import { extend } from 'umi-request';
+
+
+/** 异常处理程序 */
+const codeMessage = {
+    200: '服务器成功返回请求的数据。',
+    201: '新建或修改数据成功。',
+    // ........ 可以继续添加接口错误信息
+  };
+   
+  const errorHandler = (error) => {
+    const { response } = error;
+    if (response && response.status) {
+      const errorText = codeMessage[response.status] || response.statusText;
+      const { status, url } = response;
+      notification.error({
+        message: `请求错误 ${status}: ${url}`,
+        description: errorText,
+      });
+    } else if (!response) {
+      notification.error({
+        description: '网络异常，无法连接服务器',
+        message: '网络异常',
+      });
+    }
+    return response;
+  };
+   
+  //对 extend 实例进行简单的封装
+  const request = extend({
+    prefix: 'http://11.11.11.11:8084',  // 统一的请求前缀
+    timeout: 3000,                    // 超时时间
+    headers: {                        // headers中搭载token等请求头信息
+      'Content-Type': 'application/x-www-form-urlencoded',
+      Authentication: localStorage.getItem('token') || '',
+    },
+    //处理请求错误 调用上面的错误处理逻辑
+    errorHandler: errorHandler,
+  });
+   
+   
+  // 对实例request进行请求拦截
+  // 可以在里面对url、option中的参数进行进一步处理
+  request.interceptors.request.use((url, options) => {
+    return {
+      options: {
+        ...options,
+        interceptors: true,
+      },
+    };
+  });
+   
+  // 对实例request进行响应拦截, 统一处理接口错误信息
+  request.interceptors.response.use(async (response) => {
+    if (response.status !== 200) {
+      switch (response.status) {
+        case 401:
+          notification.warn({
+            message: '登录超时，请重新登陆!',
+          });
+          history.push('/login');
+          break;
+      }
+    }
+    return response;
+  });
+
+  export default request
+```
+
+request 使用
+
+```js
+import request from "../utils/request";
+
+export async function getDataList(params) {
+    return request('/classes/page/list', {
+      method: 'GET',
+      params,
+    });
+  }
+```
 
 
 
@@ -865,9 +1000,314 @@ function TestThing2() {
 export default TestThing2
 ```
 
+## 参数，分页查询页面增删改查示例
+
+### App.jsx 表格页
+
+```jsx
+
+import React, { useEffect, useState } from "react";
+import { Button, Pagination, Form, Input, Table, Popconfirm } from "antd";
+import { getDataList, editData, addData, delData } from "@/api/test";
+import AddOrUpdate from "./addOrUpdate";
+
+export default function Foo() {
+  // 列表数据
+  let [list, setList] = useState([]);
+  //列表总数
+  let [total, setTotal] = useState(0);
+  // 获取列表数据时的分页参数
+  let [pageQuery, setPageQuery] = useState({
+    pageNum: 1,
+    pageSize: 5,
+  });
+  // 获取列表数据时的搜索参数
+  let [searchParam, setSearchParam] = useState({});
+
+  // 搜索的表单数据
+  const [form] = Form.useForm();
+
+  // 弹窗是否显示
+  const [modalVisible, setModalVisible] = useState<boolean>(false);
+  // 弹框标题
+  const [title, setTitle] = useState("");
+
+  // 列表点击的数据
+  const [record, setRecord] = useState({});
+
+  // 当页面加载或分页参数变化时，重新获取数据
+  useEffect(() => {
+    getList();
+    console.log("副作用执行了");
+  }, [pageQuery]);
+
+  const getList = () => {
+    getDataList({ ...pageQuery, ...searchParam }).then((res) => {
+      console.log(res);
+      if (res.code == "200") {
+        setList(res.data.records);
+        setTotal(res.data.total);
+      }
+    });
+  };
+
+  const onChange = (page: any, pageSize: any) => {
+    setPageQuery({
+      pageNum: page,
+      pageSize: pageSize,
+    });
+  };
+
+  const onShowSizeChange = (current: any, pageSize: any) => {
+    setPageQuery({
+      pageNum: current,
+      pageSize: pageSize,
+    });
+  };
+
+  // 表单提交时触发
+  const handleSearch = () => {
+    form.validateFields().then((values) => {
+      console.log("values", values);
+      setSearchParam(values);
+      setPageQuery({ ...pageQuery, pageNum: 1 });
+    });
+  };
+
+  const reset = () => {
+    form.resetFields();
+    setSearchParam({});
+    setPageQuery({
+      pageNum: 1,
+      pageSize: 5,
+    });
+  };
+
+  const onEdit = (value: any) => {
+    console.log("onEdit", value, record);
+    let temp = value;
+    if (record && record.id) {
+      temp.id = record.id;
+    }
+    editData(temp).then((res) => {
+      if (res.code == 200) {
+        getList();
+      }
+    });
+  };
+
+  const onAdd = (value: any) => {
+    addData(value).then((res) => {
+      if (res.code == 200) {
+        getList();
+      }
+    });
+  };
+
+  const columns = [
+    {
+      title: "id",
+      dataIndex: "id",
+      key: "id",
+      fixed: "left",
+    },
+    {
+      title: "书名",
+      dataIndex: "name",
+      key: "name",
+    },
+    {
+      title: "作者",
+      dataIndex: "author",
+      key: "author",
+    },
+    {
+      title: "操作",
+      key: "operation",
+      fixed: "right",
+      width: 200,
+      render: (_: any, record: any) => (
+        <>
+          <Button
+            type="link"
+            onClick={() => {
+              console.log(record);
+              setModalVisible(true);
+              setTitle("修改");
+              setRecord(JSON.parse(JSON.stringify(record)));
+            }}
+          >
+            修改
+          </Button>
+
+          <Popconfirm
+            title="删除"
+            description="您确认要删除这条数据吗?"
+            onConfirm={() => {
+              console.log(record);
+              delData(record.id).then((res) => {
+                if (res) {
+                  getList();
+                }
+              });
+            }}
+            okText="是"
+            cancelText="否"
+          >
+            <Button danger type="link">
+              删除
+            </Button>
+          </Popconfirm>
+        </>
+      ),
+    },
+  ];
+  return (
+    <div>
+      <Form form={form} layout="inline" onFinish={handleSearch}>
+        <Form.Item name="name" label="书名">
+          <Input placeholder="请输入书名" />
+        </Form.Item>
+        <Form.Item>
+          <Button type="primary" htmlType="submit">
+            查询
+          </Button>
+        </Form.Item>
+        <Form.Item>
+          <Button type="primary" onClick={reset}>
+            重置
+          </Button>
+        </Form.Item>
+      </Form>
+
+      <div>
+        <Button
+          onClick={() => {
+            setModalVisible(true);
+            setTitle("新增");
+            setRecord({
+              name:'',
+              author:''
+            })
+          }}
+          type="primary"
+        >
+          新增
+        </Button>
+      </div>
+
+      <Table
+        dataSource={list}
+        columns={columns}
+        rowKey={(record) => record.id}
+        pagination={false}
+        style={{ marginBottom: "10px" }}
+      />
+
+      <Pagination
+        total={total}
+        showSizeChanger
+        showQuickJumper
+        showTotal={(total) => `共 ${total} 条`}
+        current={pageQuery.pageNum}
+        pageSize={pageQuery.pageSize}
+        onChange={onChange}
+        onShowSizeChange={onShowSizeChange}
+      />
+
+      <AddOrUpdate
+        onEdit={onEdit}
+        onAdd={onAdd}
+        modalVisible={modalVisible}
+        title={title}
+        record={record}
+        onOk={() => setModalVisible(false)}
+        onCancel={() => {
+          setModalVisible(false);
+          setRecord({});
+        }}
+      ></AddOrUpdate>
+    </div>
+  );
+}
+
+```
+
+### AddOrUpdate.jsx  表单弹框
+
+```jsx
+
+import React, { useState, useEffect } from "react";
+import { Button, Modal, Form, Input } from "antd";
+export default function AddOrUpdate({
+  title,
+  modalVisible,
+  record,
+  onOk,
+  onCancel,
+  onEdit,
+  onAdd,
+}) {
+  const [form] = Form.useForm();
+
+  useEffect(() => {
+    form.setFieldsValue(record);
+  }, [record]);
+
+  const handleOk = () => {
+    form.submit();
+    onOk();
+  };
+
+  const handleCancel = () => {
+    form.setFieldsValue({});
+    onCancel();
+  };
+
+  const onFinish = (values) => {
+    console.log("values", values);
+    if (title == "修改") {
+      onEdit(values);
+    } else if (title == "新增") {
+      onAdd(values);
+    }
+  };
+
+  return (
+    <>
+      <Modal
+        open={modalVisible}
+        title={title}
+        onOk={handleOk}
+        onCancel={handleCancel}
+        footer={[
+          <Button key="back" onClick={handleCancel}>
+            取消
+          </Button>,
+          <Button key="submit" type="primary" onClick={handleOk}>
+            确认
+          </Button>,
+        ]}
+      >
+        {record && <p>record: {JSON.stringify(record)}</p>}
+        <Form form={form} layout="inline" onFinish={onFinish}>
+          <Form.Item name="name" label="书名">
+            <Input placeholder="请输入书名" />
+          </Form.Item>
+          <Form.Item name="author" label="作者">
+            <Input placeholder="请输入作者" />
+          </Form.Item>
+        </Form>
+      </Modal>
+    </>
+  );
+}
+
+```
 
 
-## 简易的增删改查示例
+
+## 简易的增删改查示例(通过Ref实现)
 
 可参考： https://gitee.com/kong_yiji_and_lavmi/react-ant-admin/blob/vite/src/pages/list/search.tsx
 

@@ -3742,7 +3742,9 @@ RabbitMQ一共四种交换机，如下所示：
 3. Topic Exchange：主题交换机，对路由键进行模式匹配后进行投递，符号#表示一个或多个词，*表示一个词。
 4. Header Exchange：头交换机，不处理路由键。而是根据发送的消息内容中的headers属性进行匹配。
 
+## RocketMQ
 
+### 部署
 
 ## Excel 导入导出
 
@@ -4114,9 +4116,7 @@ E:\前端开源项目\java简易代码生成\codeCave\BookFreeMarkerOut  目录�
 
 使用参考：[poi-tl的使用（通俗易懂，全面，内含动态表格实现 ！）-CSDN博客](https://blog.csdn.net/s_156/article/details/138315722)
 
-
-
-## 
+​                   [SpringBoot + POI-TL 操作 Word，快速生成报表](https://mp.weixin.qq.com/s/P8fxvhv8CmXV-h0atHvnZw)
 
 ## 文件相关
 

@@ -31,8 +31,6 @@ star: 10
 
  [Express/Node 入门 - 学习 Web 开发 | MDN (mozilla.org)](https://developer.mozilla.org/zh-CN/docs/Learn/Server-side/Express_Nodejs/Introduction) 
 
-
-
 [登录是前端做全栈的必修课 - 掘金 (juejin.cn)](https://juejin.cn/post/7303463043249635362)
 
 ## node+express创建使用
@@ -47,7 +45,7 @@ star: 10
 
 ### 根目录创建  app.js
 
-```
+```js
 const express = require('express')
 const app = express()
 
@@ -68,7 +66,7 @@ app.listen(port, () => {
 
 安装 npm i cors -S
 
-```
+```js
 const  cors = require('cors')
  app.use(cors())
  app.listen(8000, function () {
@@ -82,7 +80,7 @@ const  cors = require('cors')
 
 `pnpm install mysql`
 
-```
+```js
 // 导入MySQL
 const mysql = require('mysql')
     // 创建连接
@@ -110,7 +108,7 @@ app.get('/get', (req, res) => {
 
 ### 获取客户端发送过来的查询参数
 
-```
+```js
 //  get 请求
 通过req.query可以获取到客户端发送过来的查询参数
     app.get('/',(req,res)=>{
@@ -154,7 +152,7 @@ router.post('/test', function(req, res, next) {
 
 app.js加入
 
-```
+```js
 //加入body-parser  (由于参数解析)
 let bodyParser = require('body-parser')
 const app = express()
@@ -166,7 +164,7 @@ app.use(bodyParser.json())
 
 ### 前端访问增加跨域设置
 
-```
+```js
 proxy: {
             "/api": {
                 target: "http://127.0.0.1:3000",
@@ -178,7 +176,7 @@ proxy: {
 
 ### express生成器
 
-```
+```js
 npm install -g express-generator
 
 以下创建一个名为 myapp 的 Express 应用程序。该应用程序将在当前工作目录中名为 myapp 的文件夹中创建，并且视图引擎将设置为 Pug
@@ -196,7 +194,7 @@ set DEBUG=myapp:* & npm start
 
 ### 静态文件
 
-```
+```js
  存放静态文件使用express.static(root, [options])
  
  //  使用以下代码在名为 public 的目录中提供图像、CSS 文件和 JavaScript 文件
@@ -217,7 +215,7 @@ http://127.0.0.1:3002/static/images/dot.png  // 这个地址可访问到静态�
 
 ### 中间件函数
 
-```
+```js
 //  中间件函数定义如下  （第三个函数next,调用此函数会调用应用程序中的下一个中间件函数。）
 //  中间件函数在发出请求之前执行，通过调用next方法，进入下一个中间件执行，所以next（）不能少
 const myLogger = function (req, res, next) {
@@ -470,7 +468,7 @@ mongoose.connect('mongodb://127.0.0.1/mogoTry').then(res => {
 
  Mongoose的一切都始于一个Schema。每个schema映射到MongoDB的集合(collection)和定义该集合(collection)中的文档的形式。 Schemas不仅定义了文档和属性的结构，还定义了文档实例方法、静态模型方法、复合索引和文档被称为中间件的生命周期钩子。 
 
-```
+```js
     //创建Schema对象（约束）   timestamps用于设置添加时间戳
 var Schema = mongoose.Schema;
 var stuSchema = new Schema({
@@ -482,7 +480,7 @@ var stuSchema = new Schema({
 }, { timestamps: true })
 ```
 
-```
+```js
 //  mongoDB 设置表关联
 
 let Article=new Schema({})
@@ -500,7 +498,7 @@ let CommentSchema = new Schema({
 
  使用我们的schema定义，我们需要将我们的schema转成我们可以用的模型。为此，我们通过mongoose.model(modelName, schema)。 
 
-```
+```js
 //创建数据模型-根据表结构创建数据模型 
 // 将stuSchema映射到一个MongoDB collection并定义这个文档的构成,users是collection的名称
 var stuModle = mongoose.model('users', stuSchema)

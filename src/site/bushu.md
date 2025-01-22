@@ -336,9 +336,42 @@ navicat链接mysql  报错 2003，具体可能的问题如下：
 
 [【精选】Ubuntu 20.04 安装 MySQL 8.0 并且远程连接数据库(包括后续遇到的新坑)_synchronizing state of mysql.service with sysv ser_Nymph2333的博客-CSDN博客](https://blog.csdn.net/u014378628/article/details/118406005)
 
+
+
+
+
+MySQL 错误2003 10060 "Unknown error"  （以下方法顺利解决）
+
+https://zhuanlan.zhihu.com/p/150861731#:~:text=%E5%9C%A8%E6%9C%AC%E6%9C%BA%E7%94%A8Na
+
+首先执行以下命令允许root用户远程连接,表示从任何主机连接到mysql服务器
+
+请替换yourpasssword为你的数据库密码
+
+```text
+GRANT ALL PRIVILEGES ON *.* TO 'root'@'%' IDENTIFIED BY 'yourpassword' WITH GRANT OPTION;
+```
+
+刷新权限使操作生效
+
+```text
+FLUSH PRIVILEGES;
+```
+
+执行quit;退出数据库,执行以下命令打开防火墙端口3306
+
+```text
+firewall-cmd --zone=public --add-port=3306/tcp --permanent
+```
+
+重启防火墙并查看是否生效
+
+```text
+firewall-cmd --reload		#重启firewall
+firewall-cmd --list-ports	#查看已经开放的端口
+```
+
 至此，我的navicat已经可以正常连上服务器的  mysql，正常导入数据，
-
-
 
 
 
@@ -366,11 +399,40 @@ centos:  [centos安装 mysql8.0 - 搜索 (bing.com)](https://cn.bing.com/search?
 
  nohup java -jar ruoyi-admin.jar
 
+**nohup java -jar jar包名 &**
+
 
 
 Web server failed to start. Port 8080 was already in use.
 
+
+
+[Linux环境下运行jar包的几种方式（附详细案例）_linux执行jar包中的类-CSDN博客](https://blog.csdn.net/AttleeTao/article/details/104149794)
+
 [Linux 和 windows 下解决端口占用问题（ Port was already in use）_port 10802was alread inuse-CSDN博客](https://blog.csdn.net/u012995500/article/details/104494808)
+
+[linux如何运行jar包、查看jar包进程、停止jar包_本地运行jar包,并查看线程-CSDN博客](https://blog.csdn.net/w_xiao_wang/article/details/106576231)
+
+查看jar包进程
+ps aux|grep xxx.jar
+ps -ef | grep java
+将会看到此jar的进程信息：
+root 2373 0.9 15.8 2575356 296448 pts/0 Sl+ 16:28 1:18 java -jar erp-0.5.1.2.jar
+或
+root 2373 2004 0 16:28 pts/0 00:01:18 java -jar erp-0.5.1.2.jar
+
+停止jar包
+也就是杀死进程
+找到jar的pid，杀掉命令为：
+
+kill -9 pid
+pkill 进程名
+
+
+
+部署后jar包运行MySQL连接报错，参照如下解决
+
+https://blog.csdn.net/g310773517/article/details/139472349     https://blog.csdn.net/pcw89126/article/details/118662195
 
 
 
@@ -751,3 +813,49 @@ yum install -y git
 /home/mysql    nginx  minio 
 
 jar包  /usr/local/app
+
+
+
+## 宝塔
+
+### linux安装
+
+[宝塔面板下载，免费全能的服务器运维软件 (bt.cn)](https://www.bt.cn/new/download.html)
+
+出现如下的提示，下载完成，下载完成后会生成账号密码，可以用于登录宝塔面板
+
+
+
+```
+=============注意：首次打开面板浏览器将提示不安全=================
+
+ 请选择以下其中一种方式解决不安全提醒
+ 1、下载证书，地址：https://dg2.bt.cn/ssl/baota_root.pfx  双击安装,密码【www.bt.cn】
+ 2、点击【高级】-【继续访问】或【接受风险并继续】访问
+ 教程：https://www.bt.cn/bbs/thread-117246-1-1.html
+ mac用户请下载使用此证书：https://dg2.bt.cn/ssl/baota_root.crt
+
+========================面板账户登录信息==========================
+
+ 【云服务器】请在安全组放行 13859 端口
+ 外网面板地址: https://1.94.16....
+ 内网面板地址: https://192.168....
+ username: mmgp1u5y
+ password: 123456789
+
+ 浏览器访问以下链接，添加宝塔客服
+ https://www.bt.cn/new/wechat_customer
+```
+
+### 安装问题
+
+```
+检查面板是否运行正常，尝试执行命令重启宝塔：bt restart 如无返回报错说明宝塔正常
+
+执行  bt default  获取最新面板登录地址尝试访问
+ 
+执行  bt default  获取默认账户密码
+
+执行  bt 5   重置宝塔面板密码
+```
+

@@ -1376,7 +1376,7 @@ Demo : [MicroApp样例搭建【Vue】 - 掘金 (juejin.cn)](https://juejin.cn/po
 
 官方案例：[GitHub - micro-zoe/micro-app-demo: micro-app 案例](https://github.com/micro-zoe/micro-app-demo)
 
-
+[浅入深出的微前端MicroApp | 京东云技术团队 - 京东云技术新知 - SegmentFault 思否](https://segmentfault.com/a/1190000044240323#item-2)
 
 vue项目微前端搭建注意点：
 

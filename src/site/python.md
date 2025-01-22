@@ -706,6 +706,44 @@ with pd.ExcelWriter(output_file, engine='openpyxl') as writer:
 
 记得在完成所有写入操作后调用`writer.save()`或使用`with`语句来自动关闭文件。在上面的例子中，由于使用了`with`语句，所以不需要显式调用`save()`方法。
 
+
+
+### 从接口获取数据导出到excel文件
+
+```python
+import requests
+import pandas as pd
+
+# 目标url
+url = "https://abc.com/list"
+data={
+    "pageNum":"1",
+    "pageSize":"10"
+}
+# 向目标url发送get请求
+response = requests.get(url,params=data)
+
+ # 检查请求是否成功
+if response.status_code == 200:
+    # 解析JSON数据
+    getData = response.json()
+    print(getData['rows'])   # 接口获取导出的表格数据
+    # 将数据转换为pandas DataFrame
+    df = pd.DataFrame(getData['rows'])
+
+    # 写入Excel文件
+    with pd.ExcelWriter('outputData.xlsx') as writer:
+        df.to_excel(writer, index=False)  # index=False表示不写入索引列
+
+    print("Data has been written to Excel successfully.")
+
+else:
+    print(f"Failed to retrieve data: {response.status_code}")
+    
+```
+
+
+
 ### 读取 csv  文件
 
 ```python
@@ -720,5 +758,88 @@ print("Detected encoding:", result['encoding'])
 # 通过文件编码读取 csv 文件的数据
 dCsv=pd.read_csv('work.csv',encoding=result['encoding'])
 print(dCsv)
+```
+
+
+
+## python脚本
+
+### 连接mysql数据库，执行sql命令，并返回执行结果
+
+```
+pip install mysql-connector-python
+```
+
+```python
+import mysql.connector
+from mysql.connector import Error
+
+def connect_and_execute_sql(host_name, user_name, password, database_name, sql_commands):
+    # 创建连接
+    connection = None
+    try:
+        connection = mysql.connector.connect(
+            host=host_name,
+            user=user_name,
+            passwd=password,
+            database=database_name
+        )
+        
+        if connection.is_connected():
+            print("Connected to MySQL Database")
+            
+            # 创建游标对象
+            cursor = connection.cursor()
+            
+            # 执行多条SQL命令
+            for sql_command in sql_commands:
+                cursor.execute(sql_command)
+                
+                # 如果是INSERT、UPDATE或DELETE操作，需要提交事务
+                if "INSERT" in sql_command or "UPDATE" in sql_command or "DELETE" in sql_command:
+                    connection.commit()
+                
+                # 打印执行结果
+                print(f"Executed: {sql_command}")
+                if cursor.with_rows:
+                    # 如果查询返回了结果集
+                    for row in cursor.fetchall():
+                        print(row)
+                else:
+                    print(f"Affected rows: {cursor.rowcount}")
+                
+                print("-" * 40)
+            
+            print("All SQL commands executed successfully.")
+    
+    except Error as e:
+        print(f"The error '{e}' occurred")
+    
+    finally:
+        # 关闭连接
+        if connection is not None and connection.is_connected():
+            cursor.close()
+            connection.close()
+            print("MySQL connection is closed")
+
+# 您的数据库连接信息
+host_name = "localhost"
+user_name = "root"
+password = "zf202111"
+database_name = "example"
+
+# SQL命令列表
+sql_commands = [
+    """
+    INSERT INTO sys_user (username, password,nickname) VALUES ('testUser', '123456','测试数据');
+    """,
+    """
+    SELECT * FROM sys_user;
+    """
+    
+]
+
+# 调用函数
+connect_and_execute_sql(host_name, user_name, password, database_name, sql_commands)
 ```
 
