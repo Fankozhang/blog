@@ -289,9 +289,27 @@ git reset --hard  {commitId}
 
 commitId 可以到 git 的历史里面去找。
 
+```
+git push -f origin [分支名]
+```
+
+
+
 ### Git reset(回滚) 和 revert(撤销)
 
 [Git reset(回滚) 和 revert(撤销)（图文详解）_git revert-CSDN博客](https://blog.csdn.net/Ying_ph/article/details/130761628)
+
+### Git强制提交
+
+[git绕过错误强制commit_git强制commit-CSDN博客](https://blog.csdn.net/William_TWG/article/details/117870298)
+
+```
+git commit --no-verify -m "略过代码检测 文字注释"
+```
+
+### vscode切换分支及合并分支
+
+[vscode切换分支及合并分支操作教程-CSDN博客](https://blog.csdn.net/weixin_45687201/article/details/138676302)
 
 ## vscode
 

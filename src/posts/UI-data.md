@@ -908,4 +908,38 @@ export default {
 
 [AntDV Modal组件函数方式调用自定义content为a-input并实现数据绑定_vue antd 对话框content包含a标签-CSDN博客](https://blog.csdn.net/qq_45223338/article/details/128162647)
 
-## 
+### 解决antdesign控件在div全屏下不显示的问题(如 Modal)
+
+[【AntDesign】解决antdesign控件在div全屏下不显示的问题_popover getcontainer-CSDN博客](https://blog.csdn.net/qq_41357122/article/details/122110291)
+
+
+
+### vue 分页删除最后一条数据，返回上一级的分页
+
+[vue 分页删除最后一条数据，返回上一级的分页_vue删除最后一个跳转至上一页-CSDN博客](https://blog.csdn.net/weixin_46873254/article/details/119959532)
+
+```js
+// total 总数
+// this.queryParam.page  传参的页面
+// this.queryParam.page  传参的数据条数
+
+this.$confirm({
+          title: '提示：', //标题
+          content: '您确认要删除选中的数据吗？',
+          onOk: () => {
+            //点击确认时的执行
+            delIt(record.id).then((res) => {
+              if (res.resp_code == 0) {
+                this.$message.success('删除成功')
+                const totalPage = Math.ceil((this.total - 1) / this.queryParam.limit)
+                this.queryParam.page = this.queryParam.page > totalPage ? totalPage : this.queryParam.page
+                this.queryParam.page = this.queryParam.page < 1 ? 1 : this.queryParam.page
+                this.getList()
+              } else {
+                this.$message.error(res.resp_msg)
+              }
+            })
+          }
+        })
+```
+

@@ -705,6 +705,154 @@ new G6.Graph()        加配置 renderer: 'svg',
 this.graph.changeData(this.updatedData);    //updatedData是更新后的数据
 ```
 
+### antv g6 group.addShape('dom'）自定义dom增加事件
+
+内容来自ai，实测可用
+
+一个常见的解决方案是将需要调用的方法绑定到 Vue 实例上，然后在内联事件处理程序中通过全局对象访问该方法。以下是具体的实现步骤：
+
+1. **将 Vue 方法绑定到全局对象**：在 Vue 组件的 `mounted` 生命周期钩子中，将需要调用的方法绑定到全局对象（例如 `window`）。
+2. **在内联事件处理程序中调用全局对象上的方法**。
+
+示例代码
+
+```
+<template>
+  <div id="mountNode"></div>
+</template>
+
+<script>
+import G6 from '@antv/g6';
+
+export default {
+  name: 'G6Graph',
+  data() {
+    return {
+      graph: null,
+    };
+  },
+  methods: {
+    handleEnterPressed(nodeId, value) {
+      alert(`Enter key pressed in node ${nodeId} with value: ${value}`);
+      // 在这里可以添加你需要的其他逻辑
+    },
+    initializeGraph() {
+      // 注册自定义节点类型
+      G6.registerNode('custom-node-with-dom', {
+        draw(cfg, group) {
+          // 绘制节点的基本形状
+          const keyShape = group.addShape('rect', {
+            attrs: {
+              x: -75,
+              y: -25,
+              width: 150,
+              height: 50,
+              stroke: '#666',
+              fill: '#fff',
+              radius: 10,
+            },
+            name: 'key-shape'
+          });
+
+          // 添加 DOM 元素并绑定内联事件处理程序
+          return group.addShape('dom', {
+            attrs: {
+              x: 90,  // 相对于节点中心的位置
+              y: 2,   // 相对于节点中心的位置
+              width: 150,  // 宽度与节点宽度一致
+              height: 50,  // 高度与节点高度一致
+              html: `
+                <input type="text" 
+                       value="${cfg.label || ''}" 
+                       style="
+                         width: 100%;
+                         font-size: 14px;
+                         border: 2px solid #ccc;
+                         border-radius: 4px;
+                         box-sizing: border-box;
+                         background-color: #f9f9f9;
+                         color: #333;
+                         outline: none;
+                         transition: border-color 0.3s ease;
+                       "
+                       onfocus="this.style.borderColor='blue';"
+                       onblur="this.style.borderColor='#ccc';"
+                       onkeydown="if (event.key === 'Enter') { window.handleEnterPressed('${cfg.id}', this.value); }"
+                       id="nodeInput-${cfg.id}"
+                />
+              `,
+            },
+            name: 'dom-shape'
+          });
+        }
+      });
+
+      // 初始化图实例
+      this.graph = new G6.Graph({
+        container: 'mountNode', // 这里是你的画布容器 id
+        width: 800,
+        height: 600,
+        defaultNode: {
+          type: 'custom-node-with-dom'
+        }
+      });
+
+      // 添加节点数据
+      this.graph.data({
+        nodes: [{
+          id: 'node1',
+          x: 100,
+          y: 200,
+          label: '带有输入框的节点'
+        }]
+      });
+
+      this.graph.render();
+    }
+  },
+  mounted() {
+    // 将 handleEnterPressed 方法绑定到 window 对象
+    window.handleEnterPressed = this.handleEnterPressed.bind(this);
+    
+    // 初始化图形
+    this.initializeGraph();
+  },
+  beforeDestroy() {
+    // 在组件销毁前移除对 window 对象的绑定
+    if (window.handleEnterPressed) {
+      delete window.handleEnterPressed;
+    }
+  }
+};
+</script>
+
+<style scoped>
+#mountNode {
+  width: 800px;
+  height: 600px;
+  border: 1px solid #ccc;
+}
+</style>
+```
+
+关键点解释
+
+1. **绑定方法到全局对象**：
+   - 在 `mounted` 生命周期钩子中，将 `handleEnterPressed` 方法绑定到 `window` 对象上。
+   - 使用 `.bind(this)` 确保方法中的 `this` 指向 Vue 组件实例。
+2. **内联事件处理程序**：
+   - 在 `html` 字符串中使用内联事件处理程序 `onkeydown`，并通过 `window.handleEnterPressed` 调用绑定到全局对象的方法。
+   - 注意在模板字符串中正确转义引号和变量（如 `${cfg.id}`）。
+3. **清理全局绑定**：
+   - 在 `beforeDestroy` 生命周期钩子中删除对 `window` 对象的绑定，以避免内存泄漏和其他潜在问题。
+
+注意事项
+
+- **全局污染**：虽然这种方法简单有效，但直接修改全局对象（如 `window`）可能会导致全局命名空间污染。尽量确保只在必要的时候使用这种方法，并在合适的地方进行清理。
+- **安全性**：确保传递给 `window.handleEnterPressed` 的参数是安全的，避免注入攻击或其他安全问题。
+
+通过这种方式，你可以在保持内联事件处理程序的同时，调用 Vue 组件的方法。希望这对你有所帮助！如果有任何问题或需要进一步的帮助，请随时告诉我。
+
 ## Three.js
 
 学习视频：https://www.bilibili.com/video/BV14r4y1G7h4?p=1
