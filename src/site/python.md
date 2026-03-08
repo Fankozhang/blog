@@ -9,6 +9,8 @@ tag:
 
 # python
 
+D:\pythonDemo
+
  下载： [Download Python | Python.org](https://www.python.org/downloads/)    安装时勾选 add to path
 
 [Python 教程 (w3schools.cn)](https://www.w3schools.cn/python/default.asp)
@@ -242,7 +244,7 @@ a模式，文件存在，会在原有内容后面继续写入中
 
 以下将 a.txt 内容备份到 b.txt 文件里，没有 b.txt 文件会自动创建
 
-```
+```python
 f=open('a.txt','r')
 fs=open('b.txt','w')
 fs.write(f.read())
@@ -254,7 +256,7 @@ fs.close()
 
  以下为简单的*try....except...else*的语法： 此处 Exception 是顶层，捕获所有异常
 
-```
+```python
 try:
     print(1/0)
 except Exception as e:
@@ -265,7 +267,7 @@ else:
 
  try-finally 语句无论是否发生异常都将执行最后的代码。 
 
-```
+```python
 try:
     f=open('test.txt','r')
 except Exception as e:
@@ -362,11 +364,30 @@ pip安装第三方库报错pip._vendor.urllib3.exceptions.ReadTimeoutError: HTTP
 pip install --index-url https://mirrors.aliyun.com/pypi/simple/ <package-name>    实测下载有效
 ```
 
+## Anaconda
+
+下载安装，环境配置参考：[最新版最详细Anaconda新手安装+配置+环境创建教程_anaconda配置-CSDN博客](https://blog.csdn.net/qq_44000789/article/details/142214660)
+
+下载：[Download Success | Anaconda](https://www.anaconda.com/download/success)
+
+记得修改安装路径：E:\Anaconda ，配置环境变量
+
+```
+设置镜像源
+conda config --add channels https://mirrors.tuna.tsinghua.edu.cn/anaconda/pkgs/free/
+查看配置信息数据
+conda info
+装了不可用的镜像源可以输入以下指令删除
+conda config --remove-key channels
+```
+
+vscode 安装，右下角点击可以切换解释器版本，选择conda那一个，就下载了很多的包了。
+
 
 
 ## Python数据和Json数据的相互转化
 
-```txt
+```python
 #导入json模块
 
 import json
@@ -617,6 +638,98 @@ files = {'file': open('image.png', 'rb')}
 response = requests.post(url, files=files)
 print(response.text)
 ```
+
+## Numpy
+
+官网：[NumPy 快速入门 — NumPy v2.3 手册](https://numpy.org/doc/stable/user/quickstart.html)
+
+文档参考： [NumPy：初学者的绝对基础_Numpy中文网](https://numpy.net/doc/stable/user/absolute_beginners.html)
+
+### 数组创建
+
+```python
+# numpy 创建数组 (基础创建方法) 
+array0=np.array(1) # 0维数组
+array1 = np.array([6,7,8,9])  # 一维数组
+array2 = np.array([[1,2,3],[4,5,6]])  # 二维数组
+array3 = np.array([[1,2,3],[4,5,6],[7,8,9]])  # 三维数组
+
+# numpy 创建数组参数 dtype 指定生成的数据类型, 以下打印结果[1 2 3] 
+array=np.array(['1','2','3'],dtype='int64')  
+
+# zeros 创建一个全是 0 的数组，默认生成的浮点型数据，参数 dtype 指定生成的数据类型
+arrayZeros = np.zeros((3, 4))   #创建一个 3 行 4 列的全是 0 的数组
+arrayZerosInt = np.zeros((3, 4),dtype=np.int64)  
+
+# 创建三维数组
+# 第一个数字 2 表示第一维有 2 个元素
+# 第二个数字 3 表示第二维有 3 个元素
+# 第三个数字 4 表示第三维有 4 个元素
+# 因此这个数组总共有 2×3×4 = 24 个元素
+arrayZerosIntThree = np.zeros((2,3,4),dtype=np.int64)
+
+
+#  ones创建一个全是 1 的数组，默认生成的浮点型数据，参数 dtype 指定生成的数据类型
+arrayOnes = np.ones((3, 4),dtype='int64')  #创建一个 3 行 4 列的全是 1 的数组
+
+# NumPy 提供了arange 类似于 Python 内置函数range，返回一个数组
+np.arange(10, 30, 5)  # 生成一个数组，元素从 10 开始，到 30 结束，步长为 5
+
+```
+
+### 索引切片操作
+
+#### 一维数组切片的一般形式是：
+
+```
+a[start:stop:step]
+```
+
+- `start`：起始索引（包含），默认为 `0`
+- `stop`：结束索引（**不包含**），默认为数组长度
+- `step`：步长（每次跳过的元素数），默认为 `1`
+
+示例：
+
+```python
+a = np.arange(10)**3
+print(a)
+print(a[2:5])
+print(a[:6:2])
+print(a[::-1])
+
+#打印结果
+# [  0   1   8  27  64 125 216 343 512 729]
+# [ 8 27 64]
+# [ 0  8 64]
+# [729 512 343 216 125  64  27   8   1   0]
+```
+
+#### 二维数组切片的一般形式是：
+
+```python
+a[行切片, 列切片]
+a[start_row:stop_row:step_row, start_col:stop_col:step_col]
+#每一部分都遵循一维切片规则（左闭右开，可省略，可带步长）。
+```
+
+示例：
+
+```python
+# 二维数组的切片是对行和列分别进行切片操作，例如：
+a = np.array([[ 0,  1,  2,  3],
+              [ 4,  5,  6,  7],
+              [ 8,  9, 10, 11],
+              [12, 13, 14, 15]])
+print(a)
+print(a[:,1])  # 取第 2 列的所有元素
+print(a[1,:])  # 取第 2 行的所有元素
+print(a[1:3,1:3])  # 取第 2 行到第 3 行，第 2 列到第 3 列的元素
+print(a[::2, 1::2])  # 取第 1、3 行，第 2、4 列的元素
+print(a[::-1, ::-1])  # 取所有行和列，但是以相反的顺序
+```
+
+
 
 ## pandas数据处理
 

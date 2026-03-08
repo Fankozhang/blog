@@ -124,6 +124,14 @@ export const enNavbar = navbar([
         text: "harmony",
         icon: "",
         link: "harmony"
+      },{
+        text: "claude",
+        icon: "",
+        link: "claude"
+      },{
+        text: "开发工具",
+        icon: "",
+        link: "tools"
       }
     ]
   },

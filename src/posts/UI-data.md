@@ -554,7 +554,9 @@ const columns = [
 
 ### ant-design table fixed错位解决方案
 
-https://blog.csdn.net/qq_38118138/article/details/130622854    （实测可用）
+#### 解决方案1  未生效
+
+https://blog.csdn.net/qq_38118138/article/details/130622854    
 
 ```js
 给 a-table 设置一个id，调用如下方法。
@@ -602,6 +604,51 @@ fixTable(tableId){
 
     },
 ```
+
+
+
+#### 解决方案2
+
+v 1.7.8 增加全局样式
+
+```
+/* 全局滚动条样式 */
+::-webkit-scrollbar {
+  width: 8px; /* 纵向滚动条宽度 */
+  height: 8px; /* 横向滚动条高度 */
+}
+
+/* 滚动条轨道 */
+::-webkit-scrollbar-track {
+  background: #f1f1f1;
+}
+
+/* 滚动条滑块 */
+::-webkit-scrollbar-thumb {
+  background: #888;
+  border-radius: 6px;
+}
+
+/* 滚动条滑块悬停效果 */
+::-webkit-scrollbar-thumb:hover {
+  background: #555;
+}
+// 表格固定列样式修改
+.ant-table {
+  .ant-table-scroll .ant-table-header {
+    margin-bottom: 0 !important;
+    padding-bottom: 0px !important;
+    min-width: 14px !important;
+    overflow: hidden !important;
+    margin-right: 12px;
+  }
+  .ant-table-body {
+    padding: 0 !important;
+  }
+}
+```
+
+
 
 ### a-modal 弹框全屏显示
 
@@ -941,5 +988,67 @@ this.$confirm({
             })
           }
         })
+```
+
+### a-upload 上传文件失败，过滤错误文件
+
+```js
+ handleFileChange(info) {
+      this.subNot()
+      let fileList = [...info.fileList]
+      fileList = fileList.slice(-1)
+
+      fileList = fileList.filter((item) => {
+        if (item.status == 'done' || item.url) {
+          if(item.url){
+            return true
+          }
+          if (item.response && item.response.tempAccessInfo) {
+            return true
+          } else {
+            this.$message.error(item.response && item.response.resp_msg ? item.response.resp_msg : '文件上传失败')
+            return false
+          }
+        }else{
+          return true
+        }
+      })
+
+      
+      fileList = fileList.map((file) => {
+        if (file.response && file.response.tempAccessInfo) {
+          // Component will show file.url as link
+          file.url = file.response.tempAccessInfo.url
+          file.name = file.response.tempAccessInfo.name
+          file.uid = file.response.tempAccessInfo.id
+        }
+        return file
+      })
+      this.fileList = fileList
+    },
+```
+
+
+
+
+
+```
+ {
+              title: '展期金额(万元)',
+              dataIndex: 'extendAmnt',
+              key: 'extendAmnt',
+              width: 150,
+              align: 'center',
+              customRender: (text, record) => {
+                if (record.showType == 2 || record.showType == 3 || record.showType == 4) {
+                  return text
+                } else {
+                  return '-'
+                }
+              },
+              ellipsis: {
+                tooltip: true
+              }
+            },
 ```
 

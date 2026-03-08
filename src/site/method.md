@@ -476,7 +476,7 @@ https://mp.weixin.qq.com/s/6SuNY3Y27RGXPx89zCJnEg
 
 ### 后端返回文件流(文档流)如何下载
 
-例子：
+例子：        window.open(res, '_blank')
 
 ```javascript
 // 导出指定字段Excel列表
@@ -497,6 +497,17 @@ export function downReport (data) {
     data: data
   })
 }
+
+// 设置了responseType后，代码和后台返回的415错误，问题很可能出在请求头(Content-Type)的设置上。需要设置下请求头
+return axios({
+    url: `/****`,
+    method: 'post',
+    data: data,
+    responseType: 'arraybuffer',
+    headers: {
+      'Content-Type': 'application/json' // 明确指定Content-Type
+    }
+  })
 ```
 
 请求后端文件流的接口要加上  responseType: "arraybuffer"   ，否则导出可能会打不开    
@@ -2767,3 +2778,17 @@ https://zhuanlan.zhihu.com/p/638553359
 ## ps修改图中文字
 
 [PS小白丨如何修改图片中的文字 - 知乎 (zhihu.com)](https://zhuanlan.zhihu.com/p/134102174)
+
+
+
+## vue2 实现拖动
+
+"vue-draggable-resizable": "2.3.0"
+
+组件内引入使用
+
+```
+import VueDraggableResizable from 'vue-draggable-resizable'
+import 'vue-draggable-resizable/dist/VueDraggableResizable.css'
+```
+
